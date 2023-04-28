@@ -1,0 +1,75 @@
+import routes from '@/routes';
+import React from 'react'
+import {Routes,Route,Navigate,useLocation} from 'react-router-dom'
+// Components
+import Sidebar  from '@/components/sidebar';
+
+export default function Admin(props:{[x:string]:any}) {
+    const {...rest} = props;
+    const location = useLocation()
+
+    const [open,setOpen] = React.useState(true)
+    const [currentRoute,setCurrentRoute] = React.useState('Main Dashboard')
+
+    React.useEffect(() => {
+        window.addEventListener('resize', () => {
+            window.innerWidth < 1200 ? setOpen(false) : setOpen(true)
+        })
+    },[])
+
+    React.useEffect(() => {
+        getActiveRoute(routes)
+    },[location.pathname])
+
+    // TODO: Active Routes
+    const getActiveRoute = (routes:RoutesType[]): string | boolean => {
+        let activeRoute = "Main Dashboard"
+        for(let i=0; i < routes.length; i++ ){
+            if(window.location.href.indexOf(routes[i].layout + "/" + routes[i].path)){
+                setCurrentRoute(routes[i].name)
+            }
+        }
+        return activeRoute;
+    }
+    
+    // TODO: Active Navbar
+    const getActiveNavbar = (routes:RoutesType[]): string | boolean => {
+        let activeNavbar = false;
+        for(let i=0; i < routes.length;i++){
+            if(window.location.href.indexOf(routes[i].layout + routes[i].path) !== -1 ){
+                return routes[i].secondary ? true : false
+            } 
+        }
+        return activeNavbar
+    }
+
+    // TODO: Get Routes 
+    const getRoutes = (routes:RoutesType[]):any => {
+        return  routes.map((prop,key) =>{
+            if(prop.layout == '/admin'){
+                return (
+                    <Route path={`/${prop.path}`} element={prop.component} key={key} />
+                )
+            }else {
+                return null
+            }
+        })
+    }
+
+    document.documentElement.dir = 'ltr'
+
+    return (
+        <div className="flex bg-gray-100 font-sans text-gray-900">
+            <Sidebar onClose={() => {setOpen(false)}} open={false} />
+            {/* Navbar & Main Contain */}
+            <div className="flex h-screen flex-1 flex-col">
+                <main className="flex-1 overflow-y-scroll px-12 pt-5s min-h-[84vh] p-2 md:pr-2">
+                   <Routes>
+                        {getRoutes(routes)}
+                        <Route path="/" element={<Navigate to='/admin/default' replace />} />
+                   </Routes>
+                </main>
+            </div>
+        </div>
+    )
+}
