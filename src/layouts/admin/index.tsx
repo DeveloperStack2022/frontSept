@@ -1,6 +1,7 @@
 import routes from '@/routes';
 import React from 'react'
 import {Routes,Route,Navigate,useLocation} from 'react-router-dom'
+import ProctedRoute from '@/Routes/procted.routes';
 // Components
 import Sidebar  from '@/components/sidebar';
 
@@ -48,7 +49,11 @@ export default function Admin(props:{[x:string]:any}) {
         return  routes.map((prop,key) =>{
             if(prop.layout == '/admin'){
                 return (
-                    <Route path={`/${prop.path}`} element={prop.component} key={key} />
+                    <Route path={`/${prop.path}`} element={
+                        <ProctedRoute>
+                            {prop.component}
+                        </ProctedRoute>
+                    } key={key} />  
                 )
             }else {
                 return null
@@ -66,7 +71,7 @@ export default function Admin(props:{[x:string]:any}) {
                 <main className="flex-1 overflow-y-scroll px-12 pt-5s min-h-[84vh] p-2 md:pr-2">
                    <Routes>
                         {getRoutes(routes)}
-                        <Route path="/" element={<Navigate to='/admin/default' replace />} />
+                        <Route path="/" element={<Navigate to='/auth/sign-in' replace />} />
                    </Routes>
                 </main>
             </div>

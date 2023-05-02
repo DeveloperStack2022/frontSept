@@ -1,35 +1,31 @@
+import {useEffect} from 'react'
 import {useForm} from 'react-hook-form'
 import {yupResolver} from '@hookform/resolvers/yup'
 import {validationSchemaInicioSession,FormInicioSessionType} from '@/schemas/form'
 import {useNavigate } from 'react-router-dom'
 
+// Contexts 
+import useAuth from '@/hooks/useAuth'
 // Components 
 import AlertComponent from '@/components/alerts'
 
 const SignIn = () => {
+    // Custom hooks 
+    const {login,Value} = useAuth()
+    
+    useEffect(() => {
+        if(Value) {
+            return navigate('/admin/default')
+        }
+    },[])
+
     // Hooks react-router-dom
     const navigate = useNavigate()
     
     const {register,handleSubmit,formState:{errors}} = useForm<FormInicioSessionType>({mode:'onBlur',resolver:yupResolver(validationSchemaInicioSession)});
 
     const handleSubmitForm = async (data:FormInicioSessionType) => {
-       const res = await fetch('http://localhost:5050/api/login',{
-        method:'POST',
-        body:JSON.stringify({
-            email:data.email,
-            password:data.password
-        }),
-        headers:{
-            'Content-Type':"Application/json"
-        }
-       })
-       // -> dataResponse -> {accessToken: stringToken,name:stringNameUser}
-       if(res.status >= 200 && res.status <= 299){
-           const dataResponse = await res.json()
-           window.localStorage.setItem('token',JSON.stringify(dataResponse))
-           return navigate('/admin')
-       }
-
+        login({email:data.email,password:data.password})
     }
 
     return (
