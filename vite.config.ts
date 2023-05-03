@@ -11,7 +11,7 @@ export default defineConfig({
     alias: [
       {find:'@',replacement:resolve(__dirname, 'src')},
       {find:'@components',replacement: resolve(__dirname,'src/components')},
-      {find: '@icons',replacement: resolve(__dirname,'src/icons')}
+      {find: '@icons',replacement: resolve(__dirname,'src/icons')},
   ]
   }
   

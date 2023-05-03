@@ -1,9 +1,13 @@
 import {KeyboardEvent,useState} from 'react'
 // Validations Forms
-import {useForm,useFieldArray,Controller} from 'react-hook-form'
+import {useForm,useFieldArray} from 'react-hook-form'
 import {yupResolver} from '@hookform/resolvers/yup'
 // Schema validation
 import ValidationDataSchema,{ValidationType} from '@/schemas/form'
+// Services HTTP 
+import {addSolicitud} from '@/services/solicitud-services'
+// Custom hooks 
+import {useLocalStorage} from '@/hooks/useLocalStorage'
 
 import Card from '@components/card'
 import FingerPrintIcon from '@/icons/finger-printer.svg?component'
@@ -23,17 +27,24 @@ import DeleteIcon from '@icons/delete-icon.svg?component'
 
 // Components 
 import ModalComponent from '@components/modal'
+import { json } from 'react-router-dom'
 
-
+type DataType = {
+    accessToken:string;
+    name:string
+}
 const AddSolicitudForm = () => {
     // FIXME: States 
     const [NnumeroCelulares, setNnumeroCelulares] = useState<number>(0)
     const [OpenModal, setOpenModal] = useState<boolean>(false)
-
+    const [ModalContent, setModalContent] = useState<{message:string,status:number}>({message:'',status:0})
+    // Custom Hooks 
+    const {getItem} = useLocalStorage()
     // React hooks form
     const {register,handleSubmit,watch,control,reset,formState:{errors}} = useForm<ValidationType>({mode:"onBlur",resolver: yupResolver(ValidationDataSchema)})
-
+    
     const {fields,append,remove} = useFieldArray<ValidationType,'celulares'>({control,name:'celulares'})
+//    const fields = watch('celulares')
 
     const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
         const keyCode = event.keyCode || event.which;
@@ -44,39 +55,54 @@ const AddSolicitudForm = () => {
         }
     };
 
-    const handleSubmitArrowFunction = (data:ValidationType) => {
-        console.log(data)
-        
+    const handleSubmitArrowFunction = async (data:ValidationType) => {
+        let token = getItem('authToken')
+        token = JSON.parse(token)?.accessToken
+        const ubicaciones = data.celulares.map(e => {return {latitud: e.latitud, longitud: e.longitud}})
+        const celulares = data.celulares.map(e => {return {numero_celular: e.numero_celular, imsi: e.imsi}})
+
+        try {
+            const response = await addSolicitud(data,token,ubicaciones,celulares)
+            setModalContent({message:response.data,status:response.status})
+        } catch (err) {
+            console.log(err)
+        }
+        reset()
+        handleOpenModal()
+    }
+
+    const handleGenerateFormsCelular = (value:any) => {
+        for(let i=0; i < NnumeroCelulares; i++){
+            append(value)    
+        }
+        setNnumeroCelulares(0)
+    }
+
+    const handleOpenModal = () =>  setOpenModal(true)
+    const handleCloseModal = () => {
         let i = 0
         do {
             remove(i)
             i++
         }while(i < fields.length)
-        
-        reset()
         remove(0)
-        handleOpenModal()
+        setOpenModal(prev => !prev)
     }
-
-    const handleGenerateFormsCelular = (value) => {
-        append(value)    
-    }
-
-    const handleOpenModal = () =>  setOpenModal(true)
-    const handleCloseModal = () => setOpenModal(prev => !prev)
 
     
     return (
         <Card>
-            <ModalComponent isOpen={OpenModal} onClose={handleCloseModal} >
+            <ModalComponent isOpen={OpenModal} onClose={handleCloseModal} status={(ModalContent?.status > 200 && ModalContent?.status < 300 ) ? 'success' : 'error' } message={(ModalContent?.status > 200 && ModalContent?.status < 300 ) ? 'Solicitud agregada exitosamente' : ModalContent.message } >
                 <div>
-                    test
+                    
                 </div>
             </ModalComponent>
             <form onSubmit={handleSubmit(handleSubmitArrowFunction)} >
                 <div className="grid grid-cols-2 gap-x-5 p-6">
                     <div className="">
                             <h4 className='font-semibold text-md' >Datos solicitud</h4>
+                            <input type="hidden" {...register('hora')} defaultValue={`${new Date().getHours}`} />
+                            <input type="hidden" {...register('plataforma')} defaultValue={'Septier'} />
                             <div className="">
                                 <label  className="flex justify-between items-center text-sm font-medium text-gray-500">Nombre del Caso {errors.nombre_caso?.message && <span className='text-red-500 text-xs'>*{errors.nombre_caso?.message}*</span>} </label>
                                 <div className="relative mt-1 rounded-md shadow-sm">

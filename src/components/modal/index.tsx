@@ -1,11 +1,17 @@
 import {FC,useState} from 'react'
+
+// Icons 
+import ErrorIcon from '@/icons/error-icon.svg?component'
+import SuccessIcon from '@/icons/check-icon.svg?component'
 // Props 
 type Props = {
     isOpen:boolean;
     onClose:() => void;
     children: JSX.Element
+    status: string;
+    message:string;
 }
-const ModalComponent: FC<Props> = ({children,isOpen,onClose}) => {
+const ModalComponent: FC<Props> = ({children,message,status,isOpen,onClose}) => {
 
     const handleClose = () => {
         onClose()
@@ -22,8 +28,9 @@ const ModalComponent: FC<Props> = ({children,isOpen,onClose}) => {
                         </svg>
                     </button>
                     <div className="p-6 text-center">
-                        <svg className="mx-auto mb-4 text-green-500 w-20 h-20 dark:text-gray-200" stroke="currentColor"  strokeWidth="1.7" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#0571ff"><path d="M7 12.5l3 3 7-7"  strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"></path><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"  strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"></path></svg>
-                        <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Solicitud Agregada exitosamente</h3>
+                        {status == 'success' ? <SuccessIcon className='w-10 h-10 m-auto text-green-500 ' /> : <ErrorIcon className='w-10 h-10 m-auto text-red-500 ' />}
+                        
+                        <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">{message}</h3>
                     </div>
                 </div>
             </div>
