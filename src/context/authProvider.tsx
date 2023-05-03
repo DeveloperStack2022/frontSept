@@ -35,13 +35,13 @@ export const AuthProvider = ({children}:Props) => {
            setValue(dataResponse)
            return navigate('/admin/default')
        }
-    };
+    };  
 
     const logout = () => {
         removeItem('authToken');
+        setValue(null)
         navigate('/auth/sign-in')
     }
-    
 
     const value = useMemo(() =>({
         login,

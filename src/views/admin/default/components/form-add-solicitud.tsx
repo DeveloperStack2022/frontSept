@@ -1,6 +1,6 @@
 import {KeyboardEvent,useState} from 'react'
 // Validations Forms
-import {useForm,useFieldArray} from 'react-hook-form'
+import {useForm,useFieldArray,Controller} from 'react-hook-form'
 import {yupResolver} from '@hookform/resolvers/yup'
 // Schema validation
 import ValidationDataSchema,{ValidationType} from '@/schemas/form'
@@ -45,7 +45,7 @@ const AddSolicitudForm = () => {
     };
 
     const handleSubmitArrowFunction = (data:ValidationType) => {
-        // console.log(data)
+        console.log(data)
         
         let i = 0
         do {
@@ -58,16 +58,8 @@ const AddSolicitudForm = () => {
         handleOpenModal()
     }
 
-    const handleGenerateFormsCelular = ():void => {
-        for(let i=0; i < NnumeroCelulares ; i++){
-            append({
-                imsi:'',
-                latitud:'',
-                longitud:'',
-                numero_celular:''
-            })
-        }
-        setNnumeroCelulares(0)
+    const handleGenerateFormsCelular = (value) => {
+        append(value)    
     }
 
     const handleOpenModal = () =>  setOpenModal(true)
@@ -225,7 +217,7 @@ const AddSolicitudForm = () => {
                                         autoComplete="off"
                                         type='number'
                                     />
-                                    <button type="button" className='font-bold px-4 py-2 text-blue-700 bg-blue-100 hover:bg-blue-200 transition block rounded-md outline-offset-2 outline-transparent  focus:ring-2 text-sm' onClick={handleGenerateFormsCelular}>Generar</button>
+                                    <button type="button" className='font-bold px-4 py-2 text-blue-700 bg-blue-100 hover:bg-blue-200 transition block rounded-md outline-offset-2 outline-transparent  focus:ring-2 text-sm' onClick={() => handleGenerateFormsCelular({imsi:"",latitud:"",longitud:"",numero_celular:""})}>Generar</button>
                                 </div>
                             </div>
                     </div>
@@ -235,7 +227,7 @@ const AddSolicitudForm = () => {
                     {fields?.length > 0 && <h4 className='font-semibold text-md' >Datos Celular</h4> }
                     <div className="grid grid-cols-4 gap-x-5 ">
                         {fields.map((field,index) => (
-                            <div key={index}>
+                            <div key={field.id}>
                                 <div className="mb-2">
                                     <label className="flex justify-between items-center text-sm font-medium text-gray-500">
                                         Num Celular #{index + 1 } {errors?.['celulares']?.[index]?.['numero_celular']?.['message'] && <span className='text-red-500 font-semibold' style={{fontSize:'.7rem'}}> *{errors?.['celulares']?.[index]?.['numero_celular']?.['message']}* </span>}
@@ -246,10 +238,11 @@ const AddSolicitudForm = () => {
                                             <MobileIcon className="absolute mr-6 w-5 h-5 text-gray-500" />
                                         </div>
                                         <input
-                                            {...register(`celulares.[${index}].numero_celular`)}
+                                            {...register(`celulares[${index}].numero_celular`)}
                                             className={`w-full py-2 pr-7 pl-8 block rounded-md border border-gray-300 outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm ${errors?.['celulares']?.[index]?.['numero_celular']?.['message'] && 'border-red-500 ring-1 ring-red-500'}`} 
                                             autoComplete="off"
                                         />
+                                        
                                         {/* <span className="text-red-500"> {errors?.celulares.[index].numero_celular?.message}</span> */}
                                     </div>
                                 </div>
@@ -260,7 +253,7 @@ const AddSolicitudForm = () => {
                                             <MoreIcon className="absolute mr-6 w-5 h-5 text-gray-500" />
                                         </div>
                                         <input
-                                            {...register(`celulares.[${index}].imsi`)}
+                                            {...register(`celulares[${index}].imsi`)}
                                             className="w-full py-2 pr-7 pl-8 block rounded-md border border-gray-300 outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm" 
                                             autoComplete="off"
                                         />
@@ -275,7 +268,7 @@ const AddSolicitudForm = () => {
                                             <LatitudIcon className="absolute mr-6 w-5 h-5 text-gray-500" />
                                         </div>
                                         <input
-                                            {...register(`celulares.[${index}].latitud`)}
+                                            {...register(`celulares[${index}].latitud`)}
                                             className={`w-full py-2 pr-7 pl-8 block rounded-md border border-gray-300 outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm ${errors?.['celulares']?.[index]?.['latitud']?.['message'] && 'border-red-500 ring-1 ring-red-500'}`} 
                                             autoComplete="off"
                                         />
@@ -289,15 +282,15 @@ const AddSolicitudForm = () => {
                                             <LongitudIcon className="absolute mr-6 w-5 h-5 text-gray-500" />
                                         </div>
                                         <input
-                                            {...register(`celulares.[${index}].longitud`)}
+                                            {...register(`celulares[${index}].longitud`)}
                                             className={`w-full py-2 pr-7 pl-8 block rounded-md border border-gray-300 outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm ${errors?.['celulares']?.[index]?.['longitud']?.['message'] && 'border-red-500 ring-1 ring-red-500'}`} 
                                             autoComplete="off"
                                         />
                                     </div>
                                 </div>
                                 <button className='flex justify-center items-center gap-x-2 font-bold px-4 py-2 bg-red-100 hover:bg-red-200 transition text-red-700   rounded-md  outline-offset-2 outline-transparent focus:border-red-500 focus:ring-2 focus:ring-red-500 text-sm w-28  mt-2' onClick={() => {remove(index)} }><DeleteIcon className="h-4 w-4 stroke-current" /> Eliminar</button>
-                        </div>
-                        ))}
+                            </div>
+                         ))}
                             
                     </div>
                 </div>
