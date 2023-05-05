@@ -1,5 +1,5 @@
 import {ValidationType} from '@/schemas/form'
-const URI = 'http://192.168.68.150:5050/api'
+const URI = 'http://192.168.20.124:5050/api'
 import axios from 'axios'
 
 export const addSolicitud = async (dataParams:ValidationType,token:any,ubicacion:any,celulares:any) => {
@@ -40,15 +40,4 @@ export const addSolicitud = async (dataParams:ValidationType,token:any,ubicacion
     } catch (error) {
         console.log(error)
     }
-    
-    // const response = await fetch(`${URI}/solicitud`,{
-    //     method:'POST',
-    //     body:JSON.stringify(),
-    //     headers:{
-    //         "accept":"*/*",
-    //         'Content-Type':'application/json',
-    //         'x-access-token':token
-    //     }
-    // }) 
-    
 }

@@ -62,8 +62,10 @@ const validationSchema = yup.object().shape({
             numero_celular:yup.string().required('Campo requerido'),
             imsi:yup.string(),
             // ^(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?)$
+            // latitud:yup.string().matches(/^(?:(?:-0*[7-7]\d|-[8-9]\d\d|-[1-7]\d\d\d)|(?:0*\d\d\d|0*1[0-7]\d\d|0*1800?))(?:\.\d+)?$|^$/,"Latitud no permitida").notRequired(),
             latitud:yup.string().matches(/^(?:(?:-?([0-1]?[0-9]|[2][0-1])(\.{1}[0-9]{1,6})))?$/,"Latitud no permitida").notRequired(),
-            longitud:yup.string().matches( /^(?:(?:-0*[7-7]\d|-[8-9]\d\d|-[1-7]\d\d\d)|(?:0*\d\d\d|0*1[0-7]\d\d|0*1800?))(?:\.\d+)?$|^$/,"Longitud no permitida").notRequired(),
+            longitud:yup.string().matches( /^(?:(?:-0*[7-9]\d|-[8-9]\d\d|-[1-7]\d\d\d)|(?:0*\d\d\d|0*1[0-7]\d\d|0*1800?))(?:\.\d+)?$|^$/,"Longitud no permitida").notRequired(),
+            // longitud:yup.string().matches(/^-?[0-9]{1,3}\.[0-9]{6}$/,"Longitud no permitida").notRequired(),
         })
     )
 })

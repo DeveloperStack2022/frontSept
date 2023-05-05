@@ -1,4 +1,4 @@
-import {useMemo,createContext,useEffect, useState} from 'react'
+import {useMemo,useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {useLocalStorage} from '@/hooks/useLocalStorage'
 import AuthContext from './auth'
@@ -18,7 +18,7 @@ export const AuthProvider = ({children}:Props) => {
 
     const login = async ({email,password}:FormInicioSessionType) => {
         // Service Authentication API - Server {Promise}
-        const res = await fetch('http://192.168.68.150:5050/api/login',{
+        const res = await fetch('http://192.168.20.124:5050/api/login',{
         method:'POST',
         body:JSON.stringify({
             email,
