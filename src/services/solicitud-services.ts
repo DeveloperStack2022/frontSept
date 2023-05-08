@@ -41,3 +41,21 @@ export const addSolicitud = async (dataParams:ValidationType,token:any,ubicacion
         console.log(error)
     }
 }
+
+export const getPaginateSolicitudes = async (skip:number,token:string) => {
+    try{
+        const response = await axios.get(`${URI}/solicitud`,{
+            headers:{
+                "accept":"*/*",
+                'Content-Type':'application/json',
+                'x-access-token':token
+            }
+        })
+        return {
+            data: response.data,
+            status: response.status
+        }
+    }catch(error){
+        console.log(error)
+    }
+}

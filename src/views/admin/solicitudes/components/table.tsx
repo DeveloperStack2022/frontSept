@@ -1,60 +1,76 @@
-import {useState} from 'react'
+import {useState,FC,useEffect} from 'react'
 import PhoneIcon from '@/icons/phone-icon.svg?component'
+import {useReactTable,createColumnHelper,getCoreRowModel, flexRender,PaginationState} from '@tanstack/react-table'
+//Types 
+import {Solicitud} from '@/schemas/columns-solicitudes'
 
-const TableComponent = () => {
-    const [show, setShow] = useState(null);
+
+// Example Data 
+// const data: Solicitud[] = [{
+//     caso:'caso test',
+//     delito: 'delito test',
+//     evento:'evento test'
+// }]
+
+type Solicitante = {
+    unidad:string;
+}
+
+const columnHelper = createColumnHelper<Solicitud>()
+const columns  = [
+    columnHelper.accessor('caso',{
+        cell: info => info.getValue(),
+    }),
+    columnHelper.accessor('delito',{
+        cell: info => info.getValue(),
+    }),
+    columnHelper.accessor('solicitante_result',{
+        id:'solicitante_result',
+        header: 'Unidad',
+        cell: (info) => (info.getValue() as Solicitante ).unidad
+    })
+]
+
+type Props = {
+    loading:boolean;
+    data: Solicitud[],
+    fetch_data:(n_page:number) => void;
+    pageCount:number;
+}
+
+const TableComponent:FC<Props> = ({data,fetch_data,loading,pageCount}) => {
+    // TODO: States
+    const [{pageIndex,pageSize}, setPageSize] = useState<PaginationState>({pageIndex:0,pageSize:10})
+    const table = useReactTable({data:data,columns:columns,getCoreRowModel:getCoreRowModel()})
+
+
+
+    useEffect(() => {
+        let pageIndexN = pageIndex + 1
+        fetch_data && fetch_data(pageIndexN)
+    },[pageIndex,fetch_data])
+
+
     return (
         <div className="mt-7 overflow-x-auto">
             <table className="w-full whitespace-nowrap">
                 <thead className="text-xs text-gray-900 uppercase dark:text-gray-400">
-                    <th className='px-6 py-3'>CASO</th>
-                    <th className="px-6 py-3">test</th>
-                    <th className="pl-5">SOLICITANTE</th>
-                    <th className="pl-5">N. CELULARES</th>
+                    {table.getHeaderGroups().map(headersGroup => (
+                        <tr key={headersGroup.id}>
+                            {headersGroup.headers.map(header => (
+                                <th className='px-6 py-3 text-left' key={header.id}>{header.isPlaceholder ? null : flexRender(header.column.columnDef.header,header.getContext())}</th>
+                            ))}
+                        </tr>
+                    ))}
                 </thead>
                 <tbody>
-                    <tr className='bg-white dark:bg-gray-800 border-t'>
-                        <td className='px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white'>
-                            ALEXANDER
-                        </td>
-                        <td className="px-6 py-4">
-                            White
-                        </td>
-                        <td className="px-6 py-4">
-                            Laptop PC
-                        </td>
-                        <td className="px-6 py-4">
-                            $1999
-                        </td>
-                    </tr>
-                    <tr className='bg-white dark:bg-gray-800  border-t'>
-                        <td className='px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white'>
-                            ALEXANDER
-                        </td>
-                        <td className="px-6 py-4">
-                            White
-                        </td>
-                        <td className="px-6 py-4">
-                            Laptop PC
-                        </td>
-                        <td className="px-6 py-4">
-                            $1999
-                        </td>
-                    </tr>
-                    <tr className='bg-white dark:bg-gray-800 border-t   '>
-                        <td className='px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white'>
-                            ALEXANDER
-                        </td>
-                        <td className="px-6 py-4">
-                            White
-                        </td>
-                        <td className="px-6 py-4">
-                            Laptop PC
-                        </td>
-                        <td className="px-6 py-4">
-                            $1999
-                        </td>
-                    </tr>
+                    {table.getRowModel().rows.map(row => (
+                        <tr className='bg-white dark:bg-gray-800 border-t' key={row.id}>
+                           {row.getVisibleCells().map(cell => (
+                                <td className='px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white' key={cell.id} >{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                           ))}
+                        </tr>
+                    ))}
                 </tbody>
             </table>
         </div>
