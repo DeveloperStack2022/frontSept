@@ -14,6 +14,7 @@ export const addSolicitud = async (dataParams:ValidationType,token:any,ubicacion
         "fecha": fecha,
         "plataforma": "Septier",
         "caso": dataParams.nombre_caso,
+        "delito":dataParams.delito,
         "evento": dataParams.evento,
         "organizacion_delicuencial": dataParams.grupo_delicuencial,
         "solicitante": {
