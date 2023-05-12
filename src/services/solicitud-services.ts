@@ -60,3 +60,11 @@ export const getPaginateSolicitudes = async (skip:number,token:string) => {
         console.log(error)
     }
 }
+
+export const getOneSolicitud = async (id:string) => {
+    const response = await axios.get(`${URI}/`)
+    return {
+        data: response.data,
+        status: response.status
+    }
+}
