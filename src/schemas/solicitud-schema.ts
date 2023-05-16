@@ -17,6 +17,7 @@ type Solicitante = {
 export type SolicitudAction = {
     delito: string;
     evento:string;
+    caso:string;
     fecha:Date;
     hora:string;
     organizacion_delicuencial:string;

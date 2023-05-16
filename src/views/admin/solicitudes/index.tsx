@@ -36,6 +36,7 @@ const ViewSolicitudes = () => {
     const [OpenModal, setOpenModal] = useState<boolean>(false)
     const [DataSolicitud, setDataSolicitud] = useState<SolicitudAddStatus>({
         status:'initial',
+        caso:'',
         fecha:new Date(),
         celulares_solicitados:[],
         delito:'',

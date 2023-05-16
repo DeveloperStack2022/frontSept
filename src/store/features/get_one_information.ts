@@ -50,6 +50,7 @@ export const fetchData = createAsyncThunk('getsolicitud',async ({id,token}:{id:s
 
 const initalState:InitialState  = {
     status:'initial',
+    caso:'',
     fecha:new Date(),
     celulares_solicitados:[],
     delito:'',
@@ -76,7 +77,7 @@ export const informationSolicitud = createSlice({
                 state.status = 'loading'
             })
             .addCase(fetchData.fulfilled, (state,action:PayloadAction<{data:SolicitudAction}>) => {
-                const {celulares_solicitados,delito,evento,fecha,hora,organizacion_delicuencial,plataforma,solicitante_result,ubicaciones_celulares} = action.payload.data
+                const {celulares_solicitados,delito,evento,fecha,hora,organizacion_delicuencial,plataforma,solicitante_result,ubicaciones_celulares,caso} = action.payload.data
                 
                 const data_celulares = celulares_solicitados.map((e,i) => {
                     return {
@@ -93,6 +94,7 @@ export const informationSolicitud = createSlice({
                 })
 
                 // console.log(action.payload.data.hora)
+                state.caso = caso
                 state.status = 'succeeded'
                 state.delito = delito
                 state.evento = evento

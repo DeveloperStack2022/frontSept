@@ -50,7 +50,7 @@ const ModalShowDataSolicitud:FC<Props> = ({isOpen,onClose,data,status}) => {
                                     {/* Delito */}
                                     <p> <span className='font-bold '>Delito</span> <span className='uppercase text-gray-700'>{data.delito ? data.delito : "---"}</span></p>
                                     {/* Caso */}
-                                    <p> <span className='font-bold '>Caso</span> <span className='uppercase text-gray-700'>test</span></p>
+                                    <p> <span className='font-bold '>Caso</span> <span className='uppercase text-gray-700'>{data.caso ? data.caso : "---"}</span></p>
                                     {/* Evento */}
                                     <p> <span className='font-bold '>Evento</span> <span className='uppercase text-gray-700'>{data.evento ? data.evento : "---"}</span></p>
                                     {/* Organizacion delicuencial */}

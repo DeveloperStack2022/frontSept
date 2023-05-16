@@ -4,4 +4,6 @@ export type Solicitud = {
     unidad:string;
     solicitante_result:any
     id:string;
+    // 
+    acciones:string;
 }
