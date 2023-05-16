@@ -28,9 +28,10 @@ type Props = {
     pageCount:number;
     showOneDataSolicitud: (id:string) => void
     handleModal: () => void
+    handleGetSolicitud: (id:string) => void
 }
 
-const TableComponent:FC<Props> = ({data,fetch_data,loading,pageCount,showOneDataSolicitud,handleModal}) => {
+const TableComponent:FC<Props> = ({data,fetch_data,loading,pageCount,showOneDataSolicitud,handleModal,handleGetSolicitud}) => {
     // TODO: States
     const [{pageIndex,pageSize}, setPageSize] = useState<PaginationState>({pageIndex:0,pageSize:10})
     const table = useReactTable({data:data,columns:columns,getCoreRowModel:getCoreRowModel()})
@@ -54,7 +55,7 @@ const TableComponent:FC<Props> = ({data,fetch_data,loading,pageCount,showOneData
                 </thead>
                 <tbody>
                     {table.getRowModel().rows.map(row => (
-                        <tr className='bg-white dark:bg-gray-800 border-t hover:bg-gray-200/50 cursor-pointer' key={row.id} onClick={handleModal}>
+                        <tr className='bg-white dark:bg-gray-800 border-t hover:bg-gray-200/50 cursor-pointer' key={row.id} onClick={() => handleGetSolicitud(row.original.id)}>
                            {row.getVisibleCells().map(cell => (
                                 <td className='px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white text-sm' key={cell.id} >{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
                            ))}

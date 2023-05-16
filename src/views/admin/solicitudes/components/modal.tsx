@@ -1,4 +1,5 @@
 import {FC} from 'react'
+import {SolicitudAction} from '@/schemas/solicitud-schema'
 
 // TODO: Icon
 import IconUser from '@icons/user.svg?component'
@@ -6,9 +7,11 @@ import IconUser from '@icons/user.svg?component'
 type Props = {
     isOpen: boolean;
     onClose: () => void;
+    data: SolicitudAction
+    status:string
 }
 
-const ModalShowDataSolicitud:FC<Props> = ({isOpen,onClose}) => {
+const ModalShowDataSolicitud:FC<Props> = ({isOpen,onClose,data,status}) => {
     
     return (
         <div className={`fixed flex justify-center items-center top-0 left-0 right-0 z-50  p-4  md:inset-0  max-h-full bg-black/[.54] ${!isOpen && 'hidden'}`}>
@@ -22,107 +25,55 @@ const ModalShowDataSolicitud:FC<Props> = ({isOpen,onClose}) => {
                     </button>
                     <div className="p-6 text-center">
                         <h3 className='font-semibold text-xl mt-2'>Detalles completos de la solicitud</h3>
-                        <div className="flex  justify-center flex-col mt-4 ">
-                            {/* Datos Solicitantes */}
-                            <div className='border-b-gray-300 '>
-                                    {/* Box information del solicitante */}
-                                    <div className="flex">
-                                        <div className="bg-blue-200 inline-block p-3 rounded-full">
-                                            {/* Icon user */}
-                                            <IconUser className='h-6 w-6' />
+                        {status == 'succeeded' ? (
+                            <div className="flex  justify-center flex-col mt-4 ">
+                                {/* Datos Solicitantes */}
+                                <div className='border-b-gray-300 '>
+                                        {/* Box information del solicitante */}
+                                        <div className="flex">
+                                            <div className="bg-blue-200 inline-block p-3 rounded-full h-12 w-12">
+                                                {/* Icon user */}
+                                                <IconUser className='h-6 w-6' />
+                                            </div>
+                                            <div className="flex flex-col ml-4">
+                                                {/* Nombres completos */}
+                                                <p className='text-base  font-semibold self-start text-left'>{`${data.solicitante_result[0]?.grado} ${data.solicitante_result[0]?.nombres_completos}`}</p>
+                                                {/* Unidad */}
+                                                <span className='text-gray-400 text-sm text-left'>{data.solicitante_result[0]?.unidad}</span>
+                                            </div>
                                         </div>
-                                        <div className="flex flex-col ml-4">
-                                            {/* Nombres completos */}
-                                            <p className='text-base  font-semibold self-start'>SGOS. Adrian Paredes</p>
-                                            {/* Unidad */}
-                                            <span className='text-gray-400 text-sm text-left'>UNIT</span>
+                                </div>
+                                {/* Datos Solicitud */}
+                                <div className="mt-2 text-left">
+                                    {/* Fecha */}
+                                    <p> <span className='font-bold'>Fecha</span> <span className='uppercase text-gray-700'>{data.hora} </span></p>
+                                    {/* Delito */}
+                                    <p> <span className='font-bold '>Delito</span> <span className='uppercase text-gray-700'>{data.delito ? data.delito : "---"}</span></p>
+                                    {/* Caso */}
+                                    <p> <span className='font-bold '>Caso</span> <span className='uppercase text-gray-700'>test</span></p>
+                                    {/* Evento */}
+                                    <p> <span className='font-bold '>Evento</span> <span className='uppercase text-gray-700'>{data.evento ? data.evento : "---"}</span></p>
+                                    {/* Organizacion delicuencial */}
+                                    <p> <span className='font-bold '>GDO</span> <span className='uppercase text-gray-700'>{data.organizacion_delicuencial ? data.organizacion_delicuencial : "---"}</span></p>
+                                </div>
+                                {/* Datos celular - ubicacion */}
+                                <div className=" mt-2  grid grid-cols-2 text-left h-72 overflow-y-scroll">
+                                    {data.celulares_solicitados.map((e,index) => (
+                                        <div className="" key={index}>
+                                            <p className='font-bold text-blue-600'>Numero celular {index + 1}</p>
+                                            {/* Numero celular */}
+                                            <p> <span className='font-semibold'>Numero</span> <span>{e.numero_celular}</span></p>
+                                            {/* Imsi */}
+                                            <p> <span className='font-bold'>Imsi</span> <span>{e.imsi}</span></p>
+                                            {/* Latitud */}
+                                            <p> <span className='font-bold'>Latitud</span> <span>{data.ubicaciones_celulares[index].latitud ? data.ubicaciones_celulares[index].latitud : "---"}</span></p>
+                                            {/* Longitud */}
+                                            <p> <span className='font-bold'>Longitud</span> <span>{data.ubicaciones_celulares[index].longitud ? data.ubicaciones_celulares[index].longitud : "---"}</span></p>
                                         </div>
-                                    </div>
+                                    ))}
+                                </div>
                             </div>
-                            {/* Datos Solicitud */}
-                            <div className="mt-2 text-left">
-                                {/* Fecha */}
-                                <p> <span className='font-bold'>Fecha</span> <span className='uppercase text-gray-700'> 09/05/2023 10:16 AM</span></p>
-                                {/* Delito */}
-                                <p> <span className='font-bold '>Delito</span> <span className='uppercase text-gray-700'>Mafia</span></p>
-                                {/* Caso */}
-                                <p> <span className='font-bold '>Caso</span> <span className='uppercase text-gray-700'>Frontera 1</span></p>
-                                {/* Evento */}
-                                <p> <span className='font-bold '>Evento</span> <span className='uppercase text-gray-700'>asociasion ilicita</span></p>
-                                {/* Organizacion delicuencial */}
-                                <p> <span className='font-bold '>GDO</span> <span className='uppercase text-gray-700'>Los lobos</span></p>
-                            </div>
-                            {/* Datos celular - ubicacion */}
-                            <div className=" mt-2  grid grid-cols-2 text-left h-72 overflow-y-scroll">
-                                <div className="">
-                                    <p className='font-bold text-blue-600'>Numero celular 1</p>
-                                    {/* Numero celular */}
-                                    <p> <span className='font-semibold'>Numero</span> <span>0939098050</span></p>
-                                    {/* Imsi */}
-                                    <p> <span className='font-bold'>Imsi</span> <span>0939098050</span></p>
-                                    {/* Latitud */}
-                                    <p> <span className='font-bold'>Latitud</span> <span>0939098050</span></p>
-                                    {/* Longitud */}
-                                    <p> <span className='font-bold'>Longitud</span> <span>0939098050</span></p>
-                                </div>
-                                <div className="">
-                                    <p className='font-bold text-blue-600'>Numero celular 2</p>
-                                    {/* Numero celular */}
-                                    <p> <span className='font-bold'>Numero</span> <span>0939098050</span></p>
-                                    {/* Imsi */}
-                                    <p> <span className='font-bold'>Imsi</span> <span>0939098050</span></p>
-                                    {/* Latitud */}
-                                    <p> <span className='font-bold'>Latitud</span> <span>0939098050</span></p>
-                                    {/* Longitud */}
-                                    <p> <span className='font-bold'>Longitud</span> <span>0939098050</span></p>
-                                </div>
-                                <div className="">
-                                    <p className='font-bold text-blue-600'>Numero celular 3</p>
-                                    {/* Numero celular */}
-                                    <p> <span className='font-bold'>Numero</span> <span>0939098050</span></p>
-                                    {/* Imsi */}
-                                    <p> <span className='font-bold'>Imsi</span> <span>0939098050</span></p>
-                                    {/* Latitud */}
-                                    <p> <span className='font-bold'>Latitud</span> <span>0939098050</span></p>
-                                    {/* Longitud */}
-                                    <p> <span className='font-bold'>Longitud</span> <span>0939098050</span></p>
-                                </div>
-                                <div className="">
-                                    <p className='font-bold text-blue-600'>Numero celular 4</p>
-                                    {/* Numero celular */}
-                                    <p> <span className='font-bold'>Numero</span> <span>0939098050</span></p>
-                                    {/* Imsi */}
-                                    <p> <span className='font-bold'>Imsi</span> <span>0939098050</span></p>
-                                    {/* Latitud */}
-                                    <p> <span className='font-bold'>Latitud</span> <span>0939098050</span></p>
-                                    {/* Longitud */}
-                                    <p> <span className='font-bold'>Longitud</span> <span>0939098050</span></p>
-                                </div>
-                                <div className="">
-                                    <p className='font-bold text-blue-600'>Numero celular 5</p>
-                                    {/* Numero celular */}
-                                    <p> <span className='font-semibold'>Numero</span> <span>0939098050</span></p>
-                                    {/* Imsi */}
-                                    <p> <span className='font-bold'>Imsi</span> <span>0939098050</span></p>
-                                    {/* Latitud */}
-                                    <p> <span className='font-bold'>Latitud</span> <span>0939098050</span></p>
-                                    {/* Longitud */}
-                                    <p> <span className='font-bold'>Longitud</span> <span>0939098050</span></p>
-                                </div>
-                                <div className="">
-                                    <p className='font-bold text-blue-600'>Numero celular 6</p>
-                                    {/* Numero celular */}
-                                    <p> <span className='font-bold'>Numero</span> <span>0939098050</span></p>
-                                    {/* Imsi */}
-                                    <p> <span className='font-bold'>Imsi</span> <span>0939098050</span></p>
-                                    {/* Latitud */}
-                                    <p> <span className='font-bold'>Latitud</span> <span>0939098050</span></p>
-                                    {/* Longitud */}
-                                    <p> <span className='font-bold'>Longitud</span> <span>0939098050</span></p>
-                                </div>
-                                
-                            </div>
-                        </div>
+                        ): "loading"}
                     </div>
                 </div>
             </div>

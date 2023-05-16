@@ -61,8 +61,12 @@ export const getPaginateSolicitudes = async (skip:number,token:string) => {
     }
 }
 
-export const getOneSolicitud = async (id:string) => {
-    const response = await axios.get(`${URI}/`)
+export const getOneSolicitud = async (id:string,token:string) => {
+    const response = await axios.get(`${URI}/solicitud/${id}/results`,{
+        headers:{
+            'x-access-token': token
+        }
+    })
     return {
         data: response.data,
         status: response.status
