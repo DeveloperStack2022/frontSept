@@ -3,7 +3,7 @@ export type Solicitud = {
     delito:string;
     unidad:string;
     solicitante_result:any
-    id:string;
+    _id:string;
     // 
     acciones:string;
 }

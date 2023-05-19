@@ -34,8 +34,6 @@ const TableComponent:FC<Props> = ({data,fetch_data,loading,pageCount,setPageCoun
     const pagination = useMemo(() => ({pageIndex,pageSize}),[pageIndex,pageSize])
     const defaultDataMemo = useMemo(() => [], [])
 
-   
-
 
     const columns  = [
         columnHelper.accessor('caso',{
@@ -58,7 +56,7 @@ const TableComponent:FC<Props> = ({data,fetch_data,loading,pageCount,setPageCoun
                        Editar
                     </button>
                     <button className='bg-red-600 hover:bg-red-600/90 text-white text-xs py-1.5 px-2 rounded-md font-semibold mr-2'>Eliminar</button>
-                    <button className='bg-gray-600 hover:bg-gray-600/90 text-white text-xs py-1.5 px-2 mr-2 rounded-md font-semibold' onClick={() => handleGetSolicitud(props.row.original.id)}>Detalles</button>
+                    <button className='bg-gray-600 hover:bg-gray-600/90 text-white text-xs py-1.5 px-2 mr-2 rounded-md font-semibold' onClick={() => handleGetSolicitud(props.row.original._id)}>Detalles</button>
                 </>
             )
         })
@@ -106,9 +104,7 @@ const TableComponent:FC<Props> = ({data,fetch_data,loading,pageCount,setPageCoun
                     ))}
                 </tbody>
             </table>
-            {/* <button className="p-2 bg-blue-600 mr-2" onClick={() => table.previousPage()}>{'<'}</button> */}
-            {/* <button className="p-2 bg-blue-600 " onClick={() => table.nextPage()}>{'>'}</button> */}
-            <ButtonPagination nextPage={() => table.nextPage()} previousPage={() => {table.previousPage()}} />
+            <ButtonPagination pageActual={pageIndex + 1} disableNextPage={!table.getCanNextPage()} disablePreviousPage={!table.getCanPreviousPage()} nextPage={() => table.nextPage()} previousPage={() => {table.previousPage()}} />
         </div>
     )
 }
