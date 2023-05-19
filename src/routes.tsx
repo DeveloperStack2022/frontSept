@@ -4,7 +4,7 @@ import DeleteIcon from '@icons/delete-icon.svg?component'
 import DocIcon from '@icons/doc-icon.svg?component'
 // Views Admin
 import MainDashboard from "@/views/admin/default"
-import DeleteView from '@/views/admin/delete'
+
 import SolicitudesView from '@/views/admin/solicitudes'
 // Views Auth
 import SignInView from '@/views/Auth'
@@ -16,14 +16,6 @@ const routes = [
       path: "default",
       icon: <SquerePlusIcon className="h-6 w-6 stroke-current" />,
       component: <MainDashboard />,
-    },
-    {
-      name: "Eliminar Solicitud",
-      layout: "/admin",
-      path: "eliminar-solicitud",
-      icon: <DeleteIcon className="h-6 w-6 stroke-current" />,
-      component: <DeleteView />,
-      secondary: true,
     },
     {
       name: "Solicitudes",

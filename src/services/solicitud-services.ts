@@ -1,7 +1,7 @@
 import {ValidationType} from '@/schemas/form'
 const URI = 'http://192.168.20.124:5050/api'
 import axios from 'axios'
-
+// /solicitud_test?skip=1&limit=10
 export const addSolicitud = async (dataParams:ValidationType,token:any,ubicacion:any,celulares:any) => {
     const date = new Date()
     const dateH = date.toLocaleTimeString('en-us');
@@ -43,9 +43,9 @@ export const addSolicitud = async (dataParams:ValidationType,token:any,ubicacion
     }
 }
 
-export const getPaginateSolicitudes = async (skip:number,token:string) => {
+export const getPaginateSolicitudes = async (skip:number,limit:number,token:string) => {
     try{
-        const response = await axios.get(`${URI}/solicitud`,{
+        const response = await axios.get(`${URI}/solicitud_test?skip=${skip}&limit=${limit}`,{
             headers:{
                 "accept":"*/*",
                 'Content-Type':'application/json',
@@ -53,8 +53,9 @@ export const getPaginateSolicitudes = async (skip:number,token:string) => {
             }
         })
         return {
-            data: response.data,
-            status: response.status
+            data: response.data?.solicitud,
+            status: response.status,
+            n_documents: response.data?.n_documents
         }
     }catch(error){
         console.log(error)

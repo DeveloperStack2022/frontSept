@@ -4,6 +4,7 @@ import TableComponent from './components/table';
 import {SolicitudAction} from '@/schemas/solicitud-schema'
 // Custom components
 import Modal from './components/modal'
+import AutoCompleteSearch from './components/AutoCompleteSearch';
 
 //Services 
 import {getPaginateSolicitudes} from '@/services/solicitud-services'
@@ -20,6 +21,11 @@ interface SolicitudAddStatus extends SolicitudAction {
     status:string
 }
 
+type Item = {
+    id:number;
+    text:string;
+}
+
 const ViewSolicitudes = () => {
 
     // Hooks Redux 
@@ -31,8 +37,13 @@ const ViewSolicitudes = () => {
 
     const [Loading, setLoading] = useState<boolean>(false)
     const [Search, setSearch] = useState("")
+    
+    // States component Table
     const [Data, setData] = useState([])
     const [PageCount, setPageCount] = useState<number>(0)
+    const [nDocuments, setnDocuments] = useState<number>(0)
+    const [TotalPages, setTotalPages] = useState<number>(0)
+    
     const [OpenModal, setOpenModal] = useState<boolean>(false)
     const [DataSolicitud, setDataSolicitud] = useState<SolicitudAddStatus>({
         status:'initial',
@@ -54,18 +65,32 @@ const ViewSolicitudes = () => {
         setDataSolicitud(solicitudSelector)
     },[solicitudSelector])
     
-    const fetchDataApi = async (skip:number) => {
+
+    useEffect(() => {
+        // Execute function async 
+        if(Data.length == 0 ){
+            fetchDataApi(0,5)
+        }
+      return () => {}
+    }, [Data])
+    
+
+    const fetchDataApi = async (skip:number,limit:number) => {
         const token_ = JSON.parse(getItem('authToken'))
         try {
-            const data = await getPaginateSolicitudes(skip,token_?.accessToken)
+            const data = await getPaginateSolicitudes(skip,limit,token_?.accessToken)
             setData(data?.data)
+            setnDocuments(data?.n_documents)
+            let calculo_:number = data?.n_documents / limit
+            let math_ = Math.ceil(calculo_)
+            setTotalPages(math_)
         } catch (error) {
             console.log(error)
         }
     }
 
-    const fetchData = useCallback((n_page:number) => {
-        fetchDataApi(n_page)
+    const fetchData = useCallback((skip:number,limit:number) => {
+        fetchDataApi(skip,limit)
     },[Search])
     
     const showOneDataSolicitud = (id:string) => {
@@ -76,7 +101,6 @@ const ViewSolicitudes = () => {
         setOpenModal(prev => !prev)
     }
 
-
     const handleGetSolicitudById = (id:string) => {
         const token = getItem('authToken')
         const token_ = JSON.parse(token)
@@ -84,10 +108,45 @@ const ViewSolicitudes = () => {
         handleModal()
     }
 
+    const formatResult = (item:Item) => {
+        return <span>{item.text}</span>
+    }
+
+    const handleOnSearch = (string:string, results:any) => {
+        // onSearch will have as the first callback parameter
+        // the string searched and for the second the results.
+        // console.log(string, results)
+    }
+
     return (
         <>
-            <Modal data={DataSolicitud} isOpen={OpenModal} onClose={handleModal} status={solicitudSelector.status} />     
-            <TableComponent handleGetSolicitud={handleGetSolicitudById} handleModal={handleModal} showOneDataSolicitud={showOneDataSolicitud} data={Data} loading={Loading} pageCount={PageCount} fetch_data={fetchData}  />
+            <Modal 
+                data={DataSolicitud}
+                isOpen={OpenModal}
+                onClose={handleModal}
+                status={solicitudSelector.status}
+            /> 
+            <AutoCompleteSearch 
+                items={[
+                    {
+                        id:1,
+                        text: 'test'
+                    },{
+                        id:2,
+                        text: 'caso'
+                    },{
+                        id:3,
+                        text: 'caso val 2'
+                    },{
+                        id:4,
+                        text: 'caso val 3'
+                    }
+                ]}
+                formatResult={formatResult}
+                onSearch={handleOnSearch}
+                placeholder='Search'
+            />    
+            <TableComponent totalPage={TotalPages}  handleGetSolicitud={handleGetSolicitudById} handleModal={handleModal} showOneDataSolicitud={showOneDataSolicitud} data={Data} loading={Loading} pageCount={PageCount} setPageCount={setPageCount} fetch_data={fetchData}   />
         </>
     )
 }

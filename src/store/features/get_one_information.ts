@@ -27,8 +27,8 @@ export interface GetState {
         longitud:string;
         latitud:string
     }[]
-
 }
+
 
 interface InitialState extends SolicitudAction {
     status:string

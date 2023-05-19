@@ -1,8 +1,8 @@
 import {useState,FC,useEffect,useMemo} from 'react'
-import {useReactTable,createColumnHelper,getCoreRowModel, flexRender,PaginationState} from '@tanstack/react-table'
+import {useReactTable,createColumnHelper,getCoreRowModel, flexRender,PaginationState,getPaginationRowModel,SortingState,getSortedRowModel} from '@tanstack/react-table'
 
-// TODO: Icons 
-import EditIcon from '@/icons/table-icons/edit.svg?component'
+// TODO: Custom Components
+import ButtonPagination from './buttons-pagination'
 
 //Types 
 import {Solicitud} from '@/schemas/columns-solicitudes'
@@ -16,25 +16,25 @@ const columnHelper = createColumnHelper<Solicitud>()
 type Props = {
     loading:boolean;
     data: Solicitud[],
-    fetch_data:(n_page:number) => void;
+    fetch_data:(skip:number,limit:number) => void;
     pageCount:number;
     showOneDataSolicitud: (id:string) => void
     handleModal: () => void
     handleGetSolicitud: (id:string) => void
+    setPageCount: any
+    totalPage:number
 }
 
-const TableComponent:FC<Props> = ({data,fetch_data,loading,pageCount,showOneDataSolicitud,handleModal,handleGetSolicitud}) => {
+const TableComponent:FC<Props> = ({data,fetch_data,loading,pageCount,setPageCount,showOneDataSolicitud,handleGetSolicitud,totalPage}) => {
     // TODO: States
-    const [{pageIndex,pageSize}, setPageSize] = useState<PaginationState>({pageIndex:0,pageSize:10})
+    const [{pageIndex,pageSize}, setPageSize] = useState<PaginationState>({pageIndex:0,pageSize:5})
+    const [Sorting, setSorting] = useState<SortingState>([]);
 
     // TODO: Hooks memo 
     const pagination = useMemo(() => ({pageIndex,pageSize}),[pageIndex,pageSize])
+    const defaultDataMemo = useMemo(() => [], [])
 
-
-    useEffect(() => {
-        let pageIndexN = pageIndex + 1
-        fetch_data && fetch_data(pageIndexN)
-    },[pageIndex,fetch_data])
+   
 
 
     const columns  = [
@@ -49,11 +49,6 @@ const TableComponent:FC<Props> = ({data,fetch_data,loading,pageCount,showOneData
             header: 'Unidad',
             cell: (info) => (info.getValue() as Solicitante ).unidad
         }),
-        // columnHelper.accessor('acciones', {
-        //     id:'acciones',
-        //     header: 'Accciones',
-        //     cell: (info) => ()
-        // }),
         columnHelper.display({
             id: 'acciones',
             header: 'acciones',
@@ -70,14 +65,25 @@ const TableComponent:FC<Props> = ({data,fetch_data,loading,pageCount,showOneData
     ]
 
     const table = useReactTable({
-        data:data,
+        data:data ?? defaultDataMemo,
         columns:columns,
+        onPaginationChange: setPageSize,
+        state:{pagination},
+        onSortingChange: setSorting,
         getCoreRowModel:getCoreRowModel(),
+        getSortedRowModel: getSortedRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
+        debugTable: true,
+        pageCount: totalPage ?? -1,
         manualPagination:true,
-        state:{
-            pagination:pagination
-        }
     })
+
+    useEffect(() => {
+        console.log('pages')
+        let pageIndexN = pageIndex + 1
+        fetch_data && fetch_data(pageIndexN,5)
+    },[pageIndex,fetch_data])
+
     return (
         <div className="mt-7 overflow-x-auto">
             <table className="w-full whitespace-nowrap">
@@ -100,6 +106,9 @@ const TableComponent:FC<Props> = ({data,fetch_data,loading,pageCount,showOneData
                     ))}
                 </tbody>
             </table>
+            {/* <button className="p-2 bg-blue-600 mr-2" onClick={() => table.previousPage()}>{'<'}</button> */}
+            {/* <button className="p-2 bg-blue-600 " onClick={() => table.nextPage()}>{'>'}</button> */}
+            <ButtonPagination nextPage={() => table.nextPage()} previousPage={() => {table.previousPage()}} />
         </div>
     )
 }
