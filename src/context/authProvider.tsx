@@ -14,6 +14,9 @@ export const AuthProvider = ({ children }: Props) => {
   const [Value, setValue] = useState<string | null>(() =>
     window.localStorage.getItem("authToken")
   );
+  const [Name, setName] = useState<string | null>(() =>
+    window.localStorage.getItem("name")
+  );
 
   const login = async ({ email, password }: FormInicioSessionType) => {
     // Service Authentication API - Server {Promise}
@@ -31,7 +34,9 @@ export const AuthProvider = ({ children }: Props) => {
     if (res.status >= 200 && res.status <= 299) {
       const dataResponse = await res.json();
       setItem("authToken", JSON.stringify(dataResponse));
+      setItem("name", dataResponse?.name);
       setValue(dataResponse);
+      setName(dataResponse?.name);
       return navigate("/admin/default");
     }
   };
@@ -39,6 +44,7 @@ export const AuthProvider = ({ children }: Props) => {
   const logout = () => {
     removeItem("authToken");
     setValue(null);
+    setName(null);
     navigate("/auth/sign-in");
   };
 
@@ -48,6 +54,7 @@ export const AuthProvider = ({ children }: Props) => {
       Value,
       logout,
       setValue,
+      name: Name,
     }),
     [Value]
   );

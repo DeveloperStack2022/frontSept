@@ -1,22 +1,30 @@
 import routes from "@/routes";
-import React from "react";
+import React, { useEffect } from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import ProctedRoute from "@/Routes/procted.routes";
 // Components
 import Sidebar from "@/components/sidebar";
+// Custom hooks
+import useAuth from "@/hooks/useAuth";
 
 export default function Admin(props: { [x: string]: any }) {
   const { ...rest } = props;
   const location = useLocation();
+  let { name } = useAuth();
 
   const [open, setOpen] = React.useState(true);
   const [currentRoute, setCurrentRoute] = React.useState("Main Dashboard");
+  const [Name, setName] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     window.addEventListener("resize", () => {
       window.innerWidth < 1200 ? setOpen(false) : setOpen(true);
     });
   }, []);
+
+  useEffect(() => {
+    if (name != "" && name) setName(name);
+  }, [name]);
 
   React.useEffect(() => {
     getActiveRoute(routes);
@@ -86,13 +94,13 @@ export default function Admin(props: { [x: string]: any }) {
           {/* <div className="h-4/6 w-px bg-gray-200" /> */}
           <div className="flex">
             <div className="relative inline-block ">
-              <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-gray-700  text-center  font-bold leading-none text-white">
-                LU
+              <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-gray-700 text-center  font-bold  uppercase leading-none text-white">
+                {name?.slice(0, -2)}
               </span>
               <span className="absolute bottom-0 right-0 inline-block h-3 w-3 rounded-full border-2 border-white bg-green-600"></span>
             </div>
             <div className="ml-2">
-              <span className="block font-semibold ">Luis Zapata</span>
+              <span className="block font-semibold ">{Name}</span>
               <span className="block leading-3 text-gray-400">
                 User septier
               </span>
