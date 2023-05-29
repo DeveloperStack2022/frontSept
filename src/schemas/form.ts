@@ -17,7 +17,6 @@ export type ValidationType = {
     plataforma:string;
 
     nombre_caso:string;
-    evento:string;
     delito:string;
     grupo_delicuencial:string;
     investigacion_previa:string;
@@ -47,7 +46,6 @@ export type ValidationTypeCelulares = {
 const validationSchema = yup.object().shape({
     // Datos de solicitud
     nombre_caso:yup.string().required('Campo requerido'),
-    evento:yup.string(),
     delito:yup.string().required('Campo requerido'),
     grupo_delicuencial:yup.string(),
     investigacion_previa:yup.string().required('Campo requerido'),

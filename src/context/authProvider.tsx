@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }: Props) => {
 
   const login = async ({ email, password }: FormInicioSessionType) => {
     // Service Authentication API - Server {Promise}
-    const res = await fetch("http://192.168.56.1:5050/api/login", {
+    const res = await fetch("http://192.168.20.208:5050/api/login", {
       method: "POST",
       body: JSON.stringify({
         email,

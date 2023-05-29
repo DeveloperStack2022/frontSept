@@ -1,5 +1,5 @@
 import {ValidationType} from '@/schemas/form'
-const URI = 'http://192.168.56.1:5050/api'
+const URI = 'http://192.168.20.208:5050/api'
 import axios from 'axios'
 // /solicitud_test?skip=1&limit=10
 export const addSolicitud = async (dataParams:ValidationType,token:any,ubicacion:any,celulares:any) => {
