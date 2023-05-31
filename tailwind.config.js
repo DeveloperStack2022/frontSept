@@ -13,6 +13,16 @@ module.exports = {
           600: "#006FF9",
         },
       },
+      keyframes:{
+        progress:{
+          '0%,20%':{
+            transform: 'translateX(-100%);'
+          },
+          '100%':{
+            transform: 'translateX(0);'
+          }
+        }
+      }
     },
   },
   plugins: [],

@@ -41,7 +41,7 @@ const ViewSolicitudes = () => {
     // States component Table
     const [Data, setData] = useState([])
     const [PageCount, setPageCount] = useState<number>(0)
-    const [nDocuments, setnDocuments] = useState<number>(0)
+    const [nDocuments, setnDocuments] = useState<number | null>(null)
     const [TotalPages, setTotalPages] = useState<number>(0)
     
     const [OpenModal, setOpenModal] = useState<boolean>(false)

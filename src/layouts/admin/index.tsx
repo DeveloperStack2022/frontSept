@@ -7,6 +7,10 @@ import Sidebar from "@/components/sidebar";
 // Custom hooks
 import useAuth from "@/hooks/useAuth";
 
+import ToastProvider from '@/components/toast/toastProvider'
+
+
+
 export default function Admin(props: { [x: string]: any }) {
   const { ...rest } = props;
   const location = useLocation();
@@ -77,6 +81,7 @@ export default function Admin(props: { [x: string]: any }) {
   document.documentElement.dir = "ltr";
 
   return (
+    <ToastProvider variant={'bottom_middle'}>
     <div className="flex bg-gray-100 font-sans text-gray-900">
       <Sidebar
         onClose={() => {
@@ -117,5 +122,6 @@ export default function Admin(props: { [x: string]: any }) {
         </main>
       </div>
     </div>
+    </ToastProvider>
   );
 }
