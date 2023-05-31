@@ -25,6 +25,7 @@ export type ValidationType = {
     nombres_apellidos:string;
     unidad:string;
     zona:string;
+    
     // Datos celular
     celulares:[{
         numero_celular:string;

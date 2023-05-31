@@ -15,17 +15,18 @@ export const addSolicitud = async (dataParams:ValidationType,token:any,ubicacion
         "plataforma": "Septier",
         "caso": dataParams.nombre_caso,
         "delito":dataParams.delito,
-        "evento": dataParams.evento,
+        "evento": '',
         "organizacion_delicuencial": dataParams.grupo_delicuencial,
+        'investigacion_previa':dataParams.investigacion_previa,
         "solicitante": {
-        "grado": dataParams.grado,
-        "nombres_completos": dataParams.nombres_apellidos,
-        "unidad": dataParams.unidad,
-        "zona": dataParams.zona
+            "grado": dataParams.grado,
+            "nombres_completos": dataParams.nombres_apellidos,
+            "unidad": dataParams.unidad,
+            "zona": dataParams.zona
         },
         "celular": celulares,
         "ubicacion": ubicacion
-  }
+    }
     try {
         const response = await axios.post(`${URI}/solicitud`,dataSerializada,{
             headers:{
