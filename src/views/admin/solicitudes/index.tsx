@@ -2,6 +2,8 @@ import {useState,useCallback,useEffect} from 'react'
 import TableComponent from './components/table';
 // TODO: Schemas 
 import {SolicitudAction} from '@/schemas/solicitud-schema'
+// Component
+import TagInput from '@/components/tag-input'
 // Custom components
 import Modal from './components/modal'
 import AutoCompleteSearch from './components/AutoCompleteSearch';
@@ -37,14 +39,15 @@ const ViewSolicitudes = () => {
 
     const [Loading, setLoading] = useState<boolean>(false)
     const [Search, setSearch] = useState("")
-    
+    const [Value, setValue] = useState<string[]>([])
+    const [OpenTag, setOpenTag] = useState<boolean>(false)
     // States component Table
     const [Data, setData] = useState([])
     const [PageCount, setPageCount] = useState<number>(0)
     const [nDocuments, setnDocuments] = useState<number | null>(null)
     const [TotalPages, setTotalPages] = useState<number>(0)
-    
     const [OpenModal, setOpenModal] = useState<boolean>(false)
+    
     const [DataSolicitud, setDataSolicitud] = useState<SolicitudAddStatus>({
         status:'initial',
         caso:'',
@@ -117,7 +120,7 @@ const ViewSolicitudes = () => {
         // the string searched and for the second the results.
         // console.log(string, results)
     }
-
+    
     return (
         <>
             <Modal 
@@ -126,7 +129,8 @@ const ViewSolicitudes = () => {
                 onClose={handleModal}
                 status={solicitudSelector.status}
             /> 
-            <AutoCompleteSearch 
+            <TagInput value={Value} open={OpenTag} onChange={(newValue) => setValue(newValue)} onOpen={() => setOpenTag(prev => !prev)} options={['Numero Celular', 'Caso']}  placeholder="Enter a new tag" />
+            {/* <AutoCompleteSearch 
                 items={[
                     {
                         id:1,
@@ -145,10 +149,15 @@ const ViewSolicitudes = () => {
                 formatResult={formatResult}
                 onSearch={handleOnSearch}
                 placeholder='Search'
-            />    
+            />     */}
             <TableComponent totalPage={TotalPages}  handleGetSolicitud={handleGetSolicitudById} handleModal={handleModal} showOneDataSolicitud={showOneDataSolicitud} data={Data} loading={Loading} pageCount={PageCount} setPageCount={setPageCount} fetch_data={fetchData}   />
         </>
     )
 }
 
 export default ViewSolicitudes;
+
+/**
+ * 
+ * 
+ */
