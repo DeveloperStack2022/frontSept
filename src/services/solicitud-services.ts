@@ -1,7 +1,9 @@
 import {ValidationType} from '@/schemas/form'
-const URI = 'http://192.168.20.208:5050/api'
 import axios,{AxiosResponse} from 'axios'
-// /solicitud_test?skip=1&limit=10
+
+const URI = import.meta.env.VITE_API_URL
+
+
 export const addSolicitud = async (dataParams:ValidationType,token:any,ubicacion:any,celulares:any) => {
     const date = new Date()
     const dateH = date.toLocaleTimeString('en-us');

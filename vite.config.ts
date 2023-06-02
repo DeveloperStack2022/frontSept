@@ -13,6 +13,9 @@ export default defineConfig({
       {find:'@components',replacement: resolve(__dirname,'src/components')},
       {find: '@icons',replacement: resolve(__dirname,'src/icons')},
   ]
+  },
+  define:{
+    'process.env':process.env
   }
   
 });

@@ -27,6 +27,8 @@ import MoreIcon from '@/icons/more.svg?component'
 import LongitudIcon from '@/icons/longitud.svg?component'
 import LatitudIcon from '@/icons/latitud.svg?component'
 import DeleteIcon from '@icons/delete-icon.svg?component'
+import SearchPhoneIcon from '@/icons/search-phone.svg?component'
+import XIcon from '@/icons/x-icon.svg?component'
 
 // Components 
 import ModalComponent from '@components/modal'
@@ -39,7 +41,10 @@ const AddSolicitudForm = () => {
     const dispatch = useAppDispatch()
     const stateSelector = useAppSelector(state => state.solicitudSearch)
     // FIXME: States 
+
     const refInput = useRef<HTMLInputElement>(null)
+    const [MessageNotification, setMessageNotification] = useState<{status:boolean,message:string} | null>(null)
+    const [ShowMessage, setShowMessage] = useState<boolean>(false)
     const [NnumeroCelulares, setNnumeroCelulares] = useState<number>(0)
     const [OpenModal, setOpenModal] = useState<boolean>(false)
     const [ModalContent, setModalContent] = useState<{message:string,status:number}>({message:'',status:0})
@@ -109,30 +114,42 @@ const AddSolicitudForm = () => {
         const valueInputSearch = refInput.current?.value as string
         if(valueInputSearch !== '' && !!valueInputSearch){
           
-            const {data} = await searchSolicitudByNumero(valueInputSearch,'')
+            const {data,status} = await searchSolicitudByNumero(valueInputSearch,'')
            
             let response:SolicitudNumero = data
-           
-            dispatch(informationSolicitud({
-                numero_celular:response.numero_celular,
-                solicitante:{
-                    grado:response.solicitante.grado,
-                    nombres_completos: response.solicitante.nombres_completos,
-                    unidad: response.solicitante.unidad,
-                    zona: response.solicitante.zona
-                },
-                solicitud:{
-                    caso: response.solicitud.caso,
-                    delito: response.solicitud.delito,
-                    investigacion_previa: response.solicitud.investigacion_previa,
-                    organizacion_delicuencial: response.solicitud.organizacion_delicuencial
-                }
-            }))
+            console.log(status)
+            if(status == 200){
+                dispatch(informationSolicitud({
+                    numero_celular:response.numero_celular,
+                    solicitante:{
+                        grado:response.solicitante?.grado,
+                        nombres_completos: response.solicitante.nombres_completos,
+                        unidad: response.solicitante.unidad,
+                        zona: response.solicitante.zona
+                    },
+                    solicitud:{
+                        caso: response.solicitud.caso,
+                        delito: response.solicitud.delito,
+                        investigacion_previa: response.solicitud.investigacion_previa,
+                        organizacion_delicuencial: response.solicitud.organizacion_delicuencial
+                    }
+                }))
+            }
+            
+            if(status == 204){ // Code 204 -> No Content
+                setMessageNotification({message:'Numero no encontrado',status:true})
+                setShowMessage(prev => !prev)
+            } 
 
            
         }
     }
     
+    const handleClickShow = () => {
+        setShowMessage(prev => !prev)
+    }
+
+
     useEffect(() => {
         if(stateSelector.status) {
             setFormData({
@@ -163,7 +180,6 @@ const AddSolicitudForm = () => {
       }
     }, [stateSelector.status])
     
-
     const handleChangeCasoStr = (e:ChangeEvent<HTMLInputElement>) => {
         console.log(e.target.name)
         setFormData({
@@ -185,10 +201,21 @@ const AddSolicitudForm = () => {
                         <h4 className='font-semibold text-md' >Datos solicitud</h4>
                             <div className="">
                                 <label htmlFor='num_celular'  className="inline-block text-sm font-medium text-gray-500 mb-1 hover:cursor-pointer">Buscar Numero Celular</label>
-                                <div className="flex gap-x-2">
-                                    <input ref={refInput} type="text" id='num_celular'  className='w-full py-2 pr-7 pl-9 block rounded-md  bg-gray-100 outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm' autoComplete='off'  />
+                                <div className="flex gap-x-2 justify-between">
+                                    <div className="relative w-full">
+                                        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                            <SearchPhoneIcon className="absolute mr-6 w-5 h-5 text-gray-500" />
+                                        </div>
+                                        <input ref={refInput} type="text" id='num_celular'  className='w-full py-2 pr-7 pl-9 block rounded-md  bg-gray-100 outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm' autoComplete='off'  />
+                                    </div>
                                     <button onClick={handleSearch} type="button" className='font-bold px-4 py-2 text-green-700 bg-green-100 hover:bg-green-200 transition block rounded-md outline-offset-2 outline-transparent ring-green-300  focus:ring-2 text-sm'>Buscar</button>
                                 </div>
+                                {ShowMessage && MessageNotification?.status && (
+                                    <div className='bg-red-200 px-4 py-2 my-1 rounded-sm flex justify-between items-center'>
+                                        <span className='text-red-500'>{MessageNotification.message}</span>
+                                        <XIcon className='h-5 w-5 hover:cursor-pointer' onClick={handleClickShow} /> 
+                                    </div>
+                                )}
                            </div>
                             <input type="hidden" {...register('hora')} defaultValue={`${new Date().getHours}`} />
                             <input type="hidden" {...register('plataforma')} defaultValue={'Septier'} />

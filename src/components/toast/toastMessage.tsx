@@ -67,7 +67,7 @@ export default function ToastMessage({
         icon: icon,
         name: header,
     }
-    console.log(Var)
+    
 
     useEffect(() => {
         if(lifetime && onRemove ){

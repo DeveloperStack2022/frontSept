@@ -3,10 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import AuthContext from "./auth";
 import { FormInicioSessionType } from "@/schemas/form";
+const BASE_URL = import.meta.env.VITE_API_URL
 
 type Props = {
   children: JSX.Element;
 };
+
+
 
 export const AuthProvider = ({ children }: Props) => {
   const { setItem, removeItem } = useLocalStorage();
@@ -20,7 +23,7 @@ export const AuthProvider = ({ children }: Props) => {
 
   const login = async ({ email, password }: FormInicioSessionType) => {
     // Service Authentication API - Server {Promise}
-    const res = await fetch("http://192.168.20.208:5050/api/login", {
+    const res = await fetch(`${BASE_URL}/login`, {
       method: "POST",
       body: JSON.stringify({
         email,
