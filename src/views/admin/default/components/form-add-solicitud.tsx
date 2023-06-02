@@ -1,17 +1,20 @@
-import {KeyboardEvent,useState} from 'react'
+import {useState,useRef,ChangeEvent,useEffect} from 'react'
 // Validations Forms
 import {useForm,useFieldArray} from 'react-hook-form'
 import {yupResolver} from '@hookform/resolvers/yup'
 // Schema validation
 import ValidationDataSchema,{ValidationType} from '@/schemas/form'
 // Services HTTP 
-import {addSolicitud} from '@/services/solicitud-services'
+import {addSolicitud,searchSolicitudByNumero} from '@/services/solicitud-services'
 // Custom hooks 
 import {useLocalStorage} from '@/hooks/useLocalStorage'
-
 import Card from '@components/card'
-import FingerPrintIcon from '@/icons/finger-printer.svg?component'
+// Redux Storage
+import {useAppDispatch,useAppSelector} from '@/hooks/redux'
 
+import {informationSolicitud,SolicitudNumero} from '@/store/features/search_solicitud_num_celular'
+
+import FingerPrintIcon from '@/icons/finger-printer.svg?component'
 import DelitoIcon from '@/icons/delito.svg?component'
 import GroupIcon from '@icons/group.svg?component'
 import InvestigacionIcon from '@icons/investigacion.svg?component'
@@ -27,24 +30,36 @@ import DeleteIcon from '@icons/delete-icon.svg?component'
 
 // Components 
 import ModalComponent from '@components/modal'
-import { json } from 'react-router-dom'
 
-type DataType = {
-    accessToken:string;
-    name:string
-}
+
+type TypeValidationStateForm = Omit<ValidationType,'celulares' | 'hora'>
+
 const AddSolicitudForm = () => {
+    // FIXME: Redux 
+    const dispatch = useAppDispatch()
+    const stateSelector = useAppSelector(state => state.solicitudSearch)
     // FIXME: States 
+    const refInput = useRef<HTMLInputElement>(null)
     const [NnumeroCelulares, setNnumeroCelulares] = useState<number>(0)
     const [OpenModal, setOpenModal] = useState<boolean>(false)
     const [ModalContent, setModalContent] = useState<{message:string,status:number}>({message:'',status:0})
+    const [formData, setFormData] = useState<TypeValidationStateForm>({
+        delito:'',
+        grado:'',
+        grupo_delicuencial:'',
+        investigacion_previa:'',
+        nombre_caso:'',
+        nombres_apellidos:'',
+        plataforma:'SEPTIER',
+        unidad:'',
+        zona:''
+    })
     // Custom Hooks 
     const {getItem} = useLocalStorage()
     // React hooks form
-    const {register,handleSubmit,watch,control,reset,formState:{errors}} = useForm<ValidationType>({mode:"onBlur",resolver: yupResolver(ValidationDataSchema)})
+    const {register,handleSubmit,watch,control,reset,formState:{errors},setValue} = useForm<ValidationType>({resolver: yupResolver(ValidationDataSchema)})
     
     const {fields,append,remove} = useFieldArray<ValidationType,'celulares'>({control,name:'celulares'})
-//    const fields = watch('celulares')
 
     const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
         const keyCode = event.keyCode || event.which;
@@ -79,6 +94,7 @@ const AddSolicitudForm = () => {
     }
 
     const handleOpenModal = () =>  setOpenModal(true)
+
     const handleCloseModal = () => {
         let i = 0
         do {
@@ -89,7 +105,73 @@ const AddSolicitudForm = () => {
         setOpenModal(prev => !prev)
     }
 
+    const handleSearch = async () => {  
+        const valueInputSearch = refInput.current?.value as string
+        if(valueInputSearch !== '' && !!valueInputSearch){
+          
+            const {data} = await searchSolicitudByNumero(valueInputSearch,'')
+           
+            let response:SolicitudNumero = data
+           
+            dispatch(informationSolicitud({
+                numero_celular:response.numero_celular,
+                solicitante:{
+                    grado:response.solicitante.grado,
+                    nombres_completos: response.solicitante.nombres_completos,
+                    unidad: response.solicitante.unidad,
+                    zona: response.solicitante.zona
+                },
+                solicitud:{
+                    caso: response.solicitud.caso,
+                    delito: response.solicitud.delito,
+                    investigacion_previa: response.solicitud.investigacion_previa,
+                    organizacion_delicuencial: response.solicitud.organizacion_delicuencial
+                }
+            }))
+
+           
+        }
+    }
     
+    useEffect(() => {
+        if(stateSelector.status) {
+            setFormData({
+                nombre_caso:stateSelector.solicitud.caso,
+                delito:stateSelector.solicitud.delito,
+                grupo_delicuencial:stateSelector.solicitud.organizacion_delicuencial,
+                investigacion_previa: stateSelector.solicitud.investigacion_previa,
+                grado: stateSelector.solicitante.grado,
+                nombres_apellidos: stateSelector.solicitante.nombres_completos,
+                plataforma: 'SEPTIER',
+                unidad: stateSelector.solicitante.unidad,
+                zona: stateSelector.solicitante.zona
+            })
+            
+            setValue('delito',stateSelector.solicitud.delito)
+            setValue('nombre_caso',stateSelector.solicitud.caso)
+            setValue('grupo_delicuencial',stateSelector.solicitud.organizacion_delicuencial)
+            setValue('investigacion_previa',stateSelector.solicitud.investigacion_previa)
+
+            setValue('grado',stateSelector.solicitante.grado)
+            setValue('nombres_apellidos',stateSelector.solicitante.nombres_completos)
+            setValue('unidad',stateSelector.solicitante.unidad)
+            setValue('zona',stateSelector.solicitante.zona)
+        }
+    
+      return () => {
+        
+      }
+    }, [stateSelector.status])
+    
+
+    const handleChangeCasoStr = (e:ChangeEvent<HTMLInputElement>) => {
+        console.log(e.target.name)
+        setFormData({
+            ...formData,
+            [e.target.name]:e.target.value
+        })
+    }
+
     return (
         <Card>
             <ModalComponent isOpen={OpenModal} onClose={handleCloseModal} status={(ModalContent?.status > 200 && ModalContent?.status < 300 ) ? 'success' : 'error' } message={(ModalContent?.status > 200 && ModalContent?.status < 300 ) ? 'Solicitud agregada exitosamente' : ModalContent.message } >
@@ -100,7 +182,14 @@ const AddSolicitudForm = () => {
             <form onSubmit={handleSubmit(handleSubmitArrowFunction)} >
                 <div className="grid grid-cols-2 gap-x-5 p-6">
                     <div className="">
-                            <h4 className='font-semibold text-md' >Datos solicitud</h4>
+                        <h4 className='font-semibold text-md' >Datos solicitud</h4>
+                            <div className="">
+                                <label htmlFor='num_celular'  className="inline-block text-sm font-medium text-gray-500 mb-1 hover:cursor-pointer">Buscar Numero Celular</label>
+                                <div className="flex gap-x-2">
+                                    <input ref={refInput} type="text" id='num_celular'  className='w-full py-2 pr-7 pl-9 block rounded-md  bg-gray-100 outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm' autoComplete='off'  />
+                                    <button onClick={handleSearch} type="button" className='font-bold px-4 py-2 text-green-700 bg-green-100 hover:bg-green-200 transition block rounded-md outline-offset-2 outline-transparent ring-green-300  focus:ring-2 text-sm'>Buscar</button>
+                                </div>
+                           </div>
                             <input type="hidden" {...register('hora')} defaultValue={`${new Date().getHours}`} />
                             <input type="hidden" {...register('plataforma')} defaultValue={'Septier'} />
                             <div className="">
@@ -110,10 +199,12 @@ const AddSolicitudForm = () => {
                                         <FingerPrintIcon className="absolute mr-6 w-5 h-5 text-gray-500" />
                                     </div>
                                     <input
+                                        value={formData.nombre_caso}
+                                        {...register("nombre_caso")}
+                                        onChange={handleChangeCasoStr}
                                         placeholder="Nombre del caso"
                                         className={`w-full py-2 pr-7 pl-9 block rounded-md  bg-gray-100 outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm ${errors.nombre_caso?.message && 'border border-red-500 focus:border-red-500 focus:ring-red-500'}`}
                                         autoComplete="off"
-                                        {...register("nombre_caso")}
                                     />
                                 </div>
                             </div>
@@ -124,10 +215,12 @@ const AddSolicitudForm = () => {
                                         <DelitoIcon className="absolute mr-6 w-5 h-5 text-gray-500" />
                                     </div>
                                     <input
+                                        {...register('delito')} 
+                                        onChange={handleChangeCasoStr}
+                                        value={formData.delito}
                                         placeholder="Delito"
                                         className={`w-full py-2 pr-7 pl-8 block rounded-md bg-gray-100 outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm ${errors.delito?.message && 'border border-red-500 focus:border-red-500 focus:ring-red-500'}`}
                                         autoComplete="off"
-                                        {...register('delito')}
                                     />
                                 </div>
                             </div>
@@ -138,10 +231,12 @@ const AddSolicitudForm = () => {
                                         <GroupIcon className="absolute mr-6 w-5 h-5 text-gray-500" />
                                     </div>
                                     <input
+                                        {...register('grupo_delicuencial')}
+                                        onChange={handleChangeCasoStr}
+                                        value={formData.grupo_delicuencial}
                                         placeholder="Grupo Delicuencial"
                                         className="w-full py-2 pr-7 pl-8 block rounded-md bg-gray-100 outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm" 
                                         autoComplete="off"
-                                        {...register('grupo_delicuencial')}
                                     />
                                 </div>
                             </div>
@@ -156,6 +251,8 @@ const AddSolicitudForm = () => {
                                         className={`w-full py-2 pr-7 pl-8 block rounded-md bg-gray-100 outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm ${errors.investigacion_previa?.message && 'border border-red-500 focus:border-red-500 focus:ring-red-500'}`}
                                         autoComplete="off"
                                         {...register('investigacion_previa')}
+                                        onChange={handleChangeCasoStr}
+                                        value={formData.investigacion_previa}
                                     />
                                 </div>
                             </div>
@@ -174,6 +271,8 @@ const AddSolicitudForm = () => {
                                         className={`w-full py-2 pr-7 pl-8 block rounded-md border border-gray-300 outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm ${errors.grado?.message && 'border border-red-500 focus:border-red-500 focus:ring-red-500'}`}
                                         autoComplete="off"
                                         {...register('grado')}
+                                        onChange={handleChangeCasoStr}
+                                        value={formData.grado}
                                     />
                                 </div>
                             </div>
@@ -188,6 +287,8 @@ const AddSolicitudForm = () => {
                                         className={`w-full py-2 pr-7 pl-8 block rounded-md border border-gray-300 outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm ${errors.nombres_apellidos?.message && 'border border-red-500 focus:border-red-500 focus:ring-red-500'}`} 
                                         autoComplete="off"
                                         {...register('nombres_apellidos')}
+                                        onChange={handleChangeCasoStr}
+                                        value={formData.nombres_apellidos}
                                     />
                                 </div>
                             </div>
@@ -202,18 +303,22 @@ const AddSolicitudForm = () => {
                                         className="w-full py-2 pr-7 pl-8 block rounded-md border border-gray-300 outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm" 
                                         autoComplete="off"
                                         {...register('unidad')}
+                                        onChange={handleChangeCasoStr}
+                                        value={formData.unidad}
                                     />
                                 </div>
                             </div>
                             <div className="">
-                                <label  className="block text-sm font-medium text-gray-500">Zona</label>
+                                <label  className="flex justify-between items-center text-sm font-medium text-gray-500">Zona {errors.zona?.message && <span className='text-red-500 text-xs'>*{errors.zona?.message}*</span> }</label>
                                 <div className="relative mt-1 rounded-md shadow-sm">
                                     <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                                         <ZonaIcon className="absolute mr-6 w-5 h-5 text-gray-500" />
                                     </div>
                                     <input
-                                        placeholder="Zona"
-                                        className="w-full py-2 pr-7 pl-8 block rounded-md border border-gray-300 outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm" 
+                                        {...register('zona')}
+                                        onChange={handleChangeCasoStr}
+                                        value={formData.zona}
+                                        className={`w-full py-2 pr-7 pl-8 block rounded-md border border-gray-300 outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm ${errors.zona?.message && 'border border-red-500 focus:border-red-500 focus:ring-red-500'}`} 
                                         autoComplete="off"
                                     />
                                 </div>

@@ -1,9 +1,12 @@
 import {configureStore} from '@reduxjs/toolkit'
 // Slices 
 import getSolicitudSlice from './features/get_one_information'
+import  searchSolicitudByNumCelular from './features/search_solicitud_num_celular'
+
 export const store = configureStore({
     reducer: {
-        solicitud: getSolicitudSlice
+        solicitudSearch: searchSolicitudByNumCelular,
+        solicitud: getSolicitudSlice,
     }
 })
 

@@ -54,7 +54,7 @@ const validationSchema = yup.object().shape({
     grado:yup.string().required('Campo requerido'),
     nombres_apellidos:yup.string().required('Campo requerido'),
     unidad:yup.string().required('Campo requerido'),
-    zona:yup.string(),
+    zona:yup.string().required('Campo requerido'),
     // Datos Celular
     celulares: yup.array().of(
         yup.object().shape({

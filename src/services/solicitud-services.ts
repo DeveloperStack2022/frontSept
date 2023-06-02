@@ -1,6 +1,6 @@
 import {ValidationType} from '@/schemas/form'
 const URI = 'http://192.168.20.208:5050/api'
-import axios from 'axios'
+import axios,{AxiosResponse} from 'axios'
 // /solicitud_test?skip=1&limit=10
 export const addSolicitud = async (dataParams:ValidationType,token:any,ubicacion:any,celulares:any) => {
     const date = new Date()
@@ -73,4 +73,13 @@ export const getOneSolicitud = async (id:string,token:string) => {
         data: response.data,
         status: response.status
     }
+}
+
+export const searchSolicitudByNumero = async (num_celular:string,token:string) => {
+    return await axios.get(`${URI}/solicitud/${num_celular}`,{
+        headers:{
+            'x-access-token':token
+        }
+    })
+    
 }
