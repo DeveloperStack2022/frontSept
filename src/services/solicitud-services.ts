@@ -85,3 +85,19 @@ export const searchSolicitudByNumero = async (num_celular:string,token:string) =
     })
     
 }
+
+export const searchSolicitudByCaso = async (caso:string,token:string) => {
+    return await axios.get(`${URI}/solicitud_caso/${caso}`,{
+        headers:{
+            'x-access-token':token
+        }
+    })
+}
+
+export const searchSolicitudByIp = async (ip:string,token:string) => {
+    return await axios.get(`${URI}/solicitud_ip/${ip}`,{
+        headers:{
+            'x-access-token':token
+        }
+    })
+}
