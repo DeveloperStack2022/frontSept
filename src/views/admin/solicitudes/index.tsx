@@ -18,6 +18,10 @@ import {fetchData as fetchGetSolicitudById} from '@/store/features/get_one_infor
 import {useLocalStorage} from '@/hooks/useLocalStorage'
 import {useAppDispatch,useAppSelector} from '@/hooks/redux'
 
+// Icons 
+import FingerPrintIcon from '@/icons/finger-printer.svg?component'
+
+
 // TODO: 
 interface SolicitudAddStatus extends SolicitudAction {
     status:string
@@ -129,7 +133,11 @@ const ViewSolicitudes = () => {
                 onClose={handleModal}
                 status={solicitudSelector.status}
             /> 
-            <TagInput value={Value} open={OpenTag} onChange={(newValue) => setValue(newValue)} onOpen={() => setOpenTag(prev => !prev)} options={['Numero Celular', 'Caso']}  placeholder="Enter a new tag" />
+            <TagInput value={Value} open={OpenTag} onChange={(newValue) => setValue(newValue)} onOpen={() => setOpenTag(prev => !prev)} options={[{
+                icon:FingerPrintIcon,
+                value: '',
+                id:'1'
+            }]}  placeholder="Enter a new tag" />
             {/* <AutoCompleteSearch 
                 items={[
                     {
