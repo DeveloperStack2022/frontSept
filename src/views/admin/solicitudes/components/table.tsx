@@ -51,13 +51,7 @@ const TableComponent:FC<Props> = ({data,fetch_data,loading,pageCount,setPageCoun
             id: 'acciones',
             header: 'acciones',
             cell: props => (
-                <>
-                    <button className='bg-green-600 hover:bg-green-600/90 text-white text-xs py-1.5 px-2 mr-2 rounded-md font-semibold'>
-                       Editar
-                    </button>
-                    <button className='bg-red-600 hover:bg-red-600/90 text-white text-xs py-1.5 px-2 rounded-md font-semibold mr-2'>Eliminar</button>
-                    <button className='bg-gray-600 hover:bg-gray-600/90 text-white text-xs py-1.5 px-2 mr-2 rounded-md font-semibold' onClick={() => handleGetSolicitud(props.row.original._id)}>Detalles</button>
-                </>
+                <button className='bg-gray-600 hover:bg-gray-600/90 text-white text-xs py-1.5 px-2 mr-2 rounded-md font-semibold' onClick={() => handleGetSolicitud(props.row.original._id)}>Detalles</button>
             )
         })
     ]

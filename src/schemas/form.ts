@@ -21,6 +21,7 @@ export type ValidationType = {
     grupo_delicuencial:string;
     investigacion_previa:string;
 
+    numero_cedula:string;
     grado:string;
     nombres_apellidos:string;
     unidad:string;

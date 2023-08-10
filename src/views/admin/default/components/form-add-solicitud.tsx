@@ -30,14 +30,75 @@ import DeleteIcon from '@icons/delete-icon.svg?component'
 import SearchPhoneIcon from '@/icons/search-phone.svg?component'
 import XIcon from '@/icons/x-icon.svg?component'
 import SearchIcon from '@/icons/search-icon.svg?component'
+import HashIcon from '@/icons/hash-icon.svg?component'
 
 // Components 
 import ModalComponent from '@components/modal'
+
+// Utils 
+import {validor_nro_cl} from '@/utils/utils'
+
+//FIXME: Apollo Client
+import {useQuery,useLazyQuery} from '@apollo/client'
+import {graphql} from '@/gql/gql'
+
+// FIXME: Toast 
+import {useToast} from '@/components/toast/toastProvider'
+
+
+
+// // // TODO: Start Querys Grapqhl
+const GetAnalistaByNumCl = graphql(`
+    query GetAnalistaByNumCl($numeroCedula: String!) {
+        getAnalistaByNumCl(numero_cedula: $numeroCedula) {
+            id
+            cedula
+            grado
+            nombres
+            unidad {
+                nombre_unidad
+                _id
+            }
+            zona {
+                nombre_zona
+                _id
+            }
+            direccion {
+                nombre_direccion
+            }
+        }
+    } 
+`)
+// const GET_ANALISTA_BY_NUM_CL = gql(`
+//     query GetAnalistaByNumCl($numeroCedula: String!) {
+//         getAnalistaByNumCl(numero_cedula: $numeroCedula) {
+//             id
+//             cedula
+//             grado
+//             nombres
+//             unidad {
+//                 nombre_unidad
+//                 _id
+//             }
+//             zona {
+//                 nombre_zona
+//                 _id
+//             }
+//             direccion {
+//                 nombre_direccion
+//             }
+//         }
+//     } 
+// `);
+// TODO: End Query 
 
 
 type TypeValidationStateForm = Omit<ValidationType,'celulares' | 'hora'>
 
 const AddSolicitudForm = () => {
+    // FIXME: - - - - - - - Graphql - - - - - - - - 
+    const  [runQuery] = useLazyQuery(GetAnalistaByNumCl)
+    //       - - - - - - -  End Graphql - - - - - - 
     // FIXME: Redux 
     const dispatch = useAppDispatch()
     const stateSelector = useAppSelector(state => state.solicitudSearch)
@@ -50,6 +111,7 @@ const AddSolicitudForm = () => {
     const [OpenModal, setOpenModal] = useState<boolean>(false)
     const [ModalContent, setModalContent] = useState<{message:string,status:number}>({message:'',status:0})
     const [formData, setFormData] = useState<TypeValidationStateForm>({
+        numero_cedula:'',
         delito:'',
         grado:'',
         grupo_delicuencial:'',
@@ -62,8 +124,9 @@ const AddSolicitudForm = () => {
     })
     // Custom Hooks 
     const {getItem} = useLocalStorage()
+    const toast = useToast()
     // React hooks form
-    const {register,handleSubmit,watch,control,reset,formState:{errors},setValue} = useForm<ValidationType>({resolver: yupResolver(ValidationDataSchema)})
+    const {register,handleSubmit,watch,control,reset,formState:{errors},setValue,trigger} = useForm<ValidationType>({resolver: yupResolver(ValidationDataSchema),mode:'onBlur'})
     
     const {fields,append,remove} = useFieldArray<ValidationType,'celulares'>({control,name:'celulares'})
 
@@ -140,9 +203,7 @@ const AddSolicitudForm = () => {
             if(status == 204){ // Code 204 -> No Content
                 setMessageNotification({message:'Numero no encontrado',status:true})
                 setShowMessage(prev => !prev)
-            } 
-
-           
+            }            
         }
     }
     
@@ -189,6 +250,30 @@ const AddSolicitudForm = () => {
         })
     }
 
+    const validador_nro_cl = async (e:ChangeEvent<HTMLInputElement>) => {
+        const  value = e.target.value
+        // const valores = validor_nro_cl(value)
+        // console.log(valores)
+        const {data:Data} = await runQuery({variables:{numeroCedula:value}})
+        
+        if(!Data?.getAnalistaByNumCl) {
+            toast?.pushError('Usuario No Encontrado',40000,'truncate-1-lines')
+            return
+        }
+
+        const {grado,nombres,unidad,zona} = Data?.getAnalistaByNumCl
+        setValue('grado',grado)
+        setValue('nombres_apellidos',nombres)
+        setValue('unidad',unidad.nombre_unidad)
+        setValue('zona',zona.nombre_zona.toString())
+    }
+
+    const validador_grado = async (e:ChangeEvent<HTMLInputElement>) => {
+        
+    }
+    const validador_unidad = async (e: ChangeEvent<HTMLInputElement>) => {}
+    const validaor_zona = async (e:ChangeEvent<HTMLInputElement>) => {}
+    
     return (
         <Card>
             <ModalComponent isOpen={OpenModal} onClose={handleCloseModal} status={(ModalContent?.status > 200 && ModalContent?.status < 300 ) ? 'success' : 'error' } message={(ModalContent?.status > 200 && ModalContent?.status < 300 ) ? 'Solicitud agregada exitosamente' : ModalContent.message } >
@@ -288,6 +373,24 @@ const AddSolicitudForm = () => {
                     {/* Box 2 */}
                     <div className="">
                         <h4 className='font-semibold text-md' >Datos solicitante</h4>
+                            <div className="">
+                                <label htmlFor='numero_cedula' className='text-gray-500 text-sm font-medium'>Numero Cedula</label>
+                                <div className="relative mt-1 rounded-md sgadiw-sm">
+                                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                        <HashIcon  className='absolute mr-6 w-5 h-5 text-gray-500'/>
+                                    </div>
+                                    <input type="text" id='numero_cedula' className='py-2 pr-2 pl-8 w-full block rounded-md border border-gray-300 outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm' 
+                                        {...register('numero_cedula')}
+                                        onBlur={(value) => validador_nro_cl(value)}
+                                    />
+                                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                        <svg className="animate-spin h-5 w-5 text-blue-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
                             <div className="">
                                 <label  className="flex justify-between items-center text-sm font-medium text-gray-500">Grado {errors.grado?.message && <span className='text-red-500 text-xs'>*{errors.grado.message}*</span>}</label>
                                 <div className="relative mt-1 rounded-md shadow-sm">

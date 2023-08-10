@@ -159,7 +159,7 @@ const TagInput: FunctionComponent<TagInputProps> = (props: TagInputProps) => {
 
       {value?.map((tag) => (
         <span
-        className="flex justify-between mr-1 shrink-0 rounded-sm bg-green-500/60 px-2 py-1 text-center text-white leading-none"
+        className="flex justify-between mr-1 shrink-0 rounded-sm bg-blue-500 px-2 py-1 text-center text-white leading-none"
         key={tag}
         >
           {tag}

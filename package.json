@@ -6,15 +6,18 @@
     "dev": "vite --host",
     "build": "vite build",
     "preview": "vite preview",
-    "host": "vite --host"
+    "host": "vite --host",
+    "compile": "graphql-codegen --watch"
   },
   "dependencies": {
+    "@apollo/client": "^3.8.0",
     "@hookform/resolvers": "^3.1.0",
     "@reduxjs/toolkit": "^1.9.5",
     "@types/react-table": "^7.7.14",
     "axios": "^1.4.0",
     "clsx": "^1.2.1",
     "fuse.js": "^6.6.2",
+    "graphql": "^16.6.0",
     "immer": "^10.0.2",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
@@ -25,7 +28,11 @@
     "yup": "^1.1.1"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.0",
+    "@graphql-codegen/client-preset": "^4.1.0",
+    "@graphql-codegen/typescript": "^4.0.1",
     "@honkhonk/vite-plugin-svgr": "^1.1.0",
+    "@parcel/watcher": "^2.2.0",
     "@rollup/plugin-alias": "^5.0.0",
     "@tanstack/react-table": "^8.9.1",
     "@types/node": "^18.15.13",

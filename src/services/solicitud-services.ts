@@ -86,7 +86,18 @@ export const searchSolicitudByNumero = async (num_celular:string,token:string) =
     
 }
 
-export const searchSolicitudByCaso = async (caso:string,token:string) => {
+
+/**
+ * @function searchSolicitudByCaso
+ * @param caso -> string 
+ * @param token  -> string 
+ * @returns {
+ *  solictudes: Array[],
+*  n_documents: number
+* }
+ */
+
+export const searchSolicitudByCaso = async (caso:string,token:string):Promise<AxiosResponse> => {
     return await axios.get(`${URI}/solicitud_caso/${caso}`,{
         headers:{
             'x-access-token':token
@@ -96,6 +107,23 @@ export const searchSolicitudByCaso = async (caso:string,token:string) => {
 
 export const searchSolicitudByIp = async (ip:string,token:string) => {
     return await axios.get(`${URI}/solicitud_ip/${ip}`,{
+        headers:{
+            'x-access-token':token
+        }
+    })
+}
+
+export const searchSolicitudByNumCelular = async (num_celular:string,token:string) => {
+    return await axios.get(`${URI}/solicitud_numero_celular/${num_celular}`,{
+        headers:{
+            'x-access-token':token
+        }
+    })
+}
+
+export const searchSolicitudByZona = async (zona:string,token:string) => {
+    
+    return await axios.get(`${URI}/solicitud_zona/${zona}`,{
         headers:{
             'x-access-token':token
         }

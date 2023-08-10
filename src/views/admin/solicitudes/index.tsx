@@ -9,7 +9,7 @@ import Modal from "./components/modal";
 import AutoCompleteSearch from "./components/AutoCompleteSearch";
 
 //Services
-import { getPaginateSolicitudes,searchSolicitudByCaso,searchSolicitudByIp } from "@/services/solicitud-services";
+import { getPaginateSolicitudes,searchSolicitudByCaso,searchSolicitudByIp,searchSolicitudByZona } from "@/services/solicitud-services";
 
 // Slices
 import { fetchData as fetchGetSolicitudById } from "@/store/features/get_one_information";
@@ -22,6 +22,7 @@ import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import AnyIcon from "@/icons/delito.svg?component";
 import InvestigacionIcon from '@icons/investigacion.svg?component'
 import ZonaIcon from '@/icons/zona.svg?component'
+import { AxiosResponse } from "axios";
 
 // TODO:
 interface SolicitudAddStatus extends SolicitudAction {
@@ -32,6 +33,9 @@ type Item = {
   id: number;
   text: string;
 };
+
+
+
 
 const ViewSolicitudes = () => {
   // Hooks Redux
@@ -135,7 +139,7 @@ const ViewSolicitudes = () => {
     let response;
     if(Value.length > 0) {
       let tagSearch = Value[0]
-
+      console.log(tagSearch)
       if(tagSearch == 'caso'){
         response = await searchSolicitudByCaso(SearchValue,'')
         console.log(response.data)
@@ -144,8 +148,35 @@ const ViewSolicitudes = () => {
         response = await searchSolicitudByIp(SearchValue,'')
         console.log(response.data)
       }
+      if (tagSearch == 'zona'){ 
+        response = await searchSolicitudByZona(SearchValue,'')
+        console.log(response.data)
+      }
     }
   }
+
+
+
+  const fetchDataApiCases = async (cases:string,stringQuery:string) => {
+    let response:AxiosResponse
+    try {
+      const token_ = JSON.parse(getItem("authToken"));
+      if(cases == "CASO"){
+        response = await searchSolicitudByCaso(stringQuery,'')
+        console.log(response.data)
+      }
+      if(cases == 'IP'){
+        response = await searchSolicitudByIp(stringQuery,'')
+        console.log(response.data)
+      }
+    } catch (erorr) {
+      return null
+    }
+  }
+
+  const fetchDataSearchCallback = useCallback(async (cases:string,stringQuery:string) => {
+      fetchDataApiCases(cases,stringQuery)
+  },[])
 
   return (
     <>
@@ -165,18 +196,28 @@ const ViewSolicitudes = () => {
         options={[
           {
             icon: <AnyIcon className="h-5 w-5" />,
-            id: "1",
+            id: "0",
             value: "caso",
           },
           {
             icon: <ZonaIcon className="h-5 w-5" />,
-            id: "3",
+            id: "1",
             value: "zona",
           },
           {
             icon: <InvestigacionIcon className="h-5 w-5" />,
             id: "2",
             value: "investigacion previa",
+          },
+          {
+            icon: <InvestigacionIcon className="h-5 w-5" />,
+            id: "3",
+            value: "unidad",
+          },
+          {
+            icon: <InvestigacionIcon className="h-5 w-5" />,
+            id: "4",
+            value: "GDO",
           },
         ]}
         placeholder="Enter a new tag"
