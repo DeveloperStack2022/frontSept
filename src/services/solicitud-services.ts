@@ -12,15 +12,21 @@ export const addSolicitud = async (dataParams:ValidationType,token:any,ubicacion
     const fecha = date.toLocaleDateString()
 
     const dataSerializada = {
+        // Solicitud
         "hora":dateH ,
         "fecha": fecha,
         "plataforma": "Septier",
         "caso": dataParams.nombre_caso,
         "delito":dataParams.delito,
         "evento": '',
+        "nombre_fiscal":dataParams.nombre_fical,
+        'nombre_fiscalia':dataParams.nombre_fiscalia,
         "organizacion_delicuencial": dataParams.grupo_delicuencial,
+        "tipo_solicitud":dataParams.tipo_pedido,
         'investigacion_previa':dataParams.investigacion_previa,
+        // Solicitante
         "solicitante": {
+            "numero_celular":dataParams.numero_celular,
             "grado": dataParams.grado,
             "nombres_completos": dataParams.nombres_apellidos,
             "unidad": dataParams.unidad,

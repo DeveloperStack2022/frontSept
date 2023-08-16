@@ -16,12 +16,17 @@ export type ValidationType = {
     hora:string
     plataforma:string;
 
+    nombre_fical:string;
+    nombre_fiscalia:string;
     nombre_caso:string;
     delito:string;
+    alias:string;
     grupo_delicuencial:string;
+    tipo_pedido: string;
     investigacion_previa:string;
 
     numero_cedula:string;
+    numero_celular:string;
     grado:string;
     nombres_apellidos:string;
     unidad:string;
@@ -47,11 +52,16 @@ export type ValidationTypeCelulares = {
 
 const validationSchema = yup.object().shape({
     // Datos de solicitud
+    nombre_fical: yup.string(),
+    nombre_fiscalia:yup.string(),
     nombre_caso:yup.string().required('Campo requerido'),
     delito:yup.string().required('Campo requerido'),
+    alias:yup.string(),
     grupo_delicuencial:yup.string(),
-    investigacion_previa:yup.string().required('Campo requerido'),
+    tipo_pedido:yup.string(),
+    investigacion_previa:yup.string(),
     // Datos Solicitante
+    numero_celular: yup.string().required('Campo Requerido'),
     grado:yup.string().required('Campo requerido'),
     nombres_apellidos:yup.string().required('Campo requerido'),
     unidad:yup.string().required('Campo requerido'),

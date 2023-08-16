@@ -31,6 +31,7 @@ import SearchPhoneIcon from '@/icons/search-phone.svg?component'
 import XIcon from '@/icons/x-icon.svg?component'
 import SearchIcon from '@/icons/search-icon.svg?component'
 import HashIcon from '@/icons/hash-icon.svg?component'
+import PhoneNumber from '@/icons/number-phone.svg?component'
 
 // Components 
 import ModalComponent from '@components/modal'
@@ -111,10 +112,15 @@ const AddSolicitudForm = () => {
     const [OpenModal, setOpenModal] = useState<boolean>(false)
     const [ModalContent, setModalContent] = useState<{message:string,status:number}>({message:'',status:0})
     const [formData, setFormData] = useState<TypeValidationStateForm>({
+        nombre_fical:'',
+        nombre_fiscalia:'',
         numero_cedula:'',
         delito:'',
+        numero_celular:'',
         grado:'',
+        alias:'',
         grupo_delicuencial:'',
+        tipo_pedido:'',
         investigacion_previa:'',
         nombre_caso:'',
         nombres_apellidos:'',
@@ -122,6 +128,7 @@ const AddSolicitudForm = () => {
         unidad:'',
         zona:''
     })
+    const [CheckIP, setCheckIP] = useState<boolean>(false)
     // Custom Hooks 
     const {getItem} = useLocalStorage()
     const toast = useToast()
@@ -147,7 +154,7 @@ const AddSolicitudForm = () => {
 
         try {
             const response = await addSolicitud(data,token,ubicaciones,celulares)
-            setModalContent({message:response.data,status:response.status})
+            setModalContent({message:response?.data,status:response?.status})
         } catch (err) {
             console.log(err)
         }
@@ -306,6 +313,38 @@ const AddSolicitudForm = () => {
                             <input type="hidden" {...register('hora')} defaultValue={`${new Date().getHours}`} />
                             <input type="hidden" {...register('plataforma')} defaultValue={'Septier'} />
                             <div className="">
+                                <label  className="flex justify-between items-center text-sm font-medium text-gray-500">Nombre Fiscal </label>
+                                <div className="relative mt-1 rounded-md shadow-sm">
+                                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                        <UserIcon className="absolute mr-6 w-5 h-5 text-gray-500" />
+                                    </div>
+                                    <input
+                                        value={formData.nombre_fical}
+                                        {...register("nombre_fical")}
+                                        onChange={handleChangeCasoStr}
+                                        placeholder="Nombre Fiscal"
+                                        className={`w-full py-2 pr-7 pl-9 block rounded-md  bg-gray-100 outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm ${errors.nombre_caso?.message && 'border border-red-500 focus:border-red-500 focus:ring-red-500'}`}
+                                        autoComplete="off"
+                                    />
+                                </div>
+                            </div>
+                            <div className="">
+                                <label  className="flex justify-between items-center text-sm font-medium text-gray-500">Nombre Fiscalia </label>
+                                <div className="relative mt-1 rounded-md shadow-sm">
+                                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                        <UnidadIcon className="absolute mr-6 w-5 h-5 text-gray-500" />
+                                    </div>
+                                    <input
+                                        value={formData.nombre_fiscalia}
+                                        {...register("nombre_fiscalia")}
+                                        onChange={handleChangeCasoStr}
+                                        placeholder="Nombre Fiscalia"
+                                        className={`w-full py-2 pr-7 pl-9 block rounded-md  bg-gray-100 outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm ${errors.nombre_caso?.message && 'border border-red-500 focus:border-red-500 focus:ring-red-500'}`}
+                                        autoComplete="off"
+                                    />
+                                </div>
+                            </div>
+                            <div className="">
                                 <label  className="flex justify-between items-center text-sm font-medium text-gray-500">Nombre del Caso {errors.nombre_caso?.message && <span className='text-red-500 text-xs'>*{errors.nombre_caso?.message}*</span>} </label>
                                 <div className="relative mt-1 rounded-md shadow-sm">
                                     <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
@@ -338,6 +377,22 @@ const AddSolicitudForm = () => {
                                 </div>
                             </div>
                             <div className="">
+                                <label  className="block text-sm font-medium text-gray-500">Alias</label>
+                                <div className="relative mt-1 rounded-md shadow-sm">
+                                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                        <UserIcon className="absolute mr-6 w-5 h-5 text-gray-500" />
+                                    </div>
+                                    <input
+                                        {...register('alias')}
+                                        onChange={handleChangeCasoStr}
+                                        value={formData.alias}
+                                        placeholder="Alias"
+                                        className="w-full py-2 pr-7 pl-8 block rounded-md bg-gray-100 outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm" 
+                                        autoComplete="off"
+                                    />
+                                </div>
+                            </div>
+                            <div className="">
                                 <label  className="block text-sm font-medium text-gray-500">Grupo Delicuencial</label>
                                 <div className="relative mt-1 rounded-md shadow-sm">
                                     <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
@@ -353,27 +408,68 @@ const AddSolicitudForm = () => {
                                     />
                                 </div>
                             </div>
-                            <div className="">
-                                <label  className="flex justify-between items-center text-sm font-medium text-gray-500">Investigacion Previa (IP) {errors.investigacion_previa?.message && <span className='text-red-500 text-xs'>*{errors.investigacion_previa?.message}*</span>} </label>
-                                <div className="relative mt-1 rounded-md shadow-sm">
-                                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                        <InvestigacionIcon className="absolute mr-6 w-5 h-5 text-gray-500" />
+                            
+                            <div className="flex  justify-between w-full mt-2">
+                                <div className="w-[90px]">
+                                    <label  className="flex justify-between items-center text-sm font-medium text-gray-500">Flagrancia</label>
+                                    <div className="flex justify-between items-center">
+                                        <label htmlFor="si_flagrancia">
+                                            <input type="radio"  id="si_flagrancia" value={'Si_Flagrancia'} {...register('tipo_pedido')}  /> Si
+                                        </label>
+                                        <label htmlFor="no_flagrancia">
+                                            <input type="radio"  id="no_flagrancia" value={'No_Flagrancia'} {...register('tipo_pedido')} />  No
+                                        </label>
                                     </div>
-                                    <input
-                                        onKeyPress={handleKeyPress}
-                                        className={`w-full py-2 pr-7 pl-8 block rounded-md bg-gray-100 outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm ${errors.investigacion_previa?.message && 'border border-red-500 focus:border-red-500 focus:ring-red-500'}`}
-                                        autoComplete="off"
-                                        {...register('investigacion_previa')}
-                                        onChange={handleChangeCasoStr}
-                                        value={formData.investigacion_previa}
-                                    />
                                 </div>
+                                <div className="">
+                                    <label  className="flex justify-between items-center text-sm font-medium text-gray-500">Acto Urgente</label>
+                                    <div className="flex justify-between items-center  ">
+                                        <label htmlFor="si_ActoUrgente">
+                                            <input type="radio"  id="si_ActoUrgente" value={'Si_ActoUrgente'}  {...register('tipo_pedido')} /> Si
+                                        </label>
+                                        <label htmlFor="no_ActoUrgente">
+                                            <input type="radio"  id="no_ActoUrgente" value={'No_ActoUrgente'}  {...register('tipo_pedido')}/>  No
+                                        </label>
+                                    </div>
+                                </div>
+                                <div className="">
+                                    <label  className="flex justify-between items-center text-sm font-medium text-gray-500">Investigacion Previa</label>
+                                    <div className="flex justify-between items-center  ">
+                                        <label htmlFor="si_IP">
+                                            <input type="radio"  id="si_IP" value={'Si_IP'} {...register('tipo_pedido')} onChange={() => setCheckIP(true)}   /> Si
+                                        </label>
+                                        <label htmlFor="no_IP">
+                                            <input type="radio"  id="no_IP" value={'No_IP'} {...register('tipo_pedido')} onChange={() => setCheckIP(false)}  />  No
+                                        </label>
+                                    </div>
+                                </div>
+
                             </div>
+                            {CheckIP && (
+                                <div className="">
+                                    <label  className="flex justify-between items-center text-sm font-medium text-gray-500">Investigacion Previa (IP) {errors.investigacion_previa?.message && <span className='text-red-500 text-xs'>*{errors.investigacion_previa?.message}*</span>} </label>
+                                    <div className="relative mt-1 rounded-md shadow-sm">
+                                        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                            <InvestigacionIcon className="absolute mr-6 w-5 h-5 text-gray-500" />
+                                        </div>
+                                        <input
+                                            onKeyPress={handleKeyPress}
+                                            className={`w-full py-2 pr-7 pl-8 block rounded-md bg-gray-100 outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm ${errors.investigacion_previa?.message && 'border border-red-500 focus:border-red-500 focus:ring-red-500'}`}
+                                            autoComplete="off"
+                                            {...register('investigacion_previa',{
+                                                required: CheckIP
+                                            })}
+                                            onChange={handleChangeCasoStr}
+                                            value={formData.investigacion_previa}
+                                        />
+                                    </div>
+                                </div>
+                            )}
                     </div>
                     {/* Box 2 */}
                     <div className="">
                         <h4 className='font-semibold text-md' >Datos solicitante</h4>
-                            <div className="">
+                            {/* <div className="">
                                 <label htmlFor='numero_cedula' className='text-gray-500 text-sm font-medium'>Numero Cedula</label>
                                 <div className="relative mt-1 rounded-md sgadiw-sm">
                                     <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
@@ -389,6 +485,21 @@ const AddSolicitudForm = () => {
                                             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                         </svg>
                                     </div>
+                                </div>
+                            </div> */}
+                            <div className="">
+                                <label  className="flex justify-between items-center text-sm font-medium text-gray-500">Numero Celular {errors.numero_celular?.message && <span className='text-red-500 text-xs'>*{errors.numero_celular.message}*</span>}</label>
+                                <div className="relative mt-1 rounded-md shadow-sm">
+                                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                        <PhoneNumber className="absolute mr-6 w-5 h-5 text-gray-500" />
+                                    </div>
+                                    <input
+                                        className={`w-full py-2 pr-7 pl-8 block rounded-md border border-gray-300 outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm ${errors.numero_celular?.message && 'border border-red-500 focus:border-red-500 focus:ring-red-500'}`}
+                                        autoComplete="off"
+                                        {...register('numero_celular')}
+                                        onChange={handleChangeCasoStr}
+                                        value={formData.numero_celular}
+                                    />
                                 </div>
                             </div>
                             <div className="">
