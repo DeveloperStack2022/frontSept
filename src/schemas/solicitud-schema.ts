@@ -20,6 +20,8 @@ export type SolicitudAction = {
     caso:string;
     fecha:Date;
     hora:string;
+    nombre_fiscalia:string;
+    nombre_fiscal:string;
     organizacion_delicuencial:string;
     plataforma:string;
     ubicaciones_celulares:UbicacionesSchema[]

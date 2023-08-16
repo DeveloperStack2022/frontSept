@@ -45,16 +45,19 @@ const ModalShowDataSolicitud:FC<Props> = ({isOpen,onClose,data,status}) => {
                                 </div>
                                 {/* Datos Solicitud */}
                                 <div className="mt-2 text-left">
+                                    <p> <span className='font-bold'>Fecha:</span> <span className='uppercase text-gray-700'>{new Date(data.fecha).toLocaleDateString()}</span> <span className='font-bold'>Hora: </span> <span className='uppercase text-gray-700'>{data.hora}</span> </p>
+                                    {/* Datos Juridicos */}
+                                    <p> <span className='font-bold '>Fiscal o Juridico:</span> <span className='uppercase text-gray-700'>{data.nombre_fiscal ? data.nombre_fiscal : "---"}</span></p>
+                                    <p> <span className='font-bold '>Fiscalia:</span> <span className='uppercase text-gray-700'>{data.nombre_fiscalia ? data.nombre_fiscalia : "---"}</span></p>
+                                    {/* Separator */}
+                                    <hr className='divide-x' />
                                     {/* Fecha */}
-                                    <p> <span className='font-bold'>Fecha</span> <span className='uppercase text-gray-700'>{data.hora} </span></p>
                                     {/* Delito */}
-                                    <p> <span className='font-bold '>Delito</span> <span className='uppercase text-gray-700'>{data.delito ? data.delito : "---"}</span></p>
+                                    <p> <span className='font-bold '>Delito:</span> <span className='uppercase text-gray-700'>{data.delito ? data.delito : "---"}</span></p>
                                     {/* Caso */}
-                                    <p> <span className='font-bold '>Caso</span> <span className='uppercase text-gray-700'>{data.caso ? data.caso : "---"}</span></p>
-                                    {/* Evento */}
-                                    <p> <span className='font-bold '>Evento</span> <span className='uppercase text-gray-700'>{data.evento ? data.evento : "---"}</span></p>
+                                    <p> <span className='font-bold '>Caso:</span> <span className='uppercase text-gray-700'>{data.caso ? data.caso : "---"}</span></p>
                                     {/* Organizacion delicuencial */}
-                                    <p> <span className='font-bold '>GDO</span> <span className='uppercase text-gray-700'>{data.organizacion_delicuencial ? data.organizacion_delicuencial : "---"}</span></p>
+                                    <p> <span className='font-bold '>GDO:</span> <span className='uppercase text-gray-700'>{data.organizacion_delicuencial ? data.organizacion_delicuencial : "---"}</span></p>
                                 </div>
                                 {/* Datos celular - ubicacion */}
                                 <div className=" mt-2  grid grid-cols-2 text-left h-72 overflow-y-scroll">

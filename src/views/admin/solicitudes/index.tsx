@@ -61,6 +61,8 @@ const ViewSolicitudes = () => {
   const [DataSolicitud, setDataSolicitud] = useState<SolicitudAddStatus>({
     status: "initial",
     caso: "",
+    nombre_fiscal:'',
+    nombre_fiscalia:"",
     fecha: new Date(),
     celulares_solicitados: [],
     delito: "",

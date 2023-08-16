@@ -51,6 +51,8 @@ export const fetchData = createAsyncThunk('getsolicitud',async ({id,token}:{id:s
 const initalState:InitialState  = {
     status:'initial',
     caso:'',
+    nombre_fiscal:'',
+    nombre_fiscalia:'',
     fecha:new Date(),
     celulares_solicitados:[],
     delito:'',
@@ -105,6 +107,8 @@ export const informationSolicitud = createSlice({
                 state.solicitante_result = solicitante_result
                 state.celulares_solicitados = data_celulares
                 state.ubicaciones_celulares = ubicicaciones_celulares
+                state.nombre_fiscal = action.payload.data.nombre_fiscal,
+                state.nombre_fiscalia = action.payload.data.nombre_fiscalia
             })
             .addCase(fetchData.rejected,(state,action) => {
                 state.status = 'fialed'
