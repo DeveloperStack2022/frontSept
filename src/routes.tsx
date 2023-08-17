@@ -9,6 +9,8 @@ import SolicitudesView from "@/views/admin/solicitudes";
 import UploadFile from "@/views/admin/UploadImage";
 // Views Auth
 import SignInView from "@/views/Auth";
+// View Apoyo tecnico
+import ApoyoTecnico from './views/admin/Apoyo_Tecnico'
 
 const routes = [
   {
@@ -24,6 +26,14 @@ const routes = [
     path: "view-solicitudes",
     icon: <DocIcon className="h-6 w-6 stroke-current" />,
     component: <SolicitudesView />,
+    secondary: true,
+  },
+  {
+    name: "Apoyo Tecnico",
+    layout: "/admin",
+    path: "apoyo-tecnico",
+    icon: <DocIcon className="h-6 w-6 stroke-current" />,
+    component: <ApoyoTecnico />,
     secondary: true,
   },
   {
