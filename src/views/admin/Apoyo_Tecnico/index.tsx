@@ -10,6 +10,7 @@ import FormArmas from './componens/FormArmas'
 import FormMuniciones  from './componens/FormMuniciones'
 import FormDinero from './componens/FormDinero'
 import DetalisFinally from './componens/DetalisFinally'
+import FormVehiculo from './componens/FormVehiculo'
 
 import {useState} from 'react'
 
@@ -37,6 +38,14 @@ const DatosSepts = [
     {
         numero:6,
         title:'Dinero'
+    },
+    {
+        numero: 7,
+        title: 'Vehiculos'
+    },
+    {
+        numero:8,
+        title:'Presentacion'
     }
 ]
 
@@ -55,7 +64,9 @@ const ComponentsRender = (value:number) => {
             return <FormMuniciones />
         case 6:
             return <FormDinero />
-        default:
+        case 7:
+            return <FormVehiculo />
+        case 8:
             return <DetalisFinally />
     }
 }
@@ -63,27 +74,25 @@ const ComponentsRender = (value:number) => {
 const Steps  = () => {
     // State
     const [StepNumber,updateStepNumber] = useState<number>(1)
-    const [TitleSteps, setTitleSteps] = useState(['Datos Generales','Resumen Caso','Detenidos','Armas','Municiones','Dinero','Presentacion'])
+    const [TitleSteps, setTitleSteps] = useState(['Datos Generales','Resumen Caso','Detenidos','Armas','Municiones','Dinero','Vehiculo','Presentacion'])
     // Events
     const handleIncrement = () => updateStepNumber(prev => prev + 1)
     const handleDecrement = () => updateStepNumber(prev => prev - 1)
 
 
-    
     return (
-        <Card extra='w-full md:w-1/2 h-[487px]'>
+        <Card extra='w-full md:w-1/2 min-h-[487px]'>
             <div className="p-4  flex justify-center">
                 <StepComponent steps={DatosSepts}
                     number_active={StepNumber} />
             </div>
             {/* Title Forms */}
             <h2 className="text-gray-700 text-2xl font-bold text-center mx-2">{TitleSteps[StepNumber - 1]}</h2>
-
             {ComponentsRender(StepNumber)}
             <div className=" h-full flex items-end justify-center pb-2">
                 <div className="flex gap-x-2">
-                    <button className="bg-gray-300 text-white font-bold py-2 px-4 rounded">Regresar</button>
-                    <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded " onClick={handleIncrement}>Siguiente</button>
+                    <button className={`text-white font-bold py-2 px-4 rounded ${StepNumber != 1 ? 'bg-blue-500 hover:bg-blue-600': 'bg-gray-300'}`} onClick={handleDecrement} disabled={StepNumber == 1}>Regresar</button>
+                    <button className={`text-white font-bold py-2 px-4 rounded ${DatosSepts.length == StepNumber ? 'bg-gray-300': 'bg-blue-500 hover:bg-blue-600'}`} onClick={handleIncrement} disabled={DatosSepts.length == StepNumber} >Siguiente</button>
                 </div>
             </div>
         </Card>
