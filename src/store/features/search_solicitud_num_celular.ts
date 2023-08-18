@@ -1,5 +1,4 @@
 import { createSlice,PayloadAction } from "@reduxjs/toolkit";
-import produce from 'immer'
 
 export type SolicitudNumero = {
     numero_celular:string;

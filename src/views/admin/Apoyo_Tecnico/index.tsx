@@ -1,3 +1,6 @@
+import {useState} from 'react'
+import {useForm,useFieldArray} from 'react-hook-form'
+
 
 // Components 
 import StepComponent from './componens/step'
@@ -11,9 +14,18 @@ import FormMuniciones  from './componens/FormMuniciones'
 import FormDinero from './componens/FormDinero'
 import DetalisFinally from './componens/DetalisFinally'
 import FormVehiculo from './componens/FormVehiculo'
+import { yupResolver } from '@hookform/resolvers/yup'
+import ValidationSchema,{ValidationType} from '@/schemas/apoyo-tecnico'
 
-import {useState} from 'react'
 
+
+
+
+// FIXME: 
+type TypeValidationStateForm = Omit<ValidationType,''>
+
+
+//TODO: Array Data 
 const DatosSepts = [
     {
         numero:1,
@@ -49,7 +61,7 @@ const DatosSepts = [
     }
 ]
 
-
+// TODO:Components Render 
 const ComponentsRender = (value:number) => {
     switch (value) {
         case 1:
@@ -71,13 +83,26 @@ const ComponentsRender = (value:number) => {
     }
 }
 
+
+// TODO: 
 const Steps  = () => {
+
+    //FIXME: React hooks form 
+    const {register,handleSubmit,watch,control,reset,formState:{errors},setValue,trigger} = useForm<TypeValidationStateForm>({resolver: yupResolver(ValidationSchema),mode:'onBlur'})
+
+    const {fields:FieldsDetenidos,append:AgregarDetenidos,remove:RemoveDetenidos} = useFieldArray<TypeValidationStateForm,'detenidos'>({control,name:'detenidos'})
+    const {fields:FieldsMuniciones,append:AgregarMuniciones,remove:RemoveMuniciones} = useFieldArray<TypeValidationStateForm,'municiones'>({control,name:'municiones'})
+
+   
+
     // State
     const [StepNumber,updateStepNumber] = useState<number>(1)
     const [TitleSteps, setTitleSteps] = useState(['Datos Generales','Resumen Caso','Detenidos','Armas','Municiones','Dinero','Vehiculo','Presentacion'])
     // Events
     const handleIncrement = () => updateStepNumber(prev => prev + 1)
     const handleDecrement = () => updateStepNumber(prev => prev - 1)
+
+
 
 
     return (

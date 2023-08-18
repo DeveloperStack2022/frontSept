@@ -134,8 +134,8 @@ const AddSolicitudForm = () => {
     const toast = useToast()
     // React hooks form
     const {register,handleSubmit,watch,control,reset,formState:{errors},setValue,trigger} = useForm<ValidationType>({resolver: yupResolver(ValidationDataSchema),mode:'onBlur'})
-    
     const {fields,append,remove} = useFieldArray<ValidationType,'celulares'>({control,name:'celulares'})
+    
 
     const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
         const keyCode = event.keyCode || event.which;

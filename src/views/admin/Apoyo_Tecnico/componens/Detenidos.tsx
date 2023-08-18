@@ -1,4 +1,26 @@
+import { ChangeEvent,FocusEvent,useState } from "react";
+
+// Redux Slice
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import {updateDetenidos} from '@/store/features/apoyo-tecnico'
+
+
 const DetenidosForm = () => {
+    
+    const [Data, setData] = useState<any>(null)
+    const dispatch = useAppDispatch()
+    
+    const handleChangeEvent = (e:ChangeEvent<HTMLInputElement>) => {
+        setData({
+            ...Data,
+            [e.target.name]:e.target.value
+        })
+    }
+
+    const handleOmBlur = (e:FocusEvent<HTMLInputElement>) => {
+        dispatch(updateDetenidos({...Data}))
+    }
+
     return (
         <>
             <form action="" className="px-2 pb-4">
@@ -15,7 +37,7 @@ const DetenidosForm = () => {
                 </div>
                 {/* Generates */}
                 <div className="grid grid-cols-3 gap-4 mt-2  ">
-                    {[].map(() => (
+                    {[1].map(() => (
                         <div className="flex flex-wrap border rounded-md">
                             <div className="w-full md:w-1/2 px-2">
                                 <label htmlFor="ciudadania">Ciudadania</label>
