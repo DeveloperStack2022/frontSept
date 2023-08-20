@@ -36,10 +36,12 @@ export type ValidationType = {
         n_identificacion:string;
         ciudadania:string;
         nombre_completos:string;
+        sexo:string;
     }]
 
     // TODO: Armas 
-    arma_blanca:[{
+    tipo_arma:string; // Fuego - Blanca
+    armas:[{
         tipo_fabricacion:string;
         cantidad:string;
         calibre:string;
@@ -53,9 +55,16 @@ export type ValidationType = {
     }] 
 
     // TODO: Dinero 
-    dineo:[{
+    dinero:[{
         tipo_divisa:string
         valor_total:string;
+    }]
+    // TODO: Vehiculos
+    vehiculo:[{
+        tipo_vehiculo: string;
+        marca:string;
+        modelo:string;
+        placa:string;
     }]
 }
 
@@ -88,6 +97,7 @@ const validationSchema = yup.object().shape({
         })
     ),
     // TODO: Armas 
+    tipo_arma:yup.string(), // Fuego - Blanca
     armas: yup.array().of(
         yup.object().shape({
             tipo_fabricacion:yup.string(),
