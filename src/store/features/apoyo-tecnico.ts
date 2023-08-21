@@ -51,9 +51,12 @@ export const storeApoyoTecnico = createSlice({
             state.n_identificacion = n_identificacion
             state.nombre_completos = nombre_completos
             state.sexo = sexo
-        }
+        },
+        save_data: (state,action: PayloadAction<any>) => {
+            state.data = { ...action.payload}
+        },
     }
 })
 
-export const {updateDatosGenerales,updateResumenCaso,updateDetenidos} = storeApoyoTecnico.actions
+export const {updateDatosGenerales,updateResumenCaso,updateDetenidos,save_data} = storeApoyoTecnico.actions
 export default storeApoyoTecnico.reducer

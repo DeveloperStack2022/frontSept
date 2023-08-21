@@ -52,7 +52,7 @@ const DetenidosForm = ({ fields, append, register }: IProps) => {
 
   return (
     <>
-      <form action="" className="px-2 pb-4">
+      <div  className="px-2 pb-4">
         <div className=" flex flex-wrap">
           <div className=" md:w-2/2 flex w-full justify-between px-2">
             <div className="w-full pr-2">
@@ -116,10 +116,9 @@ const DetenidosForm = ({ fields, append, register }: IProps) => {
                 <div className="flex w-full gap-x-2 px-2 md:w-1/2">
                   <div className="flex items-center">
                     <input
+                      value='Masculino'
                       {...register(`detenidos.[${index}].sexo`)}
-                      id="masculino"
                       type="radio"
-                      name="default-radio"
                       className="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-blue-500 "
                     />
                     <label
@@ -131,14 +130,13 @@ const DetenidosForm = ({ fields, append, register }: IProps) => {
                   </div>
                   <div className="flex items-center">
                     <input
+                      value='Femenino'
                       {...register(`detenidos.[${index}].sexo`)}
-                      id="femenino"
                       type="radio"
-                      name="default-radio"
                       className="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-blue-500 "
                     />
                     <label
-                      htmlFor="femenino"
+                      
                       className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                     >
                       Femenino
@@ -149,7 +147,7 @@ const DetenidosForm = ({ fields, append, register }: IProps) => {
             </div>
           ))}
         </div>
-      </form>
+      </div>
     </>
   );
 };

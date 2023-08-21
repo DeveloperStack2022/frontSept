@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useRef } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 
 // Components
@@ -13,14 +13,20 @@ import FormMuniciones from "./componens/FormMuniciones";
 import FormDinero from "./componens/FormDinero";
 import DetalisFinally from "./componens/DetalisFinally";
 import FormVehiculo from "./componens/FormVehiculo";
+import FormSustanciaFiscalizacion from './componens/FormSustanciasSujetasFiscalizacion'
 import { yupResolver } from "@hookform/resolvers/yup";
 import ValidationSchema, { ValidationType } from "@/schemas/apoyo-tecnico";
+
+
+// TODO: Store Redux 
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import {save_data} from '@/store/features/apoyo-tecnico'
 
 // FIXME:
 type TypeValidationStateForm = Omit<ValidationType, "">;
 
 //TODO: Array Data
-const DatosSepts = [
+const DatosSepts:{numero:number,title:string}[] = [
   {
     numero: 1,
     title: "Datos Generales",
@@ -34,29 +40,38 @@ const DatosSepts = [
     title: "Detenidos",
   },
   {
-    numero: 4,
-    title: "Armas",
+    numero:4,
+    title:'Sustancias Sujetas A Fiscalizacion'
   },
   {
     numero: 5,
-    title: "Municiones",
+    title: "Armas",
   },
   {
     numero: 6,
-    title: "Dinero",
+    title: "Municiones",
   },
   {
     numero: 7,
-    title: "Vehiculos",
+    title: "Dinero",
   },
   {
     numero: 8,
+    title: "Vehiculos",
+  },
+  {
+    numero: 9,
     title: "Presentacion",
   },
 ];
 
 // TODO: ======== Component =========
 const Steps = () => {
+  // REDUX 
+  const dispatch = useAppDispatch()
+  // TODO: Refs 
+  const refSubmit = useRef<HTMLButtonElement>(null)
+
   //FIXME: React hooks form
   const {
     register,
@@ -117,6 +132,15 @@ const Steps = () => {
     control,
     name: "dinero",
   });
+  //   field Array for Dinero
+  const {
+    fields: FieldDrogas,
+    append: AgregarDrogas,
+    remove: RemoveDrogas,
+  } = useFieldArray<TypeValidationStateForm, "sustancias_sujetas_fiscalizacion">({
+    control,
+    name: "sustancias_sujetas_fiscalizacion",
+  });
 
   // State
   const [StepNumber, updateStepNumber] = useState<number>(1);
@@ -124,6 +148,7 @@ const Steps = () => {
     "Datos Generales",
     "Resumen Caso",
     "Detenidos",
+    "Sustancias Sujetas a F",
     "Armas",
     "Municiones",
     "Dinero",
@@ -138,9 +163,9 @@ const Steps = () => {
   const ComponentsRender = (value: number) => {
     switch (value) {
       case 1:
-        return <FormDatosGenerales />;
+        return <FormDatosGenerales register={register} />;
       case 2:
-        return <ResumenCaso />;
+        return <ResumenCaso register={register} />;
       case 3:
         return (
           <FormDetenidos
@@ -150,6 +175,8 @@ const Steps = () => {
           />
         );
       case 4:
+        return <FormSustanciaFiscalizacion append={AgregarDrogas} fields={FieldDrogas} register={register} />
+      case 5:
         return (
           <FormArmas
             register={register}
@@ -157,7 +184,7 @@ const Steps = () => {
             append={AgregarArmas}
           />
         );
-      case 5:
+      case 6:
         return (
           <FormMuniciones
             register={register}
@@ -165,7 +192,7 @@ const Steps = () => {
             append={AgregarMuniciones}
           />
         );
-      case 6:
+      case 7:
         return (
           <FormDinero
             register={register}
@@ -173,7 +200,7 @@ const Steps = () => {
             append={AgregarDinero}
           />
         );
-      case 7:
+      case 8:
         return (
           <FormVehiculo
             register={register}
@@ -181,10 +208,23 @@ const Steps = () => {
             append={AgregarVehiculos}
           />
         );
-      case 8:
+      case 9:
         return <DetalisFinally />;
     }
   };
+
+
+  const submitForm = (data:any) => {
+    dispatch(save_data({...data}))
+  }
+
+  const hancleClickSubmit = ( ) => {
+    refSubmit.current?.click()
+    handleIncrement()
+  }
+  const handleSubmitFinally = () => {
+    console.log('Submit')
+  }
 
   return (
     <Card extra="w-full md:w-1/2 min-h-[487px]">
@@ -195,7 +235,10 @@ const Steps = () => {
       <h2 className="mx-2 text-center text-2xl font-bold text-gray-700">
         {TitleSteps[StepNumber - 1]}
       </h2>
-      {ComponentsRender(StepNumber)}
+      <form onSubmit={handleSubmit(submitForm)}>
+        {ComponentsRender(StepNumber)}
+        <button className="hidden " type="submit" ref={refSubmit} />
+      </form>
       <div className=" flex h-full items-end justify-center pb-2">
         <div className="flex gap-x-2">
           <button
@@ -207,17 +250,25 @@ const Steps = () => {
           >
             Regresar
           </button>
-          <button
-            className={`rounded px-4 py-2 font-bold text-white ${
-              DatosSepts.length == StepNumber
-                ? "bg-gray-300"
-                : "bg-blue-500 hover:bg-blue-600"
-            }`}
-            onClick={handleIncrement}
-            disabled={DatosSepts.length == StepNumber}
-          >
-            Siguiente
-          </button>
+          {DatosSepts.length  == (StepNumber + 1) ? (
+            <button className="rounded px-4 py-2 font-bold text-white bg-blue-500 hover:bg-blue-600" onClick={hancleClickSubmit}>Presentacion
+            </button>
+          ) : DatosSepts.length == StepNumber ? (
+            <button className="rounded px-4 py-2 font-bold text-white bg-blue-500 hover:bg-blue-600" onClick={handleSubmitFinally}>Submit
+            </button>
+          ):(
+            <button
+              className={`rounded px-4 py-2 font-bold text-white ${
+                DatosSepts.length == StepNumber
+                  ? "bg-gray-300"
+                  : "bg-blue-500 hover:bg-blue-600"
+              }`}
+              onClick={handleIncrement}
+              disabled={DatosSepts.length == StepNumber}
+            >
+              Siguiente
+            </button>
+          )}
         </div>
       </div>
     </Card>
