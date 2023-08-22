@@ -65,6 +65,7 @@ export default function FormVehiculo({ append, fields, register }: IProps) {
                   <select
                     id="fabricacion_arma"
                     className="block w-full appearance-none  rounded border border-gray-300 px-4 py-2 pr-8 leading-tight text-gray-700 outline-offset-2 outline-transparent focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500  "
+                    {...register(`vehiculo.[${index}].tipo_vehiculo`)}
                   >
                     <option value="">---</option>
                     <option value="Moto">Moto</option>
@@ -80,6 +81,7 @@ export default function FormVehiculo({ append, fields, register }: IProps) {
                   id="cantidad"
                   autoComplete="off"
                   className={`block w-full rounded-md border  border-gray-300 py-2 pl-2 pr-7 text-sm outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500`}
+                  {...register(`vehiculo.[${index}].marca`)}
                 />
               </div>
               <div className="w-full px-2 md:w-1/2">
@@ -89,6 +91,7 @@ export default function FormVehiculo({ append, fields, register }: IProps) {
                   id="cantidad"
                   autoComplete="off"
                   className={`block w-full rounded-md border  border-gray-300 py-2 pl-2 pr-7 text-sm outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500`}
+                  {...register(`vehiculo.[${index}].modelo`)}
                 />
               </div>
               <div className="w-full px-2 md:w-1/2">
@@ -98,6 +101,7 @@ export default function FormVehiculo({ append, fields, register }: IProps) {
                   id="cantidad"
                   autoComplete="off"
                   className={`block w-full rounded-md border  border-gray-300 py-2 pl-2 pr-7 text-sm outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500`}
+                  {...register(`vehiculo.[${index}].placa`)}
                 />
               </div>
             </div>

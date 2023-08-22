@@ -215,6 +215,7 @@ const Steps = () => {
 
 
   const submitForm = (data:any) => {
+    console.log(data)
     dispatch(save_data({...data}))
   }
 
@@ -226,8 +227,9 @@ const Steps = () => {
     console.log('Submit')
   }
 
+  console.log(errors)
   return (
-    <Card extra="w-full md:w-1/2 min-h-[487px]">
+    <Card extra={`w-full min-h-[487px] ${DatosSepts.length == StepNumber ? 'md:w-2/2' : 'md:w-1/2'} `}>
       <div className="flex  justify-center p-4">
         <StepComponent steps={DatosSepts} number_active={StepNumber} />
       </div>

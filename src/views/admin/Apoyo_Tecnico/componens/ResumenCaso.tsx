@@ -54,12 +54,12 @@ const ResumenCaso = ({register}:IProps) => {
                 </div>            
                 <div className="w-full md:w-1/2  px-2">
                     <label htmlFor="unidad_ejecutora">Tipo de Delito</label>
-                    <input type="text" id="unidad_ejecutora" name="tipo_delito"   className={`w-full py-2 pl-2 pr-7  block rounded-md border border-gray-300 outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm`}/>
+                    <input type="text" id="unidad_ejecutora" {...register('tipo_delito')}   className={`w-full py-2 pl-2 pr-7  block rounded-md border border-gray-300 outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm`}/>
                 </div>
             </div>            
             <div className="w-full px-2">
                 <label htmlFor="unidad_ejecutora">GDO Perteneciente</label>
-                <input type="text" id="unidad_ejecutora"  name="gdo_perteneciente"  className={`w-full py-2 pl-2 pr-7  block rounded-md border border-gray-300 outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm`}/>
+                <input type="text" id="unidad_ejecutora"  {...register('gdo_pertenciente')}  className={`w-full py-2 pl-2 pr-7  block rounded-md border border-gray-300 outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm`}/>
             </div>
         </div>
     )
