@@ -3,6 +3,7 @@ import SquerePlusIcon from "@icons/square-plus.svg?component";
 import DeleteIcon from "@icons/delete-icon.svg?component";
 import DocIcon from "@icons/doc-icon.svg?component";
 import UploadIcon from "@icons/upload.svg?component";
+import GpsIcon from '@/icons/ApoyoTecnico/gps-icon.svg?component'
 // Views Admin
 import MainDashboard from "@/views/admin/default";
 import SolicitudesView from "@/views/admin/solicitudes";
@@ -11,6 +12,7 @@ import UploadFile from "@/views/admin/UploadImage";
 import SignInView from "@/views/Auth";
 // View Apoyo tecnico
 import ApoyoTecnico from './views/admin/Apoyo_Tecnico'
+import ListApoyoTecnico  from './views/admin/ListApoyoTecnico'
 
 const routes = [
   {
@@ -32,8 +34,16 @@ const routes = [
     name: "Apoyo Tecnico",
     layout: "/admin",
     path: "apoyo-tecnico",
-    icon: <DocIcon className="h-6 w-6 stroke-current" />,
+    icon: <GpsIcon className="h-6 w-6 stroke-current" />,
     component: <ApoyoTecnico />,
+    secondary: true,
+  },
+  {
+    name: "Lista A. Tecnico",
+    layout: "/admin",
+    path: "lista-a-tecnico",
+    icon: <DocIcon className="h-6 w-6 stroke-current" />,
+    component: <ListApoyoTecnico />,
     secondary: true,
   },
   {

@@ -18,6 +18,7 @@ import VehiculoTabComponent from './Components-Tab/VehiculoTab'
 
 export default function DetalisFinally(){
     const apoyo_tecnico = useAppSelector(state => state.apoyoTecnico)
+  
     const [ActiveTab, setActiveTab] = useState<number>(1)
 
     const handleClickActiveTab = (tabIndex:number) => {
@@ -40,9 +41,9 @@ export default function DetalisFinally(){
                         <div className="flex justify-between">
                             <div className="">
                                 <span className="block font-semibold text-base">Distrito</span> 
-                                <span className="text-gray-500">Duran</span>
+                                <span className="text-gray-500">{apoyo_tecnico?.data?.distrito}</span>
                             </div>
-                            <div className="">
+                            <div className="">  
                                 <span className="block font-semibold text-base">Zona</span> 
                                 <span className="text-gray-500">{apoyo_tecnico?.data?.zona}</span>
                             </div>
@@ -143,7 +144,7 @@ export default function DetalisFinally(){
                         >
                         <MunicionIcon className={`h-6 w-6 ${ActiveTab == 5 ? 'text-blue-500' : 'text-gray-400'}`} />
                         <span className={`text-base  ${ActiveTab == 5 ?  'text-black' : 'text-gray-400'}`}>Municiones</span>
-                        <span className='border text-gray-400  text-sm font-medium  px-3 py-0.2 rounded-xl'>0</span>
+                        <span className='border text-gray-400  text-sm font-medium  px-3 py-0.2 rounded-xl'>{apoyo_tecnico.data?.municiones.length}</span>
                     </button>
                     <button
                         className={`flex items-center px-4 py-2 gap-x-1 hover:bg-gray-50 ${

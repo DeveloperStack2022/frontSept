@@ -6,6 +6,7 @@ import ButtonPagination from './buttons-pagination'
 
 //Types 
 import {Solicitud} from '@/schemas/columns-solicitudes'
+
 type Solicitante = {
     unidad:string;
 }
@@ -69,7 +70,7 @@ const TableComponent:FC<Props> = ({data,fetch_data,loading,pageCount,setPageCoun
         pageCount: totalPage ?? -1,
         manualPagination:true,
     })
-
+    
     useEffect(() => {
         console.log('pages')
         let pageIndexN = pageIndex + 1

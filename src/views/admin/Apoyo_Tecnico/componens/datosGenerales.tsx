@@ -1,13 +1,11 @@
-import { ChangeEvent,FocusEvent,useState } from "react";
-
+import {useState} from 'react'
 import {UseFormRegister} from "react-hook-form";
-// Redux Slice
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
-import {updateDatosGenerales} from '@/store/features/apoyo-tecnico'
-
-
 import { ValidationType } from "@/schemas/apoyo-tecnico";
-  
+import DatePicker from 'react-datepicker'
+import {format} from 'date-fns'
+import 'react-datepicker/dist/react-datepicker.css'
+
+
 type TypeValidationStateForm = Omit<ValidationType, "">;
 
 interface IProps {
@@ -16,29 +14,53 @@ interface IProps {
 
 const FormDatosGenerales  = ({register}:IProps) => {
     // state
-    const [Data, setData] = useState<any>(null)
-
-    const dispatch = useAppDispatch()
-    const solicitudSelector = useAppSelector((state) => state.apoyoTecnico);
-
-
-
-    const handleChange = (e:ChangeEvent<HTMLInputElement>) => {
-        setData({
-            ...solicitudSelector,
-            [e.target.name]:e.target.value
-        })
-    }
-
-    const handleOutFocusInput = (e:FocusEvent<HTMLInputElement>) => {
-        dispatch(updateDatosGenerales({...Data}))
-    }
+    const [date, setDate] = useState<Date | null>(new Date());   
 
     return (
         <>
             {/* Formulario */}
             <div  className="px-2 pb-4">
-                <div className=" flex flex-wrap">
+                <div className=" flex flex-wrap"  >
+                    <div className="w-full md:w-1/2 px-2">
+                        <label htmlFor="numero_caso" className='block' >Fecha</label>
+                        <DatePicker 
+                            dateFormat={'dd-MM-y'}
+                            selected={date}
+                            onChange={(date) => setDate(date)}
+                            customInput={<input {...register('fecha')}  className='w-full py-2 pl-2 pr-2  block rounded-md border border-gray-300 outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm' />} 
+                            renderCustomHeader={({date,decreaseMonth,increaseMonth,prevMonthButtonDisabled,nextMonthButtonDisabled}) =>  (
+                            <div className="flex items-center justify-between px-2 py-2">
+                                <span className="text-lg text-gray-700">
+                                    {format(date, 'MMMM yyyy')}
+                                </span>
+                                <div className="space-x-2">
+                                    <button
+                                        onClick={decreaseMonth}
+                                        disabled={prevMonthButtonDisabled}
+                                        type="button"
+                                        className={`
+                                            ${prevMonthButtonDisabled && 'cursor-not-allowed opacity-50'}
+                                            inline-flex p-1 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-blue-500
+                                        `}
+                                    >
+                                        {"<"}
+                                    </button>
+
+                                    <button
+                                        onClick={increaseMonth}
+                                        disabled={nextMonthButtonDisabled}
+                                        type="button"
+                                        className={`
+                                            ${nextMonthButtonDisabled && 'cursor-not-allowed opacity-50'}
+                                            inline-flex p-1 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-blue-500
+                                        `}
+                                        >
+                                            {">"}
+                                    </button>
+                                </div>
+                            </div>
+                        )}/>
+                    </div>
                     <div className="w-full md:w-1/2 px-2">
                         <label htmlFor="numero_caso">Numero Caso</label>
                         <input type="text" id="numero_caso"  {...register('numero_caso')}  className={`w-full py-2 pl-2 pr-2  block rounded-md border border-gray-300 outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm`}/>

@@ -1,5 +1,7 @@
 import { useState,useRef } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
+import {addApoyoTecnico} from '@/services/apoyo-tecnico-services'
+import ToastProvider from '@/components/toast/toastProvider'
 
 // Components
 import StepComponent from "./componens/step";
@@ -16,7 +18,7 @@ import FormVehiculo from "./componens/FormVehiculo";
 import FormSustanciaFiscalizacion from './componens/FormSustanciasSujetasFiscalizacion'
 import { yupResolver } from "@hookform/resolvers/yup";
 import ValidationSchema, { ValidationType } from "@/schemas/apoyo-tecnico";
-
+import { useToast } from "@/components/toast/toastProvider";
 
 // TODO: Store Redux 
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
@@ -67,8 +69,12 @@ const DatosSepts:{numero:number,title:string}[] = [
 
 // TODO: ======== Component =========
 const Steps = () => {
+  // TODO: Toast
+  const toast = useToast()
   // REDUX 
   const dispatch = useAppDispatch()
+  const apoyo_tecnico = useAppSelector(data => data.apoyoTecnico)
+
   // TODO: Refs 
   const refSubmit = useRef<HTMLButtonElement>(null)
 
@@ -215,7 +221,6 @@ const Steps = () => {
 
 
   const submitForm = (data:any) => {
-    console.log(data)
     dispatch(save_data({...data}))
   }
 
@@ -223,57 +228,66 @@ const Steps = () => {
     refSubmit.current?.click()
     handleIncrement()
   }
-  const handleSubmitFinally = () => {
-    console.log('Submit')
+  const handleSubmitFinally = async () => {
+    console.log('Submit') 
+    // await axios.post('',{})
+    if(!!apoyo_tecnico?.data) {
+      const data = await addApoyoTecnico(apoyo_tecnico?.data)
+      if(data?.status  >= 200 && data?.status < 300 ) {
+        toast?.pushSuccess('Agregado Exitosamente',3000,'truncate-1-lines')
+      }
+    }
   }
 
   console.log(errors)
   return (
-    <Card extra={`w-full min-h-[487px] ${DatosSepts.length == StepNumber ? 'md:w-2/2' : 'md:w-1/2'} `}>
-      <div className="flex  justify-center p-4">
-        <StepComponent steps={DatosSepts} number_active={StepNumber} />
-      </div>
-      {/* Title Forms */}
-      <h2 className="mx-2 text-center text-2xl font-bold text-gray-700">
-        {TitleSteps[StepNumber - 1]}
-      </h2>
-      <form onSubmit={handleSubmit(submitForm)}>
-        {ComponentsRender(StepNumber)}
-        <button className="hidden " type="submit" ref={refSubmit} />
-      </form>
-      <div className=" flex h-full items-end justify-center pb-2">
-        <div className="flex gap-x-2">
-          <button
-            className={`rounded px-4 py-2 font-bold text-white ${
-              StepNumber != 1 ? "bg-blue-500 hover:bg-blue-600" : "bg-gray-300"
-            }`}
-            onClick={handleDecrement}
-            disabled={StepNumber == 1}
-          >
-            Regresar
-          </button>
-          {DatosSepts.length  == (StepNumber + 1) ? (
-            <button className="rounded px-4 py-2 font-bold text-white bg-blue-500 hover:bg-blue-600" onClick={hancleClickSubmit}>Presentacion
-            </button>
-          ) : DatosSepts.length == StepNumber ? (
-            <button className="rounded px-4 py-2 font-bold text-white bg-blue-500 hover:bg-blue-600" onClick={handleSubmitFinally}>Submit
-            </button>
-          ):(
+    <ToastProvider variant='bottom_middle' >
+      <Card extra={`w-full min-h-[487px] ${DatosSepts.length == StepNumber ? 'md:w-2/2' : 'md:w-1/2'} `}>
+        <div className="flex  justify-center p-4">
+          <StepComponent steps={DatosSepts} number_active={StepNumber} />
+        </div>
+        {/* Title Forms */}
+        <h2 className="mx-2 text-center text-2xl font-bold text-gray-700">
+          {TitleSteps[StepNumber - 1]}
+        </h2>
+        <form onSubmit={handleSubmit(submitForm)}>
+          {ComponentsRender(StepNumber)}
+          <button className="hidden " type="submit" ref={refSubmit} />
+        </form>
+        <div className=" flex h-full items-end justify-center pb-2">
+          <div className="flex gap-x-2">
             <button
               className={`rounded px-4 py-2 font-bold text-white ${
-                DatosSepts.length == StepNumber
-                  ? "bg-gray-300"
-                  : "bg-blue-500 hover:bg-blue-600"
+                StepNumber != 1 ? "bg-blue-500 hover:bg-blue-600" : "bg-gray-300"
               }`}
-              onClick={handleIncrement}
-              disabled={DatosSepts.length == StepNumber}
+              onClick={handleDecrement}
+              disabled={StepNumber == 1}
             >
-              Siguiente
+              Regresar
             </button>
-          )}
+            {DatosSepts.length  == (StepNumber + 1) ? (
+              <button className="rounded px-4 py-2 font-bold text-white bg-blue-500 hover:bg-blue-600" onClick={hancleClickSubmit}>Presentacion
+              </button>
+            ) : DatosSepts.length == StepNumber ? (
+              <button className="rounded px-4 py-2 font-bold text-white bg-blue-500 hover:bg-blue-600" onClick={handleSubmitFinally}>Submit
+              </button>
+            ):(
+              <button
+                className={`rounded px-4 py-2 font-bold text-white ${
+                  DatosSepts.length == StepNumber
+                    ? "bg-gray-300"
+                    : "bg-blue-500 hover:bg-blue-600"
+                }`}
+                onClick={handleIncrement}
+                disabled={DatosSepts.length == StepNumber}
+              >
+                Siguiente
+              </button>
+            )}
+          </div>
         </div>
-      </div>
-    </Card>
+      </Card>
+    </ToastProvider>
   );
 };
 export default Steps;
