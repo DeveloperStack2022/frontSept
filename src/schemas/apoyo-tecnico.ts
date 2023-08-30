@@ -10,7 +10,7 @@ export type Detenidos = {
 export type ValidationType = {
     // Default Types
     hora:string
-    fecha:string;
+    fecha:Date;
 
     // TODO: Datos Generales 
     numero_caso:string;
@@ -38,6 +38,13 @@ export type ValidationType = {
         ciudadania:string;
         nombre_completos:string;
         sexo:string;
+    }]
+
+    // TODO: Celulares
+    celulares: [{
+        marca:string;
+        modelo:string;
+        numero:string;
     }]
 
     // TODO: Sustancias Sujetas A Fiscalizacion
@@ -80,6 +87,7 @@ export type ValidationType = {
 
 const validationSchema = yup.object().shape({
     // TODO: Datos Generales
+    fecha:yup.date(),
     numero_caso:yup.string(),
     zona:yup.string(),
     sub_zona:yup.string(),

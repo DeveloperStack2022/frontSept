@@ -6,6 +6,7 @@ export const storeApoyoTecnico = createSlice({
     initialState:{},
     reducers:{
         updateDatosGenerales: (state,action:PayloadAction<{
+            fecha:Date,
             numero_caso:string;
             zona:string;
             sub_zona:string;
@@ -16,8 +17,8 @@ export const storeApoyoTecnico = createSlice({
             unidad_apoyo:string;
             distrito:string
         }>) => {
-            const {numero_caso,direccion,sub_zona,zona,latitud,longitud,unidad_apoyo,unidad_ejecutora,distrito} = action.payload
-
+            const {numero_caso,direccion,sub_zona,zona,latitud,longitud,unidad_apoyo,unidad_ejecutora,distrito,fecha} = action.payload
+            state.fecha = fecha
             state.numero_caso = numero_caso
             state.zona = zona
             state.sub_zona = sub_zona

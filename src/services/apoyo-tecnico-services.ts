@@ -4,6 +4,7 @@ const URI = import.meta.env.VITE_API_URL
 
 
 export const addApoyoTecnico = async (data: ValidationType) => {
+    console.log(data)
     const formatData = {
         ...data,
         DatosGenerales: {
@@ -12,6 +13,7 @@ export const addApoyoTecnico = async (data: ValidationType) => {
             subzona:data.sub_zona,
             distrito: data.distrito,
             direccion:data.direccion,
+            fecha: data.fecha,
             coordenadas:{
                 latitud:data.latitud,
                 longitud:data.longitud

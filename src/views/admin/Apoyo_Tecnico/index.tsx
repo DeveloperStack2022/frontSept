@@ -1,5 +1,7 @@
+// REACT: Hooks React 
 import { useState,useRef } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+// REACT-HOOKS-FORM: 
+import { useForm, useFieldArray,Controller } from "react-hook-form";
 import {addApoyoTecnico} from '@/services/apoyo-tecnico-services'
 import ToastProvider from '@/components/toast/toastProvider'
 
@@ -16,6 +18,7 @@ import FormDinero from "./componens/FormDinero";
 import DetalisFinally from "./componens/DetalisFinally";
 import FormVehiculo from "./componens/FormVehiculo";
 import FormSustanciaFiscalizacion from './componens/FormSustanciasSujetasFiscalizacion'
+import FormCelularesComponent from './componens/FormCelulares'
 import { yupResolver } from "@hookform/resolvers/yup";
 import ValidationSchema, { ValidationType } from "@/schemas/apoyo-tecnico";
 import { useToast } from "@/components/toast/toastProvider";
@@ -42,27 +45,31 @@ const DatosSepts:{numero:number,title:string}[] = [
     title: "Detenidos",
   },
   {
-    numero:4,
+    numero: 4,
+    title: "Celulares",
+  },
+  {
+    numero:5,
     title:'Sustancias Sujetas A Fiscalizacion'
   },
   {
-    numero: 5,
+    numero: 6,
     title: "Armas",
   },
   {
-    numero: 6,
+    numero: 7,
     title: "Municiones",
   },
   {
-    numero: 7,
+    numero: 8,
     title: "Dinero",
   },
   {
-    numero: 8,
+    numero: 9,
     title: "Vehiculos",
   },
   {
-    numero: 9,
+    numero: 10,
     title: "Presentacion",
   },
 ];
@@ -78,7 +85,7 @@ const Steps = () => {
   // TODO: Refs 
   const refSubmit = useRef<HTMLButtonElement>(null)
 
-  //FIXME: React hooks form
+  // REACT-HOOKS-FORM: 
   const {
     register,
     handleSubmit,
@@ -100,6 +107,15 @@ const Steps = () => {
   } = useFieldArray<TypeValidationStateForm, "detenidos">({
     control,
     name: "detenidos",
+  });
+
+  const {
+    fields: FieldsCelulares,
+    append: AgregarCelulares,
+    remove: RemoveCelulares,
+  } = useFieldArray<TypeValidationStateForm, "celulares">({
+    control,
+    name: "celulares",
   });
   //   field Array of Municiones
   const {
@@ -154,6 +170,7 @@ const Steps = () => {
     "Datos Generales",
     "Resumen Caso",
     "Detenidos",
+    "Medios Electronicos",
     "Sustancias Sujetas a F",
     "Armas",
     "Municiones",
@@ -169,7 +186,7 @@ const Steps = () => {
   const ComponentsRender = (value: number) => {
     switch (value) {
       case 1:
-        return <FormDatosGenerales register={register} />;
+        return <FormDatosGenerales  control={control} register={register} />;
       case 2:
         return <ResumenCaso register={register} />;
       case 3:
@@ -181,8 +198,10 @@ const Steps = () => {
           />
         );
       case 4:
-        return <FormSustanciaFiscalizacion append={AgregarDrogas} fields={FieldDrogas} register={register} />
+        return <FormCelularesComponent append={AgregarCelulares} fields={FieldsCelulares} register={register} />
       case 5:
+        return <FormSustanciaFiscalizacion append={AgregarDrogas} fields={FieldDrogas} register={register} />
+      case 6:
         return (
           <FormArmas
             register={register}
@@ -190,7 +209,7 @@ const Steps = () => {
             append={AgregarArmas}
           />
         );
-      case 6:
+      case 7:
         return (
           <FormMuniciones
             register={register}
@@ -198,7 +217,7 @@ const Steps = () => {
             append={AgregarMuniciones}
           />
         );
-      case 7:
+      case 8:
         return (
           <FormDinero
             register={register}
@@ -206,7 +225,7 @@ const Steps = () => {
             append={AgregarDinero}
           />
         );
-      case 8:
+      case 9:
         return (
           <FormVehiculo
             register={register}
@@ -214,13 +233,15 @@ const Steps = () => {
             append={AgregarVehiculos}
           />
         );
-      case 9:
+      case 10:
         return <DetalisFinally />;
     }
   };
 
 
   const submitForm = (data:any) => {
+    console.log('REact hooks form')
+    console.log(data)
     dispatch(save_data({...data}))
   }
 
