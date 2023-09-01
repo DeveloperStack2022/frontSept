@@ -1,6 +1,7 @@
 import {useReactTable,createColumnHelper,getCoreRowModel, flexRender,PaginationState,getPaginationRowModel,SortingState,getSortedRowModel} from '@tanstack/react-table'
 import {useState,FC,useEffect,useMemo} from 'react'
-
+import {format} from 'date-fns'
+import es from 'date-fns/locale/es'
 // Types 
 import {ApoyoTecnico} from '@/schemas/columns-apoyo-tecnico'
 
@@ -14,8 +15,9 @@ const columnHelper = createColumnHelper<ApoyoTecnico>()
 type IProps = {
     loading: boolean
     data: ApoyoTecnico[]
+    openModal: (id:string) => void
 }
-const TableCompoents: FC<IProps> = ({data,loading}) => {
+const TableCompoents: FC<IProps> = ({data,loading,openModal}) => {
     // TODO: Hooks Memo 
     const defaultDataMemo = useMemo(() => [], [])
     const columns  = [
@@ -24,9 +26,9 @@ const TableCompoents: FC<IProps> = ({data,loading}) => {
             cell: info => info.getValue(),
         }),
         columnHelper.accessor('fecha',{
-            cell: info => info.getValue(),
+            cell: info => <span className='text-gray-500 font-semibold'> {format(new Date(info.getValue()),'d MMM, yyyy',{locale:es}).toLocaleUpperCase()} </span>
         }),
-        columnHelper.accessor('detenidos',{
+        columnHelper.accessor('n_detenidos',{
             id:'detenidos',
             header: 'N. Detenidos',
             cell: info => info.getValue()
@@ -35,7 +37,7 @@ const TableCompoents: FC<IProps> = ({data,loading}) => {
             id: 'Acciones',
             header: 'Acciones',
             cell: props => (
-                <button className='bg-blue-600 hover:bg-blue-600/90 text-white text-xs py-1.5 px-2 mr-2 rounded-md font-semibold'>Detalles</button>
+                <button className='bg-blue-600 hover:bg-blue-600/90 text-white text-xs py-1.5 px-2 mr-2 rounded-md font-semibold' onClick={() => openModal(props.row.original.id)}>Mostrar Img</button>
             )
         })
     ]
@@ -52,12 +54,12 @@ const TableCompoents: FC<IProps> = ({data,loading}) => {
 
     return (
         <>
-            <table className='w-full whitespace-nowrap'>
+            <table className='w-full whitespace-nowrap rounded-lg mt-5'>
                 <thead className='text-sm  bg-white uppercase dark:text-gray-400 font-light tracking-normal py-4'>
                     {table.getHeaderGroups().map(headersGroup => (
                         <tr  key={headersGroup.id}>
                             {headersGroup.headers.map(header => (
-                                <th className='px-2 py-4 text-left'>
+                                <th className='px-4 py-4 text-left'>
                                     {header.isPlaceholder ? null : flexRender(header.column.columnDef.header,header.getContext())}
                                 </th>
                             ))}

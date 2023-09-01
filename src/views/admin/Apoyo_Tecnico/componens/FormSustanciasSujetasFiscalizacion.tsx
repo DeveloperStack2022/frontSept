@@ -63,6 +63,7 @@ import {
                   <label htmlFor="tipo_droga">Tipo De Droga</label>
                   <div className="relative ">
                     <select
+                    {...register(`sustancias_sujetas_fiscalizacion.[${index}].tipo_droga`)}
                       id="tipo_droga"
                       className="block w-full rounded-md border-0 py-1.5 pr-14 pl-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 "
                     >
@@ -78,18 +79,18 @@ import {
                   <label htmlFor="peso_neto">Peso Neto</label>
                   <div className="relative">
                     <input
+                      {...register(`sustancias_sujetas_fiscalizacion.[${index}].peso_neto`)}
                       type="text"
                       id="peso_neto"
                       autoComplete="off"
                       className={`block w-full rounded-md border-0 py-1.5 pr-14 pl-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6`}
                     />
                     <div className="absolute inset-y-0 right-0 flex items-center">
-                        <select className="h-full rounded-md border-0 bg-transparent py-0 pl-2 pr-7 text-gray-500 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm">
-                          <option value="Gr">Gr</option>
-                          <option value="Kg">Kg</option>
+                        <select {...register(`sustancias_sujetas_fiscalizacion.[${index}].medida_peso`)} className="h-full rounded-md border-0 bg-transparent py-0 pl-2 pr-7 text-gray-500 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm">
+                          <option value="gr">Gr</option>
+                          <option value="kg">Kg</option>
                         </select>
                     </div>
-
                   </div>
                 </div>
                 <div className="w-full px-2 md:w-1/2">

@@ -1,8 +1,8 @@
 export type ApoyoTecnico = {
-    _id:string;
+    id:string;
     fecha:string;
     unidad_ejecutoria:string;
-    detenidos:string;
+    n_detenidos:number;
     nombre_caso:string
     acciones:string
 }

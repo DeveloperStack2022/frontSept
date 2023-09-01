@@ -6,7 +6,7 @@ import Vehiculo from '@icons/ApoyoTecnico/vehiculo.svg?component'
 import PhoneIcon from '@icons/ApoyoTecnico/phone.svg?component'
 import MunicionIcon from '@icons/ApoyoTecnico/municion.svg?component'
 
-// TODO: Store Redux 
+// REDUX: 
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import {useState} from 'react'
 // COMPONENTS
@@ -15,7 +15,10 @@ import NavBarInfo from './NavbarInfo'
 import UserInfo from './Components-Tab/UserInfo'
 import ArmasTabComponent from './Components-Tab/ArmasTab'
 import VehiculoTabComponent from './Components-Tab/VehiculoTab'
+import CelularesTab from './Components-Tab/CelularesTab'
+import MunicionesTab from './Components-Tab/MunicionesTab'
 
+// COMPONENT: 
 export default function DetalisFinally(){
     const apoyo_tecnico = useAppSelector(state => state.apoyoTecnico)
   
@@ -27,7 +30,7 @@ export default function DetalisFinally(){
 
     return (
         <>
-            <NavBarInfo nombre_caso={apoyo_tecnico?.data?.numero_caso} total_celulares={2} detenidos={apoyo_tecnico.data?.detenidos.length} total_armas={apoyo_tecnico.data?.armas.length} total_vehiculos={apoyo_tecnico.data?.vehiculo.length} />
+            <NavBarInfo nombre_caso={apoyo_tecnico?.data?.numero_caso} total_celulares={apoyo_tecnico?.data?.celulares.length} detenidos={apoyo_tecnico?.data?.detenidos.length} total_armas={apoyo_tecnico?.data?.armas.length} total_vehiculos={apoyo_tecnico?.data?.vehiculo.length} />
             <hr className="mx-4 mb-2" />
             <div className="grid grid-cols-2 gap-x-2">
                 <div className="px-4">
@@ -124,7 +127,7 @@ export default function DetalisFinally(){
                         >
                         <PhoneIcon className={`h-5 w-5 ${ActiveTab == 3 ? 'text-blue-500' : 'text-gray-400'}`} />
                         <span className={`text-base  ${ActiveTab == 3 ?  'text-black' : 'text-gray-400'}`}>Celulares</span>
-                        <span className='border text-gray-400  text-sm font-medium  px-3 py-0.2 rounded-xl'>2</span>
+                        <span className='border text-gray-400  text-sm font-medium  px-3 py-0.2 rounded-xl'>{apoyo_tecnico?.data?.celulares.length}</span>
                     </button>
                     <button
                         className={` flex items-center justify-between px-4 py-2 gap-x-1 hover:bg-gray-50 ${
@@ -174,10 +177,24 @@ export default function DetalisFinally(){
                         ))}
                     </>
                 )}
+                {ActiveTab == 3 && (
+                    <>
+                        {apoyo_tecnico?.data?.celulares.map((item,index) => (
+                            <CelularesTab marca={item.marca} modelo={item.modelo} numero={item.numero} />
+                        ))}
+                    </>
+                )}
                 {ActiveTab == 4 && (
                     <>
                         {apoyo_tecnico?.data?.vehiculo.map((item,index) => (
                             <VehiculoTabComponent marca={item.marca} modelo={item.modelo} placa={item.placa} tipo_vehiculo={item.tipo_vehiculo} />
+                        ))}
+                    </>
+                )}
+                {ActiveTab == 5 && (
+                    <>
+                        {apoyo_tecnico?.data?.municiones.map((item,index) => (
+                            <MunicionesTab cantidad={item.cantidad} tipo_municion={item.tipo_municion} calibre={item.calibre} />
                         ))}
                     </>
                 )}

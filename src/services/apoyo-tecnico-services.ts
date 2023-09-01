@@ -4,7 +4,6 @@ const URI = import.meta.env.VITE_API_URL
 
 
 export const addApoyoTecnico = async (data: ValidationType) => {
-    console.log(data)
     const formatData = {
         ...data,
         DatosGenerales: {
@@ -13,7 +12,7 @@ export const addApoyoTecnico = async (data: ValidationType) => {
             subzona:data.sub_zona,
             distrito: data.distrito,
             direccion:data.direccion,
-            fecha: data.fecha,
+            fecha: new Date(data.fecha),
             coordenadas:{
                 latitud:data.latitud,
                 longitud:data.longitud
@@ -57,5 +56,13 @@ export const getApoyoTecnico = async () => {
         }
     } catch (error) {
         console.log(error)
+    }
+}
+export const   getApoyoTecnicoById = async (id:string) => {
+    try {
+        const response =  await axios.get(`${URI}/getApoyoTecnicoId/${id}`)
+        return response
+    } catch (error) {
+        
     }
 }

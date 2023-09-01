@@ -1,4 +1,20 @@
 import * as yup  from 'yup'
+
+export type SingleDataPresentation = {
+    nombre_caso:string;
+    ejecutor:string;
+    direccion:string;
+    latitud:string;
+    longitud:string;
+    delito:string;
+    contexto:string; //TODO: Resumen Caso
+    detenidos:number
+    indicios: {
+        armas:number;
+        celulares:number
+    }
+}
+
 export type Detenidos = {
     tipo_identificacion:string;
     n_identificacion:string;
@@ -51,6 +67,7 @@ export type ValidationType = {
     sustancias_sujetas_fiscalizacion: [{
         tipo_droga:string;
         peso_neto:string;
+        medida_peso:'kg'| 'gr'
         descripcion_logotipo:string
         descripcion_marquilla:string;
     }]
@@ -83,6 +100,8 @@ export type ValidationType = {
         placa:string;
     }]
 }
+
+
 
 
 const validationSchema = yup.object().shape({

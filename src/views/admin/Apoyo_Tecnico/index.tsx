@@ -240,8 +240,6 @@ const Steps = () => {
 
 
   const submitForm = (data:any) => {
-    console.log('REact hooks form')
-    console.log(data)
     dispatch(save_data({...data}))
   }
 
