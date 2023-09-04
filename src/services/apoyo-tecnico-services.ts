@@ -27,11 +27,14 @@ export const addApoyoTecnico = async (data: ValidationType) => {
         }
     }
 
+    const formData = new FormData()
+    formData.append('upload_anexo',data.upload_anexo)
+    formData.append('data',JSON.stringify(formatData))
     try {
-        const response = await axios.post(`${URI}/registroApoyoTecnico`,formatData,{
+        const response = await axios.post(`${URI}/registroApoyoTecnico`,formData,{
             headers:{
                 'Accept':'*/*',
-                'Content-Type':'application/json',
+                'Content-Type': 'multipart/form-data'
             }
         })
 

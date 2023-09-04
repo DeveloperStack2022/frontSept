@@ -9,6 +9,7 @@ export type SingleDataPresentation = {
     delito:string;
     contexto:string; //TODO: Resumen Caso
     detenidos:number
+    name_image:string;
     indicios: {
         armas:number;
         celulares:number
@@ -99,6 +100,8 @@ export type ValidationType = {
         modelo:string;
         placa:string;
     }]
+
+    upload_anexo:string
 }
 
 

@@ -4,9 +4,10 @@ import Table from './components/table'
 import Modal from './components/ModalPresenter'
 import CardsCantidad from './components/Cards'
 import {SingleDataPresentation} from '@/schemas/apoyo-tecnico'
+const URI_IMG = import.meta.env.VITE_API_URL_IMAGE
 
 const imgUrl = new URL('/public/img/presentacion.png', import.meta.url).href
-const imgAnexoUrl = new URL('/public/img/imagen_anexo.png', import.meta.url).href
+// const imgAnexoUrl = new URL(`/public/img/imagen_anexo.png`, import.meta.url).href
 
 // Icons 
 import User from '@/icons/user.svg?component'
@@ -115,7 +116,7 @@ export default function ApoyoTecnico(){
                             )} */}
                             {formatData(DataModal?.indicios)}
                         </div>
-                        <div className="absolute top-[430px] left-[366px] w-[909px] h-[285px] bg-cover bg-center bg-no-repeat " style={{backgroundImage:`url('${imgAnexoUrl}')`}}></div>
+                        <div className="absolute top-[430px] left-[366px] w-[909px] h-[285px] bg-cover bg-center bg-no-repeat " style={{backgroundImage:`url('${URI_IMG}/${DataModal?.name_image}')`}}></div>
 
                     </div>
                 </div>

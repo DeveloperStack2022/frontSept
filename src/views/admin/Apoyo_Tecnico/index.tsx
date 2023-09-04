@@ -19,6 +19,7 @@ import DetalisFinally from "./componens/DetalisFinally";
 import FormVehiculo from "./componens/FormVehiculo";
 import FormSustanciaFiscalizacion from './componens/FormSustanciasSujetasFiscalizacion'
 import FormCelularesComponent from './componens/FormCelulares'
+import FormAnaexos from './componens/FormUploadImage'
 import { yupResolver } from "@hookform/resolvers/yup";
 import ValidationSchema, { ValidationType } from "@/schemas/apoyo-tecnico";
 import { useToast } from "@/components/toast/toastProvider";
@@ -70,6 +71,10 @@ const DatosSepts:{numero:number,title:string}[] = [
   },
   {
     numero: 10,
+    title: "Upload Anexos",
+  },
+  {
+    numero: 11,
     title: "Presentacion",
   },
 ];
@@ -176,6 +181,7 @@ const Steps = () => {
     "Municiones",
     "Dinero",
     "Vehiculo",
+    "Upload Anexos",
     "Presentacion",
   ]);
   // Events
@@ -234,13 +240,18 @@ const Steps = () => {
           />
         );
       case 10:
+        return (
+          <FormAnaexos control={control} register={register} />
+        )
+      case 11:
         return <DetalisFinally />;
     }
   };
 
 
   const submitForm = (data:any) => {
-    dispatch(save_data({...data}))
+    const upload_anexo = data.upload_anexo[0]
+    dispatch(save_data({...data,upload_anexo:upload_anexo}))
   }
 
   const hancleClickSubmit = ( ) => {
