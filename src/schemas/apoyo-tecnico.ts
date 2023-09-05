@@ -101,7 +101,7 @@ export type ValidationType = {
         placa:string;
     }]
 
-    upload_anexo:string
+    upload_anexo:File
 }
 
 

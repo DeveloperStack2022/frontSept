@@ -1,10 +1,11 @@
-import {useState} from 'react'
-import {UseFormRegister,Controller,Control} from "react-hook-form";
+import {UseFormRegister,Controller,Control,FieldErrors} from "react-hook-form";
 
 import { ValidationType } from "@/schemas/apoyo-tecnico";
 import DatePicker from 'react-datepicker'
 import {format} from 'date-fns'
 import 'react-datepicker/dist/react-datepicker.css'
+import { error } from "console";
+
 
 
 type TypeValidationStateForm = Omit<ValidationType, "">;
@@ -12,10 +13,11 @@ type TypeValidationStateForm = Omit<ValidationType, "">;
 interface IProps {
     register: UseFormRegister<TypeValidationStateForm>;
     control: Control<TypeValidationStateForm,any>
+    errors: FieldErrors<TypeValidationStateForm>
     // Controller: <TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>(props: ControllerProps<TFieldValues, TName>) => import("react").ReactElement<any, string | import("react").JSXElementConstructor<any>>
 }
 
-const FormDatosGenerales  = ({register,control}:IProps) => {
+const FormDatosGenerales  = ({errors,register,control}:IProps) => {
     // state
     // const [date, setDate] = useState<Date>(new Date());   
 
@@ -97,11 +99,11 @@ const FormDatosGenerales  = ({register,control}:IProps) => {
                     <label htmlFor="numero_caso" className="ml-2 font-semibold">Cordenadas</label>
                     <div className="flex ">
                         <div className="w-full md:w-1/2 px-2">
-                            <label htmlFor="latitud" className="">Latitud</label>
+                            <label htmlFor="latitud" className="flex justify-between">Latitud <span className="text-red-500 text-sm">{errors?.latitud?.message && "*campo incorrecto*"}</span></label>
                             <input type="text" id='latitud' {...register('latitud')}    className={`w-full py-2 pl-2 pr-7  block rounded-md border border-gray-300 outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm`}/>
                         </div>
                         <div className="w-full md:w-1/2 px-2">
-                            <label htmlFor="longitud">longitud</label>
+                            <label htmlFor="longitud" className="flex justify-between">longitud <span className="text-red-500 text-sm">{errors?.longitud?.message && "*campo incorrecto*"}</span></label>
                             <input type="text" id='longitud' {...register('longitud')}  className={`w-full py-2 pl-2 pr-7  block rounded-md border border-gray-300 outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm`}/>
                         </div>
                     </div>

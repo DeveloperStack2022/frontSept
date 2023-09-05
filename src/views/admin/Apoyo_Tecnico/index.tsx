@@ -192,7 +192,7 @@ const Steps = () => {
   const ComponentsRender = (value: number) => {
     switch (value) {
       case 1:
-        return <FormDatosGenerales  control={control} register={register} />;
+        return <FormDatosGenerales errors={errors} control={control} register={register} />;
       case 2:
         return <ResumenCaso register={register} />;
       case 3:
@@ -241,7 +241,7 @@ const Steps = () => {
         );
       case 10:
         return (
-          <FormAnaexos control={control} register={register} />
+          <FormAnaexos setValue={setValue} control={control} register={register} />
         )
       case 11:
         return <DetalisFinally />;
@@ -250,7 +250,7 @@ const Steps = () => {
 
 
   const submitForm = (data:any) => {
-    const upload_anexo = data.upload_anexo[0]
+    const upload_anexo = data.upload_anexo
     dispatch(save_data({...data,upload_anexo:upload_anexo}))
   }
 
@@ -259,8 +259,7 @@ const Steps = () => {
     handleIncrement()
   }
   const handleSubmitFinally = async () => {
-    console.log('Submit') 
-    // await axios.post('',{})
+    
     if(!!apoyo_tecnico?.data) {
       const data = await addApoyoTecnico(apoyo_tecnico?.data)
       if(data?.status  >= 200 && data?.status < 300 ) {
@@ -268,8 +267,6 @@ const Steps = () => {
       }
     }
   }
-
-  console.log(errors)
   return (
     <ToastProvider variant='bottom_middle' >
       <Card extra={`w-full min-h-[487px] ${DatosSepts.length == StepNumber ? 'md:w-2/2' : 'md:w-1/2'} `}>
@@ -299,8 +296,8 @@ const Steps = () => {
               <button className="rounded px-4 py-2 font-bold text-white bg-blue-500 hover:bg-blue-600" onClick={hancleClickSubmit}>Presentacion
               </button>
             ) : DatosSepts.length == StepNumber ? (
-              <button className="rounded px-4 py-2 font-bold text-white bg-blue-500 hover:bg-blue-600" onClick={handleSubmitFinally}>Submit
-              </button>
+                <button className="rounded px-4 py-2 font-bold text-white bg-blue-500 hover:bg-blue-600" onClick={handleSubmitFinally} disabled={Object.keys(errors) ? true:false}>Submit
+                </button>
             ):(
               <button
                 className={`rounded px-4 py-2 font-bold text-white ${
