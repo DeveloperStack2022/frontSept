@@ -297,7 +297,7 @@ const Steps = () => {
               </button>
             ) : DatosSepts.length == StepNumber ? (
                 <button className="rounded px-4 py-2 font-bold text-white bg-blue-500 hover:bg-blue-600" onClick={handleSubmitFinally} disabled={Object.keys(errors) ? true:false}>Submit
-                </button>
+                </button> 
             ):(
               <button
                 className={`rounded px-4 py-2 font-bold text-white ${

@@ -14,7 +14,7 @@ interface IProps {
     register: UseFormRegister<TypeValidationStateForm>;
     control: Control<TypeValidationStateForm,any>
     errors: FieldErrors<TypeValidationStateForm>
-    // Controller: <TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>(props: ControllerProps<TFieldValues, TName>) => import("react").ReactElement<any, string | import("react").JSXElementConstructor<any>>
+    
 }
 
 const FormDatosGenerales  = ({errors,register,control}:IProps) => {
