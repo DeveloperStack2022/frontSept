@@ -13,6 +13,11 @@ export type SingleDataPresentation = {
     indicios: {
         armas:number;
         celulares:number
+        SustanciasIlegales:{
+            medida_peso:string
+            peso_neto:string;
+            tipo_droga:string;
+        }[]
     }
 }
 

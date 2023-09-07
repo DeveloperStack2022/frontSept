@@ -17,16 +17,34 @@ import Vehiculo from '@/icons/ApoyoTecnico/vehiculo.svg?component'
 import Dinero from '@/icons/ApoyoTecnico/dinero.svg?component'
 import SustanciasIlegales from '@/icons/ApoyoTecnico/sustancias_ilegales.svg?component'
 
+
+type SustanciasIlegales = {
+    medida_peso:string
+    peso_neto:string;
+    tipo_droga:string;
+}
+
+const formDataArray = (arrayObj:SustanciasIlegales[]) => {
+    if(arrayObj){
+        return arrayObj.length > 0 && arrayObj.map(item => (
+            <p className='text-[#002060] text-xl font-medium leading-5 uppercase'>{item.tipo_droga}: {item.peso_neto}{item.medida_peso}</p>
+        ))
+    }
+}
+
 const formatData = (obj:any) => {
     if(obj){
         const objKeys = Object.keys(obj)
         const objValues = Object.values(obj)
         return objKeys.map((item,i) => (
-            <p className='text-[#002060] text-xl font-medium leading-5 uppercase'>{item} : {objValues[i]}</p>
+            <>
+                {objValues[i] as number > 0 && (
+                    <p className='text-[#002060] text-xl font-medium leading-5 uppercase'>{item} : {objValues[i]}</p>
+                ) }
+            </>
         ))
     }
 }
-
 
 export default function ApoyoTecnico(){
 
@@ -66,6 +84,9 @@ export default function ApoyoTecnico(){
         setDataModal(data?.data)
         setShowModal(true)
     }
+
+    
+    
 
     
     return (
@@ -109,12 +130,8 @@ export default function ApoyoTecnico(){
                             <p className='text-[#002060] text-2xl font-bold leading-5 uppercase'>Indicios</p>
                         </div>
                         <div className="absolute top-[175px] left-[860px] w-[454px]">
-                            {/* {!!DataModal?.indicios && (
-                                Object.values(DataModal?.indicios).map(items => (
-                                        <p className='text-[#002060] text-xl font-medium leading-5 uppercase'>{items}</p>        
-                                    ))
-                            )} */}
                             {formatData(DataModal?.indicios)}
+                            {formDataArray(DataModal?.indicios.SustanciasIlegales)}
                         </div>
                         <div className="absolute top-[430px] left-[366px] w-[909px] h-[285px] bg-cover bg-center bg-no-repeat " style={{backgroundImage:`url('${URI_IMG}/${DataModal?.name_image}')`}}></div>
 

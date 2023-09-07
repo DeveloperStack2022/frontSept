@@ -72,9 +72,9 @@ export default function FormDinero({ fields,append,register }: IProps) {
                   {...register(`dinero.[${index}].tipo_divisa`)}
                 >
                   <option value="">---</option>
-                  <option value="Arma_Larga">Pesos Colombianos</option>
-                  <option value="Arma_Larga">Soles Peruano</option>
-                  <option value="Arma_Corta">Dolares</option>
+                  <option value="Pesos Colombianos">Pesos Colombianos</option>
+                  <option value="Soles Peruanos">Soles Peruano</option>
+                  <option value="Dolares Americanos">Dolares Americanos</option>
                 </select>
                 
               </div>

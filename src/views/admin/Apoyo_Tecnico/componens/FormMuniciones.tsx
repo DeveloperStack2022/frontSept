@@ -72,8 +72,8 @@ export default function FormMuniciones({ append, fields, register }: IProps) {
                 {...register(`municiones.[${index}].tipo_municion`)}
               >
                 <option value="">---</option>
-                <option value="Arma_Larga">Arma Larga</option>
-                <option value="Arma_Corta">Arma Corta</option>
+                <option value="Arma Larga">Arma Larga</option>
+                <option value="Arma Corta">Arma Corta</option>
               </select>
              
             </div>
