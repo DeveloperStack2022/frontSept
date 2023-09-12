@@ -2,6 +2,7 @@ import { ChangeEvent, FocusEvent, useState } from "react";
 import {
   FieldArrayWithId,
   UseFieldArrayAppend,
+  UseFieldArrayRemove,
   UseFormRegister,
 } from "react-hook-form";
 // Redux Slice
@@ -15,9 +16,10 @@ interface IProps {
   fields: FieldArrayWithId<TypeValidationStateForm, "detenidos", "id">[];
   append: UseFieldArrayAppend<TypeValidationStateForm, "detenidos">;
   register: UseFormRegister<TypeValidationStateForm>;
+  RemoveDetenidos: UseFieldArrayRemove
 }
 
-const DetenidosForm = ({ fields, append, register }: IProps) => {
+const DetenidosForm = ({ fields, append, register,RemoveDetenidos }: IProps) => {
   const [Data, setData] = useState<any>(null);
   const [FieldsGenerate, setFieldsGenerate] = useState<number>(0);
 
@@ -142,8 +144,11 @@ const DetenidosForm = ({ fields, append, register }: IProps) => {
                       Femenino
                     </label>
                   </div>
-                </div>
-              </div>
+                  </div>
+                  </div>
+                  <div className="w-full flex justify-center my-2">
+                    <button className="bg-red-500 text-white px-2 py-1 rounded-md w-3/4 hover:bg-red-600 transition-all" onClick={() => RemoveDetenidos(index)}>Eliminar</button>
+                  </div>
             </div>
           ))}
         </div>

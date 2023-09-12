@@ -198,6 +198,7 @@ const Steps = () => {
       case 3:
         return (
           <FormDetenidos
+            RemoveDetenidos={RemoveDetenidos}
             register={register}
             fields={FieldsDetenidos}
             append={AgregarDetenidos}
