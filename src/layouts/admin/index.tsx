@@ -114,7 +114,7 @@ export default function Admin(props: { [x: string]: any }) {
         </header>
         {/* Navbar & Main Contain */}
 
-        <main className="pt-5s min-h-[84vh] flex-1 overflow-y-scroll p-2 px-12 md:pr-2">
+        <main className="pt-5s min-h-[84vh] flex-1 overflow-y-scroll p-2 px-12 md:pr-2 sm:pr-1">
           <Routes>
             {getRoutes(routes)}
             <Route path="/" element={<Navigate to="/auth/sign-in" replace />} />

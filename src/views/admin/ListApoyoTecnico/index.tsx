@@ -1,9 +1,11 @@
-import {useState,useCallback,useEffect,KeyboardEvent} from 'react'
-import {getApoyoTecnico,getApoyoTecnicoById} from '@/services/apoyo-tecnico-services'
+import {useState,useCallback,useEffect,forwardRef, MouseEventHandler} from 'react'
+import {getApoyoTecnico,getApoyoTecnicoById,getApoyoTecnicoResultsTotal,getApoyoTecnicoResultsTotalByParamas} from '@/services/apoyo-tecnico-services'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 import Table from './components/table'
 import Modal from './components/ModalPresenter'
 import CardsCantidad from './components/Cards'
-import {SingleDataPresentation} from '@/schemas/apoyo-tecnico'
+import {SingleDataPresentation,TotalResultados} from '@/schemas/apoyo-tecnico'
 const URI_IMG = import.meta.env.VITE_API_URL_IMAGE
 
 const imgUrl = new URL('/public/img/presentacion.png', import.meta.url).href
@@ -54,7 +56,18 @@ export default function ApoyoTecnico(){
     // REACT: States of Modal 
     const [ShowModal, setShowModal] = useState<boolean>(false)
     const [DataModal,setDataModal] = useState<SingleDataPresentation | null>(null)
-
+    const [DataTotalResultados,setDataTotalResultados] = useState<{loading:boolean,TotalResultados:TotalResultados,error:boolean}>({loading:true,TotalResultados:{
+        total_armas:0,
+        total_detenidos:0,
+        total_municiones:0,
+        total_sustancias_ilegales:0,
+        total_vehiculos:0
+    },error:false})
+    let date_ = `${new Date().getMonth() + 1},01,${new Date().getFullYear()}`
+    let end_date_ = `${new Date().getMonth() + 2},01,${new Date().getFullYear()}`
+    const [RangeDate, setRangeDate] = useState<[Date | null, Date | null]>([new Date(date_),new Date(end_date_)])
+    const [StarDate,EndDate] = RangeDate
+    
     const fetchDataApi = async () => {
         try {
             const data = await getApoyoTecnico()
@@ -63,6 +76,14 @@ export default function ApoyoTecnico(){
             console.log(error)
         }
     }
+
+    const ExampleCustomInput = forwardRef<HTMLButtonElement,{value:any,onClick:MouseEventHandler}>(({value,onClick}, ref) => (
+        <button className="ml-2 px-4 py-1 bg-white font-semibold " onClick={onClick} ref={ref}>
+            {value}
+        </button>
+    ))
+   
+
     const fetchData = useCallback(
         () => {
         fetchDataApi();
@@ -72,6 +93,19 @@ export default function ApoyoTecnico(){
 
     useEffect(() => {
         // Execute function async
+        if(DataTotalResultados.TotalResultados.total_detenidos == 0){
+            (async()=>{
+                try {
+                    const data = await getApoyoTecnicoResultsTotal()
+                    setDataTotalResultados({TotalResultados:data?.data!,loading:false,error:false})
+                } catch (error) {
+                    console.log(error)
+                    setDataTotalResultados({loading:false,TotalResultados:{
+                        ...DataTotalResultados.TotalResultados
+                    },error:true})
+                }
+            })()
+        }
         if (Data.length == 0) {
             fetchDataApi();
         }
@@ -85,6 +119,17 @@ export default function ApoyoTecnico(){
         setShowModal(true)
     }
 
+    const GetDataByRangeDate = async (start_date:Date | null,end_date:Date | null) => {
+        try {
+            const data = await getApoyoTecnicoResultsTotalByParamas(start_date,end_date)
+            setDataTotalResultados({TotalResultados:data?.data!,loading:false,error:false})
+        } catch (error) {
+            console.log(error)
+            setDataTotalResultados({loading:false,TotalResultados:{
+                ...DataTotalResultados.TotalResultados
+            },error:true})
+        }
+    }
     
     
 
@@ -138,9 +183,12 @@ export default function ApoyoTecnico(){
                     </div>
                 </div>
             </Modal>
-            <h2 className='text-3xl font-semibold mb-4'>Reporte Mensuales</h2>
-            <div className="grid grid-cols-4 gap-x-4">
-                {[{title:'Total Detenidos',numero:23,icon:User},{title:'Total Armas',numero:50,icon:Armas},{title:'Total Sustancias Sujetas F...',numero:200,otro:'kg',icon:SustanciasIlegales},{title:'Total Vehiculos',numero:50,icon:Vehiculo},{title:'Total Dinero',numero:200,icon:Dinero,otro:'Dolares Americanos'},{title:'Total Municiones',numero:5000,icon:Municiones}].map((item) => (
+            <h2 className='text-3xl font-semibold mb-2'>Reporte Mensuales</h2>
+            <span className='text-base font-semibold mb-2 inline-block'>Fecha</span>
+            <DatePicker dateFormat="d MMM yyyy" selectsRange={true} startDate={StarDate} endDate={EndDate} onChange={(update) => setRangeDate(update) } customInput={<ExampleCustomInput value={''} onClick={() => {}}  />} />
+            <button className='md:ml-2 text-white font-semibold bg-blue-500 px-4 py-1 rounded-md hover:bg-blue-600 mb-2' onClick={() => GetDataByRangeDate(StarDate,EndDate)}>Ver Resultados</button>
+            <div className="grid md:grid-cols-3 lg:grid-cols-4 sm:grid-cols-2 gap-x-4">
+                {[{title:'Total Detenidos',numero:DataTotalResultados.TotalResultados.total_detenidos ,icon:User},{title:'Total Armas',numero:DataTotalResultados.TotalResultados.total_armas,icon:Armas},{title:'Total Sustancias Sujetas F...',numero:DataTotalResultados.TotalResultados.total_sustancias_ilegales,otro:'kg',icon:SustanciasIlegales},{title:'Total Vehiculos',numero:DataTotalResultados.TotalResultados.total_vehiculos,icon:Vehiculo},{title:'Total Dinero',numero:200,icon:Dinero,otro:'Dolares Americanos'},{title:'Total Municiones',numero:DataTotalResultados.TotalResultados.total_municiones,icon:Municiones}].map((item) => (
                     <CardsCantidad otro={item.otro}  Icon={item.icon!} title_card={item.title} numero={item.numero} />
                 ))}
             </div>

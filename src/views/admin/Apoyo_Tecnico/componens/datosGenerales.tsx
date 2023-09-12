@@ -2,8 +2,8 @@ import {UseFormRegister,Controller,Control,FieldErrors} from "react-hook-form";
 
 import { ValidationType } from "@/schemas/apoyo-tecnico";
 import DatePicker from 'react-datepicker'
-import {format} from 'date-fns'
 import 'react-datepicker/dist/react-datepicker.css'
+import {format} from 'date-fns'
 import { error } from "console";
 
 

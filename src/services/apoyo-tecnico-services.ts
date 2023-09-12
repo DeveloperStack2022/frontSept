@@ -1,5 +1,5 @@
 import axios,{AxiosResponse} from 'axios'
-import {ValidationType} from '@/schemas/apoyo-tecnico'
+import {ValidationType,TotalResultados} from '@/schemas/apoyo-tecnico'
 const URI = import.meta.env.VITE_API_URL
 
 
@@ -67,5 +67,27 @@ export const   getApoyoTecnicoById = async (id:string) => {
         return response
     } catch (error) {
         
+    }
+}
+export const getApoyoTecnicoResultsTotal = async () => {
+    try {
+        const response = await axios.get<TotalResultados>(`${URI}/getResultByRangeDate?date_start=2023-09-01&date_end=2023-09-31`)
+        return {
+            status: response.status,
+            data: response.data,
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+export const getApoyoTecnicoResultsTotalByParamas = async (start_date:Date | null,end_date:Date | null) => {
+    try {
+        const response = await axios.get<TotalResultados>(`${URI}/getResultByRangeDate?date_start=${start_date}&date_end=${end_date}`)
+        return {
+            status: response.status,
+            data: response.data,
+        }
+    } catch (error) {
+        console.log(error)
     }
 }
