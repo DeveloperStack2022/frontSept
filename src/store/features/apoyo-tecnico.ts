@@ -3,7 +3,9 @@ import {createSlice,PayloadAction} from '@reduxjs/toolkit'
 
 export const storeApoyoTecnico = createSlice({
     name:'Apoyo-Tecnico',
-    initialState:{},
+    initialState:{
+        error:false
+    },
     reducers:{
         updateDatosGenerales: (state,action:PayloadAction<{
             fecha:Date,
@@ -56,8 +58,12 @@ export const storeApoyoTecnico = createSlice({
         save_data: (state,action: PayloadAction<any>) => {
             state.data = { ...action.payload}
         },
+        error_forms: (state,actions: PayloadAction<any>) => {
+            state.error = true;
+            state.message_error = actions.payload.message;
+        }
     }
 })
 
-export const {updateDatosGenerales,updateResumenCaso,updateDetenidos,save_data} = storeApoyoTecnico.actions
+export const {updateDatosGenerales,updateResumenCaso,updateDetenidos,save_data,error_forms} = storeApoyoTecnico.actions
 export default storeApoyoTecnico.reducer

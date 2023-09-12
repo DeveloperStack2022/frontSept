@@ -1,5 +1,6 @@
 // REACT: Hooks React 
-import { useState,useRef } from "react";
+import { useState,useRef, useEffect } from "react";
+import {useNavigate} from 'react-router-dom'
 // REACT-HOOKS-FORM: 
 import { useForm, useFieldArray,Controller } from "react-hook-form";
 import {addApoyoTecnico} from '@/services/apoyo-tecnico-services'
@@ -26,7 +27,7 @@ import { useToast } from "@/components/toast/toastProvider";
 
 // TODO: Store Redux 
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
-import {save_data} from '@/store/features/apoyo-tecnico'
+import {save_data,error_forms} from '@/store/features/apoyo-tecnico'
 
 // FIXME:
 type TypeValidationStateForm = Omit<ValidationType, "">;
@@ -86,6 +87,7 @@ const Steps = () => {
   // REDUX 
   const dispatch = useAppDispatch()
   const apoyo_tecnico = useAppSelector(data => data.apoyoTecnico)
+  const navigate = useNavigate()
 
   // TODO: Refs 
   const refSubmit = useRef<HTMLButtonElement>(null)
@@ -265,9 +267,15 @@ const Steps = () => {
       const data = await addApoyoTecnico(apoyo_tecnico?.data)
       if(data?.status  >= 200 && data?.status < 300 ) {
         toast?.pushSuccess('Agregado Exitosamente',3000,'truncate-1-lines')
+        navigate('/admin/lista-a-tecnico')
       }
     }
   }
+
+  const handleShowError = () => {
+    toast?.pushError(`Error ${errors.latitud ? 'ingresar Latitud Correcta': errors.longitud ? 'ingrese la longitud correcta' : null }`,3000,'truncate-1-lines')
+  }
+
   return (
     <ToastProvider variant='bottom_middle' >
       <Card extra={`w-full min-h-[487px] ${DatosSepts.length == StepNumber ? 'md:w-2/2' : 'md:w-1/2'} `}>
@@ -306,7 +314,7 @@ const Steps = () => {
                     ? "bg-gray-300"
                     : "bg-blue-500 hover:bg-blue-600"
                 }`}
-                onClick={handleIncrement}
+                onClick={() => Object.keys(errors).length > 0 ? handleShowError() : handleIncrement()}
                 disabled={DatosSepts.length == StepNumber}
               >
                 Siguiente
@@ -319,3 +327,6 @@ const Steps = () => {
   );
 };
 export default Steps;
+
+
+
