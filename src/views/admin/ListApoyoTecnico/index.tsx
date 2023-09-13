@@ -59,7 +59,7 @@ export default function ApoyoTecnico(){
     const [DataModal,setDataModal] = useState<SingleDataPresentation>({contexto:'',delito:'',detenidos:0,direccion:'',ejecutor:'',fecha:new Date(),indicios:'',latitud:'',longitud:'',name_image:'',nombre_caso:'',tipo_operativo:''})
     const [DataTotalResultados,setDataTotalResultados] = useState<{loading:boolean,TotalResultados:TotalResultados,error:boolean}>({loading:true,TotalResultados:{
         total_armas:0,
-        total_detendios:0,
+        total_detenidos:0,
         total_municiones:0,
         total_sustancias_ilegales:0,
         total_vehiculos:0
@@ -94,7 +94,7 @@ export default function ApoyoTecnico(){
 
     useEffect(() => {
         // Execute function async
-        if(DataTotalResultados.TotalResultados.total_detendios == 0){
+        if(DataTotalResultados.TotalResultados.total_detenidos == 0){
             (async()=>{
                 try {
                     const data = await getApoyoTecnicoResultsTotal()
@@ -200,7 +200,7 @@ export default function ApoyoTecnico(){
             <DatePicker dateFormat="d MMM yyyy" selectsRange={true} startDate={StarDate} endDate={EndDate} onChange={(update) => setRangeDate(update) } customInput={<ExampleCustomInput value={''} onClick={() => {}}  />} />
             <button className='md:ml-2 text-white font-semibold bg-blue-500 px-4 py-1 rounded-md hover:bg-blue-600 mb-2' onClick={() => GetDataByRangeDate(StarDate,EndDate)}>Ver Resultados</button>
             <div className="grid md:grid-cols-3 lg:grid-cols-4 sm:grid-cols-2 gap-x-4">
-                {[{title:'Total Detenidos',numero:DataTotalResultados.TotalResultados.total_detendios ,icon:User},{title:'Total Armas',numero:DataTotalResultados.TotalResultados.total_armas,icon:Armas},{title:'Total Sustancias Sujetas F...',numero:DataTotalResultados.TotalResultados.total_sustancias_ilegales,otro:'kg',icon:SustanciasIlegales},{title:'Total Vehiculos',numero:DataTotalResultados.TotalResultados.total_vehiculos,icon:Vehiculo},{title:'Total Dinero',numero:200,icon:Dinero,otro:'Dolares Americanos'},{title:'Total Municiones',numero:DataTotalResultados.TotalResultados.total_municiones,icon:Municiones}].map((item) => (
+                {[{title:'Total Detenidos',numero:DataTotalResultados.TotalResultados.total_detenidos ,icon:User},{title:'Total Armas',numero:DataTotalResultados.TotalResultados.total_armas,icon:Armas},{title:'Total Sustancias Sujetas F...',numero:DataTotalResultados.TotalResultados.total_sustancias_ilegales,otro:'kg',icon:SustanciasIlegales},{title:'Total Vehiculos',numero:DataTotalResultados.TotalResultados.total_vehiculos,icon:Vehiculo},{title:'Total Dinero',numero:200,icon:Dinero,otro:'Dolares Americanos'},{title:'Total Municiones',numero:DataTotalResultados.TotalResultados.total_municiones,icon:Municiones}].map((item) => (
                     <CardsCantidad otro={item.otro}  Icon={item.icon!} title_card={item.title} numero={item.numero} />
                 ))}
             </div>

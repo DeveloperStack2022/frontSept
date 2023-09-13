@@ -3,7 +3,7 @@ import * as yup  from 'yup'
 export type TotalResultados = {
     total_municiones:number,
     total_sustancias_ilegales:number,
-    total_detendios:number,
+    total_detenidos:number,
     total_armas:number,
     total_vehiculos:number
 }
