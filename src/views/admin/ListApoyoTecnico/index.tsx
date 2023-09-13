@@ -6,8 +6,9 @@ import Table from './components/table'
 import Modal from './components/ModalPresenter'
 import CardsCantidad from './components/Cards'
 import {SingleDataPresentation,TotalResultados} from '@/schemas/apoyo-tecnico'
-const URI_IMG = import.meta.env.VITE_API_URL_IMAGE
+import {format} from 'date-fns'
 
+const URI_IMG = import.meta.env.VITE_API_URL_IMAGE
 const imgUrl = new URL('/public/img/presentacion.png', import.meta.url).href
 // const imgAnexoUrl = new URL(`/public/img/imagen_anexo.png`, import.meta.url).href
 
@@ -55,10 +56,10 @@ export default function ApoyoTecnico(){
     const [Data, setData] = useState([])
     // REACT: States of Modal 
     const [ShowModal, setShowModal] = useState<boolean>(false)
-    const [DataModal,setDataModal] = useState<SingleDataPresentation | null>(null)
+    const [DataModal,setDataModal] = useState<SingleDataPresentation>({contexto:'',delito:'',detenidos:0,direccion:'',ejecutor:'',fecha:new Date(),indicios:'',latitud:'',longitud:'',name_image:'',nombre_caso:'',tipo_operativo:''})
     const [DataTotalResultados,setDataTotalResultados] = useState<{loading:boolean,TotalResultados:TotalResultados,error:boolean}>({loading:true,TotalResultados:{
         total_armas:0,
-        total_detenidos:0,
+        total_detendios:0,
         total_municiones:0,
         total_sustancias_ilegales:0,
         total_vehiculos:0
@@ -93,7 +94,7 @@ export default function ApoyoTecnico(){
 
     useEffect(() => {
         // Execute function async
-        if(DataTotalResultados.TotalResultados.total_detenidos == 0){
+        if(DataTotalResultados.TotalResultados.total_detendios == 0){
             (async()=>{
                 try {
                     const data = await getApoyoTecnicoResultsTotal()
@@ -141,9 +142,18 @@ export default function ApoyoTecnico(){
                         <div className="absolute top-[90px] left-14 w-[259px]    ">
                             <p className='text-[#002060] text-xl font-bold  text-center'>“{DataModal?.nombre_caso}”</p>
                         </div>
+                        {/* TODO: Numero Plantilla */}
+                        <div className="absolute top-[150px] left-14 ">
+                            <p className='text-[#002060] text-lg font-semibold  text-center'>UNCI </p>
+                        </div>
+                        
                         {/* TODO: UNIDAD EJECUTORA */}
                         <div className="absolute top-[212px] left-9">
                             <span className='text-[#002060] text-xl font-bold '>{DataModal?.ejecutor}</span>
+                        </div>
+                        {/* TODO: UNIDAD FECHA */}
+                        <div className="absolute top-[185px] left-60">
+                            <span className='text-[#002060] text-base font-semibold '>{format(new Date(DataModal.fecha),'dd/MM/yyyy')}</span>
                         </div>
                         {/* TODO: UBICACION */}
                         <div className="absolute top-[316px] left-9 w-[325px]">
@@ -151,7 +161,7 @@ export default function ApoyoTecnico(){
                         </div>
                         {/* TODO: LATITUD */}
                         <div className="absolute top-[360px] left-9 w-[325px]">
-                            <span className='text-[#002060] text-lg -leading-3'> {DataModal?.latitud} {DataModal?.longitud} </span>
+                            <span className='text-[#002060] text-lg -leading-3'> {DataModal?.latitud} {DataModal.longitud} </span>
                         </div>
                         {/* TODO: CORDINACION */}
                         <div className="absolute top-[414px] left-9 w-[325px]">
@@ -161,6 +171,10 @@ export default function ApoyoTecnico(){
                         {/* TODO: DELITO - CONTRAVENCION */}
                         <div className="absolute top-[578px] left-9 w-[325px]">
                             <p className='text-[#002060] text-lg  block '> {DataModal?.delito}</p>
+                        </div>
+                        {/* TODO: Tipo Operatvivo  */}
+                        <div className="absolute top-[100px] left-[383px] w-[454px]">
+                            <p className='text-[#002060] text-lg font-semibold leading-5 uppercase'>{DataModal?.tipo_operativo}</p>
                         </div>
                         {/* TODO: Contexto */}
                         <div className="absolute top-[167px] left-[383px] w-[454px]">

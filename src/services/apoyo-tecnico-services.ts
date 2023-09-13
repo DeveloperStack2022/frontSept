@@ -7,6 +7,7 @@ export const addApoyoTecnico = async (data: ValidationType) => {
     const formatData = {
         ...data,
         DatosGenerales: {
+            tipo_operativo: data.tipo_operativo,
             nombre_caso: data.numero_caso,
             zona:data.zona,
             subzona:data.sub_zona,

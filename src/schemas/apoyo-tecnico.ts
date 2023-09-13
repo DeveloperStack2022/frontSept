@@ -18,6 +18,8 @@ export type SingleDataPresentation = {
     contexto:string; //TODO: Resumen Caso
     detenidos:number
     name_image:string;
+    tipo_operativo:string;
+    fecha:Date;
     indicios: {
         armas:number;
         celulares:number
