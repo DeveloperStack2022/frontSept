@@ -131,9 +131,7 @@ export default function ApoyoTecnico(){
         }
     }
     
-    
 
-    
     return (
         <>
             <Modal isOpen={ShowModal} onClose={onClose} >

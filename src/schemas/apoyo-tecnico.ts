@@ -43,6 +43,7 @@ export type ValidationType = {
     fecha:Date;
 
     // TODO: Datos Generales 
+    tipo_operativo:string;
     numero_caso:string;
     zona:string;
     sub_zona:string;
@@ -128,6 +129,7 @@ const validationSchema = yup.object().shape({
     sub_zona:yup.string(),
     direccion:yup.string(),
     distrito:yup.string(),
+    tipo_operativo:yup.string(),
     
     latitud:yup.string().matches(/^(?:(?:-?([0-1]?[0-9]|[2][0-1])(\.{1}[0-9]{1,6})))?$/,"Latitud no permitida").notRequired(),
     longitud:yup.string().matches( /^(?:(?:-0*[7-9]\d|-[8-9]\d\d|-[1-7]\d\d\d)|(?:0*\d\d\d|0*1[0-7]\d\d|0*1800?))(?:\.\d+)?$|^$/,"Longitud no permitida").notRequired(),
