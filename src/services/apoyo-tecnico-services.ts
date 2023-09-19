@@ -14,6 +14,7 @@ export const addApoyoTecnico = async (data: ValidationType) => {
             distrito: data.distrito,
             direccion:data.direccion,
             fecha: new Date(data.fecha),
+            numero_reporte:data.numero_reporte,
             coordenadas:{
                 latitud:data.latitud,
                 longitud:data.longitud

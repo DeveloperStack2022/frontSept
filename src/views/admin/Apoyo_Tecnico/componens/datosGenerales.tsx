@@ -83,10 +83,17 @@ const FormDatosGenerales  = ({errors,register,control}:IProps) => {
                                 <option value="penitenciario">Penitenciario</option>
                             </select>
                         </div>
+                        
                     </div>
-                    <div className="w-full md:w-1/2 px-2">
-                        <label htmlFor="numero_caso">Numero Caso</label>
-                        <input type="text" id="numero_caso"  {...register('numero_caso')}  className={`w-full py-2 pl-2 pr-2  block rounded-md border border-gray-300 outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm`}/>
+                    <div className="w-full md:w-1/2 px-2 flex gap-x-2">
+                        <div className="">
+                            <label htmlFor="numero_caso">Nombre Caso</label>
+                            <input type="text" id="numero_caso"  {...register('numero_caso')}  className={`w-full  py-2 pl-2 pr-2  rounded-md border border-gray-300 outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm`}/>
+                        </div>
+                        <div className="">
+                            <label htmlFor="num_reporte">N.Reporte</label>
+                            <input type="number" id="num_reporte" {...register('numero_reporte')} autoComplete='off' className={`sm:w-full py-2 pl-2 pr-2  min-w-[80px] rounded-md border border-gray-300 outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm`}  />
+                        </div>
                     </div>
                     <div className="w-full md:w-1/2 px-2">
                         <label htmlFor="zona">Zona</label>
