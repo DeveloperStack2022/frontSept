@@ -39,58 +39,16 @@ import ModalComponent from '@components/modal'
 // Utils 
 import {validor_nro_cl} from '@/utils/utils'
 
-//FIXME: Apollo Client
-import {useQuery,useLazyQuery} from '@apollo/client'
-import {graphql} from '@/gql/gql'
+
 
 // FIXME: Toast 
 import {useToast} from '@/components/toast/toastProvider'
 
-
-
 // // // TODO: Start Querys Grapqhl
-const GetAnalistaByNumCl = graphql(`
-    query GetAnalistaByNumCl($numeroCedula: String!) {
-        getAnalistaByNumCl(numero_cedula: $numeroCedula) {
-            id
-            cedula
-            grado
-            nombres
-            unidad {
-                nombre_unidad
-                _id
-            }
-            zona {
-                nombre_zona
-                _id
-            }
-            direccion {
-                nombre_direccion
-            }
-        }
-    } 
-`)
-// const GET_ANALISTA_BY_NUM_CL = gql(`
-//     query GetAnalistaByNumCl($numeroCedula: String!) {
-//         getAnalistaByNumCl(numero_cedula: $numeroCedula) {
-//             id
-//             cedula
-//             grado
-//             nombres
-//             unidad {
-//                 nombre_unidad
-//                 _id
-//             }
-//             zona {
-//                 nombre_zona
-//                 _id
-//             }
-//             direccion {
-//                 nombre_direccion
-//             }
-//         }
-//     } 
-// `);
+//FIXME: Apollo Client
+import {useQuery,useLazyQuery} from '@apollo/client'
+import {GetAnalistaByNumCl,GetAnalistaByUnidad,GetAnalistaByGrado} from '@/schemas/gql/analista'
+
 // TODO: End Query 
 
 
@@ -99,6 +57,9 @@ type TypeValidationStateForm = Omit<ValidationType,'celulares' | 'hora'>
 const AddSolicitudForm = () => {
     // FIXME: - - - - - - - Graphql - - - - - - - - 
     const  [runQuery] = useLazyQuery(GetAnalistaByNumCl)
+    const [runQueryGetAnalistaByUnidad] = useLazyQuery(GetAnalistaByUnidad)
+    const [runQueryGetAnalistaByGrado] = useLazyQuery(GetAnalistaByGrado)
+    
     //       - - - - - - -  End Graphql - - - - - - 
     // FIXME: Redux 
     const dispatch = useAppDispatch()
@@ -250,7 +211,7 @@ const AddSolicitudForm = () => {
     }, [stateSelector.status])
     
     const handleChangeCasoStr = (e:ChangeEvent<HTMLInputElement>) => {
-        console.log(e.target.name)
+       
         setFormData({
             ...formData,
             [e.target.name]:e.target.value
@@ -276,7 +237,13 @@ const AddSolicitudForm = () => {
     }
 
     const validador_grado = async (e:ChangeEvent<HTMLInputElement>) => {
-        
+        const value = e.target.value
+        const {data:DataAnalistaByGrado} = await runQueryGetAnalistaByGrado({variables:{grado:value}})
+
+        if(DataAnalistaByGrado?.getAnalistaByGrado?.analistas.length == 0){
+            toast?.pushError('Analistas no encontrados',40000,'truncate-1-lines')
+            return
+        }
     }
     const validador_unidad = async (e: ChangeEvent<HTMLInputElement>) => {}
     const validaor_zona = async (e:ChangeEvent<HTMLInputElement>) => {}
@@ -469,7 +436,7 @@ const AddSolicitudForm = () => {
                     {/* Box 2 */}
                     <div className="">
                         <h4 className='font-semibold text-md' >Datos solicitante</h4>
-                            {/* <div className="">
+                            <div className="">
                                 <label htmlFor='numero_cedula' className='text-gray-500 text-sm font-medium'>Numero Cedula</label>
                                 <div className="relative mt-1 rounded-md sgadiw-sm">
                                     <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
@@ -486,7 +453,7 @@ const AddSolicitudForm = () => {
                                         </svg>
                                     </div>
                                 </div>
-                            </div> */}
+                            </div>
                             <div className="">
                                 <label  className="flex justify-between items-center text-sm font-medium text-gray-500">Numero Celular {errors.numero_celular?.message && <span className='text-red-500 text-xs'>*{errors.numero_celular.message}*</span>}</label>
                                 <div className="relative mt-1 rounded-md shadow-sm">
@@ -513,6 +480,7 @@ const AddSolicitudForm = () => {
                                         className={`w-full py-2 pr-7 pl-8 block rounded-md border border-gray-300 outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm ${errors.grado?.message && 'border border-red-500 focus:border-red-500 focus:ring-red-500'}`}
                                         autoComplete="off"
                                         {...register('grado')}
+                                        onBlur={(value) => validador_grado(value)}
                                         onChange={handleChangeCasoStr}
                                         value={formData.grado}
                                     />
@@ -545,6 +513,7 @@ const AddSolicitudForm = () => {
                                         className="w-full py-2 pr-7 pl-8 block rounded-md border border-gray-300 outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm" 
                                         autoComplete="off"
                                         {...register('unidad')}
+                                        
                                         onChange={handleChangeCasoStr}
                                         value={formData.unidad}
                                     />

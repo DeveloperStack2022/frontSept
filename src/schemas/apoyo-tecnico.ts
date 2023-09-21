@@ -52,6 +52,7 @@ export type ValidationType = {
     distrito:string;
     direccion:string;
     numero_reporte:number;
+    unidad_apoyo:string
     
     // Cordenadas 
     latitud:string;

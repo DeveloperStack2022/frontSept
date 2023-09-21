@@ -18,8 +18,9 @@ export const storeApoyoTecnico = createSlice({
             unidad_ejecutora:string;
             unidad_apoyo:string;
             distrito:string
+            numero_reporte:number
         }>) => {
-            const {numero_caso,direccion,sub_zona,zona,latitud,longitud,unidad_apoyo,unidad_ejecutora,distrito,fecha} = action.payload
+            const {numero_caso,direccion,sub_zona,zona,latitud,longitud,unidad_apoyo,unidad_ejecutora,distrito,fecha,numero_reporte} = action.payload
             state.fecha = fecha
             state.numero_caso = numero_caso
             state.zona = zona
@@ -30,6 +31,7 @@ export const storeApoyoTecnico = createSlice({
             state.unidad_apoyo = unidad_apoyo
             state.unidad_ejecutora = unidad_ejecutora
             state.distrito = distrito
+            state.numero_reporte = numero_reporte
         },
         updateResumenCaso: (state,action:PayloadAction<{
             asunto:string;
