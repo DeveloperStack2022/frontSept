@@ -144,7 +144,7 @@ export default function ApoyoTecnico(){
                         </div>
                         {/* TODO: Numero Plantilla */}
                         <div className="absolute top-[150px] left-14 ">
-                            <p className='text-[#002060] text-lg font-semibold  text-center'>UNCI </p>
+                            <p className='text-[#002060] text-lg font-semibold  text-center'>UNCI {DataModal?.numero_reporte}</p>
                         </div>
                         
                         {/* TODO: UNIDAD EJECUTORA */}
@@ -166,7 +166,7 @@ export default function ApoyoTecnico(){
                         {/* TODO: CORDINACION */}
                         <div className="absolute top-[414px] left-9 w-[325px]">
                             <span className='text-[#002060] text-lg  block'> - UNCI</span>
-                            <span className='text-[#002060] text-lg '> - UN-BAC</span>
+                            <span className='text-[#002060] text-lg '>{DataModal?.unidades_apoyo}</span>
                         </div>
                         {/* TODO: DELITO - CONTRAVENCION */}
                         <div className="absolute top-[578px] left-9 w-[325px]">

@@ -11,6 +11,8 @@ export type TotalResultados = {
 export type SingleDataPresentation = {
     nombre_caso:string;
     ejecutor:string;
+    unidades_apoyo:string;
+    numero_reporte:string;
     direccion:string;
     latitud:string;
     longitud:string;
