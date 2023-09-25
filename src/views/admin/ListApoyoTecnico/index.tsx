@@ -158,14 +158,14 @@ export default function ApoyoTecnico(){
                         {/* TODO: UBICACION */}
                         <div className="absolute top-[316px] left-9 w-[325px]">
                             <p className='text-[#002060] text-lg leading-5'>{DataModal?.direccion}</p>
-                        </div>
+                        </div> 
                         {/* TODO: LATITUD */}
                         <div className="absolute top-[360px] left-9 w-[325px]">
                             <span className='text-[#002060] text-lg -leading-3'> {DataModal?.latitud} {DataModal.longitud} </span>
                         </div>
                         {/* TODO: CORDINACION */}
                         <div className="absolute top-[414px] left-9 w-[325px]">
-                            <span className='text-[#002060] text-lg  block'> - UNCI</span>
+                            <span className='text-[#002060] text-lg  block'> -UNCI</span>
                             <span className='text-[#002060] text-lg '>{DataModal?.unidades_apoyo}</span>
                         </div>
                         {/* TODO: DELITO - CONTRAVENCION */}
