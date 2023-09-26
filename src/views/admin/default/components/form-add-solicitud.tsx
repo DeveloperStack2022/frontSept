@@ -218,33 +218,33 @@ const AddSolicitudForm = () => {
         })
     }
 
-    const validador_nro_cl = async (e:ChangeEvent<HTMLInputElement>) => {
-        const  value = e.target.value
-        // const valores = validor_nro_cl(value)
-        // console.log(valores)
-        const {data:Data} = await runQuery({variables:{numeroCedula:value}})
+    // const validador_nro_cl = async (e:ChangeEvent<HTMLInputElement>) => {
+    //     const  value = e.target.value
+    //     // const valores = validor_nro_cl(value)
+    //     // console.log(valores)
+    //     const {data:Data} = await runQuery({variables:{numeroCedula:value}})
         
-        if(!Data?.getAnalistaByNumCl) {
-            toast?.pushError('Usuario No Encontrado',40000,'truncate-1-lines')
-            return
-        }
+    //     if(!Data?.getAnalistaByNumCl) {
+    //         toast?.pushError('Usuario No Encontrado',40000,'truncate-1-lines')
+    //         return
+    //     }
 
-        const {grado,nombres,unidad,zona} = Data?.getAnalistaByNumCl
-        setValue('grado',grado)
-        setValue('nombres_apellidos',nombres)
-        setValue('unidad',unidad.nombre_unidad)
-        setValue('zona',zona.nombre_zona.toString())
-    }
+    //     const {grado,nombres,unidad,zona} = Data?.getAnalistaByNumCl
+    //     setValue('grado',grado)
+    //     setValue('nombres_apellidos',nombres)
+    //     setValue('unidad',unidad.nombre_unidad)
+    //     setValue('zona',zona.nombre_zona.toString())
+    // }
 
-    const validador_grado = async (e:ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value
-        const {data:DataAnalistaByGrado} = await runQueryGetAnalistaByGrado({variables:{grado:value}})
+    // const validador_grado = async (e:ChangeEvent<HTMLInputElement>) => {
+    //     const value = e.target.value
+    //     const {data:DataAnalistaByGrado} = await runQueryGetAnalistaByGrado({variables:{grado:value}})
 
-        if(DataAnalistaByGrado?.getAnalistaByGrado?.analistas.length == 0){
-            toast?.pushError('Analistas no encontrados',40000,'truncate-1-lines')
-            return
-        }
-    }
+    //     if(DataAnalistaByGrado?.getAnalistaByGrado?.analistas.length == 0){
+    //         toast?.pushError('Analistas no encontrados',40000,'truncate-1-lines')
+    //         return
+    //     }
+    // }
     const validador_unidad = async (e: ChangeEvent<HTMLInputElement>) => {}
     const validaor_zona = async (e:ChangeEvent<HTMLInputElement>) => {}
     
@@ -444,7 +444,7 @@ const AddSolicitudForm = () => {
                                     </div>
                                     <input type="text" id='numero_cedula' className='py-2 pr-2 pl-8 w-full block rounded-md border border-gray-300 outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm' 
                                         {...register('numero_cedula')}
-                                        onBlur={(value) => validador_nro_cl(value)}
+                                        // onBlur={(value) => validador_nro_cl(value)}
                                     />
                                     <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
                                         <svg className="animate-spin h-5 w-5 text-blue-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -480,7 +480,7 @@ const AddSolicitudForm = () => {
                                         className={`w-full py-2 pr-7 pl-8 block rounded-md border border-gray-300 outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm ${errors.grado?.message && 'border border-red-500 focus:border-red-500 focus:ring-red-500'}`}
                                         autoComplete="off"
                                         {...register('grado')}
-                                        onBlur={(value) => validador_grado(value)}
+                                        // onBlur={(value) => validador_grado(value)}
                                         onChange={handleChangeCasoStr}
                                         value={formData.grado}
                                     />

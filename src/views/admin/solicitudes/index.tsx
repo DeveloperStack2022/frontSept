@@ -188,7 +188,7 @@ const ViewSolicitudes = () => {
         onClose={handleModal}
         status={solicitudSelector.status}
       />
-      <TagInput
+      {/* <TagInput
         value={Value}
         open={OpenTag}
         onChange={(newValue) => setValue(newValue)}
@@ -223,27 +223,27 @@ const ViewSolicitudes = () => {
           },
         ]}
         placeholder="Enter a new tag"
-      />
-      {/* <AutoCompleteSearch 
-                items={[
-                    {
-                        id:1,
-                        text: 'test'
-                    },{
-                        id:2,
-                        text: 'caso'
-                    },{
-                        id:3,
-                        text: 'caso val 2'
-                    },{
-                        id:4,
-                        text: 'caso val 3'
-                    }
-                ]}
-                formatResult={formatResult}
-                onSearch={handleOnSearch}
-                placeholder='Search'
-            />     */}
+      /> */}
+      <AutoCompleteSearch 
+          items={[
+              {
+                  id:1,
+                  text: 'test'
+              },{
+                  id:2,
+                  text: 'caso'
+              },{
+                  id:3,
+                  text: 'caso val 2'
+              },{
+                  id:4,
+                  text: 'caso val 3'
+              }
+          ]}
+          formatResult={formatResult}
+          onSearch={handleOnSearch}
+          placeholder='Search'
+      />    
       <TableComponent
         totalPage={TotalPages}
         handleGetSolicitud={handleGetSolicitudById}
