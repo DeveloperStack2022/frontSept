@@ -72,7 +72,7 @@ const TableComponent:FC<Props> = ({data,fetch_data,loading,pageCount,setPageCoun
     })
     
     useEffect(() => {
-        console.log('pages')
+        
         let pageIndexN = pageIndex + 1
         fetch_data && fetch_data(pageIndexN,5)
     },[pageIndex,fetch_data])

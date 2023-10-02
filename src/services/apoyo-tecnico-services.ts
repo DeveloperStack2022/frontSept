@@ -52,9 +52,9 @@ export const addApoyoTecnico = async (data: ValidationType) => {
 }
 
 
-export const getApoyoTecnico = async () => {
+export const getApoyoTecnico = async (skip:number,limit:number) => {
     try {
-        const response = await axios.get(`${URI}/getApoyoTecnico`)
+        const response = await axios.get(`${URI}/getApoyoTecnico?skip=${skip}&limit=${limit}`)
         
         return {
             status: response.status,

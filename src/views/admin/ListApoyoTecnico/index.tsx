@@ -64,15 +64,24 @@ export default function ApoyoTecnico(){
         total_sustancias_ilegales:0,
         total_vehiculos:0
     },error:false})
+    const [TotlaPages, setTotalPages] = useState<number>(1)
+    const [PageCount, setPageCount] = useState<number>(0);
+    const [nDocuments, setnDocuments] = useState<number | null>(null);
+    const [Loading, setLoading] = useState<boolean>(false);
+    // TODO: Total Pages
     let date_ = `${new Date().getMonth() + 1},01,${new Date().getFullYear()}`
     let end_date_ = `${new Date().getMonth() + 2},01,${new Date().getFullYear()}`
     const [RangeDate, setRangeDate] = useState<[Date | null, Date | null]>([new Date(date_),new Date(end_date_)])
     const [StarDate,EndDate] = RangeDate
     
-    const fetchDataApi = async () => {
+    const fetchDataApi = async (skip:number,limit:number) => {
         try {
-            const data = await getApoyoTecnico()
-            setData(data?.data)
+            const data = await getApoyoTecnico(skip,limit)
+            setData(data?.data?.DataShowTable)
+            let calculo:number = data?.data?.total_documents / limit
+            let math_ = Math.ceil(calculo)
+            setnDocuments(data?.data?.total_documents)
+            setTotalPages(math_)
         } catch (error) {
             console.log(error)
         }
@@ -83,11 +92,10 @@ export default function ApoyoTecnico(){
             {value}
         </button>
     ))
-   
-
+        
     const fetchData = useCallback(
-        () => {
-        fetchDataApi();
+        (skip:number,limit:number) => {
+        fetchDataApi(skip,limit);
         },
         [Search]
     );
@@ -108,7 +116,7 @@ export default function ApoyoTecnico(){
             })()
         }
         if (Data.length == 0) {
-            fetchDataApi();
+            fetchDataApi(0,10);
         }
         return () => {};
     }, [Data]);
@@ -205,7 +213,7 @@ export default function ApoyoTecnico(){
                 ))}
             </div>
             
-            <Table openModal={openModal} data={Data}  loading={false} />
+            <Table fetchData={fetchData} totalPages={TotlaPages} pageCount={PageCount} setPageCount={setPageCount} openModal={openModal} data={Data}  loading={Loading}  />
         </>
     )
 }
