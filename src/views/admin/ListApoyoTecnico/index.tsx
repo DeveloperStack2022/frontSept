@@ -127,7 +127,7 @@ export default function ApoyoTecnico(){
         setDataModal(data?.data)
         setShowModal(true)
     }
-
+    // onClick={() => GetDataByRangeDate(StarDate,EndDate)}
     const GetDataByRangeDate = async (start_date:Date | null,end_date:Date | null) => {
         try {
             const data = await getApoyoTecnicoResultsTotalByParamas(start_date,end_date)
@@ -206,7 +206,7 @@ export default function ApoyoTecnico(){
             <h2 className='text-3xl font-semibold mb-2'>Reporte Mensuales</h2>
             <span className='text-base font-semibold mb-2 inline-block'>Fecha</span>
             <DatePicker dateFormat="d MMM yyyy" selectsRange={true} startDate={StarDate} endDate={EndDate} onChange={(update) => setRangeDate(update) } customInput={<ExampleCustomInput value={''} onClick={() => {}}  />} />
-            <button className='md:ml-2 text-white font-semibold bg-blue-500 px-4 py-1 rounded-md hover:bg-blue-600 mb-2' onClick={() => GetDataByRangeDate(StarDate,EndDate)}>Ver Resultados</button>
+            <button className='md:ml-2 text-white font-semibold bg-blue-500 px-4 py-1 rounded-md hover:bg-blue-600 mb-2' >Ver Resultados</button>
 
             <div className="grid md:grid-cols-3 lg:grid-cols-4 sm:grid-cols-2 gap-x-4">
                 {[{title:'Total Detenidos',numero:DataTotalResultados.TotalResultados.total_detenidos ,icon:User},{title:'Total Armas',numero:DataTotalResultados.TotalResultados.total_armas,icon:Armas},{title:'Total Sustancias Sujetas F...',numero:DataTotalResultados.TotalResultados.total_sustancias_ilegales > 0 ? parseFloat(DataTotalResultados.TotalResultados.total_sustancias_ilegales.toFixed(3)) : 0,otro:'kg',icon:SustanciasIlegales},{title:'Total Vehiculos',numero:DataTotalResultados.TotalResultados.total_vehiculos,icon:Vehiculo},{title:'Total Dinero',numero:200,icon:Dinero,otro:'Dolares Americanos'},{title:'Total Municiones',numero:DataTotalResultados.TotalResultados.total_municiones,icon:Municiones}].map((item) => (
