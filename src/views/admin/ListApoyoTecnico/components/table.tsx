@@ -25,7 +25,7 @@ type IProps = {
 }
 const TableCompoents: FC<IProps> = ({data,loading,openModal,totalPages,pageCount,setPageCount,fetchData,...props}) => {
     const [Sorting, setSorting] = useState<SortingState>([]);
-    const [{pageIndex,pageSize}, setPageSize] = useState<PaginationState>({pageIndex:0,pageSize:5})
+    const [{pageIndex,pageSize}, setPageSize] = useState<PaginationState>({pageIndex:0,pageSize:10})
     // TODO: Hooks Memo 
     const defaultDataMemo = useMemo(() => [], [])
     const pagination = useMemo(() => ({pageIndex,pageSize}),[pageIndex,pageSize])
