@@ -57,6 +57,7 @@ const TableCompoents: FC<IProps> = ({data,loading,openModal,totalPages,pageCount
         columns:columns,
         state:{pagination},
         onSortingChange: setSorting,
+        onPaginationChange: setPageSize,
         getCoreRowModel:getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
