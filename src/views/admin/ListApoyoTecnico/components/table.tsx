@@ -8,11 +8,6 @@ import es from 'date-fns/locale/es'
 import {ApoyoTecnico} from '@/schemas/columns-apoyo-tecnico'
 
 
-
-type Detenidos = {
-    detenidos:string;
-}
-
 const columnHelper = createColumnHelper<ApoyoTecnico>()
 type IProps = {
     fetchData(skip:number,limit:number):void;
