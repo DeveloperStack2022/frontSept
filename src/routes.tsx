@@ -4,10 +4,12 @@ import DeleteIcon from "@icons/delete-icon.svg?component";
 import DocIcon from "@icons/doc-icon.svg?component";
 import UploadIcon from "@icons/upload.svg?component";
 import GpsIcon from '@/icons/ApoyoTecnico/gps-icon.svg?component'
+import GraphIcon from '@/icons/graph-icon.svg?component'
 // Views Admin
 import MainDashboard from "@/views/admin/default";
 import SolicitudesView from "@/views/admin/solicitudes";
 import UploadFile from "@/views/admin/UploadImage";
+import RegistroPrae from "./views/admin/RegistroPrae";
 // Views Auth
 import SignInView from "@/views/Auth";
 // View Apoyo tecnico
@@ -52,6 +54,14 @@ const routes = [
     path: "add-file-excel",
     icon: <UploadIcon className="h-6 w-6 stroke-current" />,
     component: <UploadFile />,
+    secondary: true,
+  },
+  {
+    name: "Registro Sistema PRAE",
+    layout: "/admin",
+    path: "registro-prae",
+    icon: <GraphIcon className="h-6 w-6 " />,
+    component: <RegistroPrae />,
     secondary: true,
   },
   {
