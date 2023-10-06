@@ -10,6 +10,7 @@ import MainDashboard from "@/views/admin/default";
 import SolicitudesView from "@/views/admin/solicitudes";
 import UploadFile from "@/views/admin/UploadImage";
 import RegistroPrae from "./views/admin/RegistroPrae";
+import RegistroEcu from "./views/admin/RegistroEcu";
 // Views Auth
 import SignInView from "@/views/Auth";
 // View Apoyo tecnico
@@ -62,6 +63,14 @@ const routes = [
     path: "registro-prae",
     icon: <GraphIcon className="h-6 w-6 " />,
     component: <RegistroPrae />,
+    secondary: true,
+  },
+  {
+    name: "Registro Sistema ECU",
+    layout: "/admin",
+    path: "registro-ecu",
+    icon: <GraphIcon className="h-6 w-6 " />,
+    component: <RegistroEcu />,
     secondary: true,
   },
   {

@@ -6,6 +6,15 @@ import { Button } from '../ui/button'
 import {yupResolver} from '@hookform/resolvers/yup'
 import {validationPraeYup,ValidationFormPrae} from '@/schemas/solicitudes-prae'
 
+// REDUX: imports 
+import {addData,fetchContent} from '@/store/features/prae-action-redux'
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+
+
+/**
+ * @Example
+ * dispatch(save_data({...data,upload_anexo:upload_anexo}))
+ */
 
 interface Props {
     btnTitle: string;
@@ -13,17 +22,19 @@ interface Props {
 
 
 const formPrae = ({btnTitle}:Props) => {
-
+    const dispatch = useAppDispatch()
 
     const form = useForm<ValidationFormPrae>({resolver:yupResolver(validationPraeYup),mode:'onBlur'})
     
     const onSubmit = async (values:ValidationFormPrae) => {
         console.log(values)
+        dispatch(addData({...values}))
+        dispatch(fetchContent({...values}))
     }
 
     return (
         <Form {...form}>
-            <form className='flex flex-wrap  bg-white p-4 rounded-md  ' onSubmit={form.handleSubmit(onSubmit)}>
+            <form className='flex flex-wrap  bg-white p-4 rounded-md ' onSubmit={form.handleSubmit(onSubmit)}>
                     <FormField
                         control={form.control}
                         name="numero_cl"
