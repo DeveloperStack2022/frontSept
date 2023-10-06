@@ -68,7 +68,7 @@ const TableCompoents: FC<IProps> = ({data,loading,openModal,totalPages,pageCount
 
     return (
         <>
-            <table className='w-full whitespace-nowrap rounded-lg mt-5'>
+            <table className='w-full whitespace-nowrap rounded-lg mt-5 border-spacing-2'>
                 <thead className='text-sm  bg-white uppercase dark:text-gray-400 font-light tracking-normal py-4'>
                     {table.getHeaderGroups().map(headersGroup => (
                         <tr  key={headersGroup.id}>

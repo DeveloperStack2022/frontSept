@@ -24,6 +24,7 @@ import {Button} from '@/components/ui/button'
 
 // YUP: Validation
 import {yupResolver} from '@hookform/resolvers/yup'
+import {SolicitudesEcu} from '@/schemas/solicitudes-ecu'
 // import {} from 
 
 interface Props {
