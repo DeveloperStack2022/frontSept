@@ -149,7 +149,7 @@ const AddSolicitudForm = () => {
             const {data,status} = await searchSolicitudByNumero(valueInputSearch,'')
            
             let response:SolicitudNumero = data
-            console.log(status)
+            
             if(status == 200){
                 dispatch(informationSolicitud({
                     numero_celular:response.numero_celular,
@@ -268,7 +268,7 @@ const AddSolicitudForm = () => {
                                         </div>
                                         <input ref={refInput} type="text" id='num_celular'  className='w-full py-2 pr-7 pl-9 block rounded-md  bg-gray-100 outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm' autoComplete='off'  />
                                     </div>
-                                    <button onClick={handleSearch} type="button" className='font-bold px-4 py-2 text-green-700 bg-green-100 hover:bg-green-200 transition block rounded-md outline-offset-2 outline-transparent ring-green-300  focus:ring-2 text-sm flex items-center gap-x-2'> <SearchIcon className="h-4 w-4" /> <span>Buscar</span></button>
+                                    <button onClick={handleSearch} type="button" className='font-bold px-4 py-2 text-green-700 bg-green-100 hover:bg-green-200 transition  rounded-md outline-offset-2 outline-transparent ring-green-300  focus:ring-2 text-sm flex items-center gap-x-2'> <SearchIcon className="h-4 w-4" /> <span>Buscar</span></button>
                                 </div>
                                 {ShowMessage && MessageNotification?.status && (
                                     <div className='bg-red-200 px-4 py-2 my-1 rounded-sm flex justify-between items-center'>

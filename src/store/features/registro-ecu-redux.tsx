@@ -4,23 +4,22 @@ import {SolicitudesEcu} from '@/schemas/solicitudes-ecu'
 
 // REDUX: User State 
 interface UserState {
-    data: SolicitudesEcu
+    data: SolicitudesEcu[]
     loading: 'idle' | 'pending' | 'succeded' | 'failed'
 }
 // REDUX: Initial State 
 const initialState = {
-    data:{
-        unidad:'',
-        numero_celular_agente:'',
-        grado_nombres_agente:'',
-
-        numero_celular_solicitado:'',
+    data:
+    [{
         alias:'',
-        nombre_gdo_perteneciente:'',
-        
-        nombre_caso:'',
+        celulares:[{}],
         delito:'',
-    },
+        grado_nombres_agente:'',
+        nombre_caso:'',
+        nombre_gdo_perteneciente:'',
+        numero_cedula_agente:'',
+        numero_celular_agente:''
+    }],
     loading:'idle'
 } as UserState;
 
@@ -30,16 +29,16 @@ const registroEcuSlice = createSlice({
     name:'ecu-slice',
     initialState,
     reducers:{
-        addDate: (state,action:PayloadAction<SolicitudesEcu>) => {
-            state.data = action.payload
+        addData: (state,action:PayloadAction<SolicitudesEcu>) => {
+            state.data.push(action.payload)
         }
     },
 })
 // REDUX: Extrae Acitons
-const {addDate} = registroEcuSlice.actions
+const {addData} = registroEcuSlice.actions
 
 // REDUX: Export reducers and AsyncTunk
 export default registroEcuSlice.reducer
 export {
-    addDate
+    addData
 }

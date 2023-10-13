@@ -17,6 +17,7 @@ import ArmasTabComponent from './Components-Tab/ArmasTab'
 import VehiculoTabComponent from './Components-Tab/VehiculoTab'
 import CelularesTab from './Components-Tab/CelularesTab'
 import MunicionesTab from './Components-Tab/MunicionesTab'
+import Dinero from './Components-Tab/dineroTab'
 
 // COMPONENT: 
 export default function DetalisFinally(){
@@ -157,7 +158,7 @@ export default function DetalisFinally(){
                         >
                             <DineroIcon className={`h-6 w-6 ${ActiveTab == 6 ? 'text-blue-500' : 'text-gray-400'}`} />
                             <span className={`text-base ${ActiveTab == 6 ?  'text-black' : 'text-gray-400'}`}>Dinero</span>
-                            <span className='border text-gray-400  text-sm font-medium  px-3 py-0.2 rounded-xl'>0</span>
+                            <span className='border text-gray-400  text-sm font-medium  px-3 py-0.2 rounded-xl'>{apoyo_tecnico?.data?.dinero.length}</span>
                     </button>
                 </div>
             </nav>
@@ -195,6 +196,13 @@ export default function DetalisFinally(){
                     <>
                         {apoyo_tecnico?.data?.municiones.map((item,index) => (
                             <MunicionesTab cantidad={item.cantidad} tipo_municion={item.tipo_municion} calibre={item.calibre} />
+                        ))}
+                    </>
+                )}
+                {ActiveTab == 6 && (
+                    <>
+                        {apoyo_tecnico?.data?.dinero.map((item,index) => (
+                            <Dinero  tipo_divisa={item.tipo_divisa} valor_total={item.valor_total} />
                         ))}
                     </>
                 )}

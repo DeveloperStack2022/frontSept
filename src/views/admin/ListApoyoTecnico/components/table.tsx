@@ -36,7 +36,7 @@ const TableCompoents: FC<IProps> = ({data,loading,openModal,totalPages,pageCount
         columnHelper.accessor('n_detenidos',{
             id:'detenidos',
             header: 'N. Detenidos',
-            cell: info => info.getValue()
+            cell: info => info.getValue() 
         }),
         columnHelper.display({
             id: 'Acciones',

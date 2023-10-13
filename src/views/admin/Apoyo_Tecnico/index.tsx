@@ -295,14 +295,14 @@ const Steps = () => {
             <button
               className={`rounded px-4 py-2 font-bold text-white ${
                 StepNumber != 1 ? "bg-blue-500 hover:bg-blue-600" : "bg-gray-300"
-              }`}
+              } disabled:bg-gray-400`}
               onClick={handleDecrement}
-              disabled={StepNumber == 1}
+              disabled={(StepNumber == 1 || StepNumber == 11 ) ? true : false }
             >
               Regresar
             </button>
             {DatosSepts.length  == (StepNumber + 1) ? (
-              <button className="rounded px-4 py-2 font-bold text-white bg-blue-500 hover:bg-blue-600" onClick={hancleClickSubmit}>Presentacion
+              <button className="rounded px-4 py-2 font-bold text-white bg-blue-500 hover:bg-blue-600" onClick={hancleClickSubmit} >Presentacion
               </button>
             ) : DatosSepts.length == StepNumber ? (
                 <button className="rounded px-4 py-2 font-bold text-white bg-blue-500 hover:bg-blue-600" onClick={handleSubmitFinally} >Submit

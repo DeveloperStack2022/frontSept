@@ -42,7 +42,7 @@ const formatData = (obj:any) => {
         return objKeys.map((item,i) => (
             <>
                 {objValues[i] as number > 0 && (
-                    <p className='text-[#002060] text-xl font-medium leading-5 uppercase'>{item} : {objValues[i]}</p>
+                    <p className='text-[#002060] text-xl font-medium leading-5 uppercase'>{item} : {item == 'dinero' && '$'} {objValues[i]} </p>
                 ) }
             </>
         ))
