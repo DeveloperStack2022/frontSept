@@ -61,8 +61,8 @@ const TableCompoents: FC<IProps> = ({data,loading,openModal,totalPages,pageCount
     })
 
     useEffect(() => {
-      let pageIndexN = pageIndex + pageSize
-      fetchData && fetchData(pageIndexN,10);
+      let pageIndexNN = pageIndex * 10
+      fetchData && fetchData(pageIndexNN,pageSize);
     }, [pageIndex,fetchData])
     
 

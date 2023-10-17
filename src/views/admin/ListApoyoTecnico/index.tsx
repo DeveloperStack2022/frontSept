@@ -115,11 +115,18 @@ export default function ApoyoTecnico(){
                 }
             })()
         }
+        return () => {};
+    }, [Data]);
+
+    useEffect(() => {
         if (Data.length == 0) {
             fetchDataApi(0,10);
         }
-        return () => {};
-    }, [Data]);
+        return () => {
+            
+        }
+    }, [])
+    
 
     const onClose = () => setShowModal(false)
     const openModal = async (id:string) => {
