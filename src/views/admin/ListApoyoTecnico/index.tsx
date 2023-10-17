@@ -62,7 +62,8 @@ export default function ApoyoTecnico(){
         total_detenidos:0,
         total_municiones:0,
         total_sustancias_ilegales:0,
-        total_vehiculos:0
+        total_vehiculos:0,
+        total_dinero:0
     },error:false})
     const [TotlaPages, setTotalPages] = useState<number>(1)
     const [PageCount, setPageCount] = useState<number>(0);
@@ -205,7 +206,7 @@ export default function ApoyoTecnico(){
                             {formatData(DataModal?.indicios)}
                             {formDataArray(DataModal?.indicios.SustanciasIlegales)}
                         </div>
-                        <div className="absolute top-[430px] left-[366px] w-[909px] h-[285px] bg-cover bg-center bg-no-repeat " style={{backgroundImage:`url('${URI_IMG}/${DataModal?.name_image}')`}}></div>
+                        <div className="absolute top-[430px] left-[366px] w-[909px] h-[285px] bg-contain bg-center bg-no-repeat " style={{backgroundImage:`url('${URI_IMG}/${DataModal?.name_image}')`}}></div>
 
                     </div>
                 </div>
@@ -216,7 +217,7 @@ export default function ApoyoTecnico(){
             <button className='md:ml-2 text-white font-semibold bg-blue-500 px-4 py-1 rounded-md hover:bg-blue-600 mb-2' >Ver Resultados</button>
 
             <div className="grid md:grid-cols-3 lg:grid-cols-4 sm:grid-cols-2 gap-x-4">
-                {[{title:'Total Detenidos',numero:DataTotalResultados.TotalResultados.total_detenidos ,icon:User},{title:'Total Armas',numero:DataTotalResultados.TotalResultados.total_armas,icon:Armas},{title:'Total Sustancias Sujetas F...',numero:DataTotalResultados.TotalResultados.total_sustancias_ilegales > 0 ? parseFloat(DataTotalResultados.TotalResultados.total_sustancias_ilegales.toFixed(3)) > 1000 ? parseFloat(DataTotalResultados.TotalResultados.total_sustancias_ilegales.toFixed(3)) / 1000 : parseFloat(DataTotalResultados.TotalResultados.total_sustancias_ilegales.toFixed(3))  : 0,otro: parseFloat(DataTotalResultados.TotalResultados.total_sustancias_ilegales.toFixed(3)) > 1000 ? 'Tn' : 'Kg',icon:SustanciasIlegales},{title:'Total Vehiculos',numero:DataTotalResultados.TotalResultados.total_vehiculos,icon:Vehiculo},{title:'Total Dinero',numero:200,icon:Dinero,otro:'Dolares Americanos'},{title:'Total Municiones',numero:DataTotalResultados.TotalResultados.total_municiones,icon:Municiones}].map((item) => (
+                {[{title:'Total Detenidos',numero:DataTotalResultados.TotalResultados.total_detenidos ,icon:User},{title:'Total Armas',numero:DataTotalResultados.TotalResultados.total_armas,icon:Armas},{title:'Total Sustancias Sujetas F...',numero:DataTotalResultados.TotalResultados.total_sustancias_ilegales > 0 ? parseFloat(DataTotalResultados.TotalResultados.total_sustancias_ilegales.toFixed(3)) > 1000 ? parseFloat(DataTotalResultados.TotalResultados.total_sustancias_ilegales.toFixed(3)) / 1000 : parseFloat(DataTotalResultados.TotalResultados.total_sustancias_ilegales.toFixed(3))  : 0,otro: parseFloat(DataTotalResultados.TotalResultados.total_sustancias_ilegales.toFixed(3)) > 1000 ? 'Tn' : 'Kg',icon:SustanciasIlegales},{title:'Total Vehiculos',numero:DataTotalResultados.TotalResultados.total_vehiculos,icon:Vehiculo},{title:'Total Dinero',numero:DataTotalResultados.TotalResultados.total_dinero,icon:Dinero},{title:'Total Municiones',numero:DataTotalResultados.TotalResultados.total_municiones,icon:Municiones}].map((item) => (
                     <CardsCantidad otro={item.otro}  Icon={item.icon!} title_card={item.title} numero={item.numero} />
                 ))}
             </div>

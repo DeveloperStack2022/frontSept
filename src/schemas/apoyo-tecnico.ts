@@ -6,6 +6,7 @@ export type TotalResultados = {
     total_detenidos:number,
     total_armas:number,
     total_vehiculos:number
+    total_dinero:number
 }
 
 export type SingleDataPresentation = {

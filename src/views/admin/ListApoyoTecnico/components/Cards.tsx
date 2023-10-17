@@ -16,7 +16,7 @@ const CardsCantidad = ({Icon,numero,title_card,otro}:IProps) => {
                 <h2 className='font-semibold text-lg text-gray-600 '>{title_card}</h2>
                 <Icon className='h-6 w-6 text-blue-500' />
             </div>
-            <span className='text-6xl font-extralight '>{numero} {otro && <span className='text-xl inline-flex items-center font-medium bg-green-50 px-2 py-1 rounded-lg text-green-700  text-center ring-1 ring-inset ring-green-500/20'>{otro}</span> } </span> 
+            <span className='text-6xl font-extralight '>{numero} {otro && <span className='text-lg inline-flex items-center font-medium bg-green-50 px-2 py-1 rounded-lg text-green-700  text-center ring-1 ring-inset ring-green-500/20'>{otro}</span> } </span> 
         </Card>
     )
 }
