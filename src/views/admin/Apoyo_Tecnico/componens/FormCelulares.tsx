@@ -1,6 +1,6 @@
 // REACT: Hooks React | Events Types
 import {ChangeEvent,useState,FocusEvent} from 'react'
-import {FieldArrayWithId,UseFieldArrayAppend,UseFormRegister} from 'react-hook-form'
+import {FieldArrayWithId,UseFieldArrayAppend,UseFormRegister,UseFieldArrayRemove} from 'react-hook-form'
 import { ValidationType } from "@/schemas/apoyo-tecnico";
 
 // REDUX: Hooks Redux 
@@ -13,6 +13,7 @@ interface IProps {
     fields: FieldArrayWithId<TypeValidationStateForm, "celulares", "id">[];
     append: UseFieldArrayAppend<TypeValidationStateForm, "celulares">;
     register: UseFormRegister<TypeValidationStateForm>;
+    Remove: UseFieldArrayRemove;
 }
 
 

@@ -207,15 +207,16 @@ const Steps = () => {
           />
         );
       case 4:
-        return <FormCelularesComponent append={AgregarCelulares} fields={FieldsCelulares} register={register} />
+        return <FormCelularesComponent  Remove={RemoveCelulares} append={AgregarCelulares} fields={FieldsCelulares} register={register} />
       case 5:
-        return <FormSustanciaFiscalizacion append={AgregarDrogas} fields={FieldDrogas} register={register} />
+        return <FormSustanciaFiscalizacion Remove={RemoveDrogas} append={AgregarDrogas} fields={FieldDrogas} register={register} />
       case 6:
         return (
           <FormArmas
             register={register}
             fields={FieldArmas}
             append={AgregarArmas}
+            Remove={RemoveArmas}
           />
         );
       case 7:
@@ -224,6 +225,7 @@ const Steps = () => {
             register={register}
             fields={FieldsMuniciones}
             append={AgregarMuniciones}
+            Remove={RemoveMuniciones}
           />
         );
       case 8:
@@ -232,6 +234,7 @@ const Steps = () => {
             register={register}
             fields={FieldDinero}
             append={AgregarDinero}
+            Remove={RemoveDinero}
           />
         );
       case 9:
@@ -240,6 +243,7 @@ const Steps = () => {
             register={register}
             fields={FieldVehiculos}
             append={AgregarVehiculos}
+            Remove={RemoveVehiculos}
           />
         );
       case 10:

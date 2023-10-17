@@ -3,6 +3,7 @@ import {
   FieldArrayWithId,
   UseFieldArrayAppend,
   UseFormRegister,
+  UseFieldArrayRemove
 } from "react-hook-form";
 import { ValidationType } from "@/schemas/apoyo-tecnico";
 
@@ -12,6 +13,7 @@ interface IProps {
   fields: FieldArrayWithId<TypeValidationStateForm, "armas", "id">[];
   append: UseFieldArrayAppend<TypeValidationStateForm, "armas">;
   register: UseFormRegister<TypeValidationStateForm>;
+  Remove: UseFieldArrayRemove;
 }
 // TODO: Component
 const FormArmas = ({ fields, append, register }: IProps) => {

@@ -2,6 +2,7 @@ import {
     FieldArrayWithId,
     UseFieldArrayAppend,
     UseFormRegister,
+    UseFieldArrayRemove
   } from "react-hook-form";
   import {ChangeEvent, useState} from 'react'
   import { ValidationType } from "@/schemas/apoyo-tecnico";
@@ -12,6 +13,7 @@ import {
     fields: FieldArrayWithId<TypeValidationStateForm, "sustancias_sujetas_fiscalizacion", "id">[];
     append: UseFieldArrayAppend<TypeValidationStateForm, "sustancias_sujetas_fiscalizacion">;
     register: UseFormRegister<TypeValidationStateForm>;
+    Remove: UseFieldArrayRemove;
   }
   
   export default function FormSustanciasSujetasFiscalizacion({ append, fields, register }: IProps) {

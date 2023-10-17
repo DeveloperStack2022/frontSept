@@ -4,6 +4,7 @@ import {
   FieldArrayWithId,
   UseFieldArrayAppend,
   UseFormRegister,
+  UseFieldArrayRemove
 } from "react-hook-form";
 
 import { ValidationType } from "@/schemas/apoyo-tecnico";
@@ -14,8 +15,9 @@ interface IProps {
   fields: FieldArrayWithId<TypeValidationStateForm, "municiones", "id">[];
   append: UseFieldArrayAppend<TypeValidationStateForm, "municiones">;
   register: UseFormRegister<TypeValidationStateForm>;
+  Remove: UseFieldArrayRemove;
 }
-export default function FormMuniciones({ append, fields, register }: IProps) {
+export default function FormMuniciones({ append, fields, register,Remove }: IProps) {
   const [NumberGenerate, setNumberGenerate] = useState<number>(0);
 
   const hanldeGenerate = (e: ChangeEvent<HTMLInputElement>) => {
@@ -97,6 +99,9 @@ export default function FormMuniciones({ append, fields, register }: IProps) {
               className={`block w-full rounded-md border  border-gray-300 py-2 pl-2 pr-7 text-sm outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500`}
               {...register(`municiones.[${index}].calibre`)}
             />
+          </div>
+          <div className="w-full flex justify-center my-2">
+            <button className="bg-red-500 text-white px-2 py-1 rounded-md w-3/4 hover:bg-red-600 transition-all" onClick={() => Remove(index)}>Eliminar</button>
           </div>
         </div>
         ))}
