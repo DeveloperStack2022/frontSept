@@ -15,9 +15,9 @@ interface IProps {
   fields: FieldArrayWithId<TypeValidationStateForm, "municiones", "id">[];
   append: UseFieldArrayAppend<TypeValidationStateForm, "municiones">;
   register: UseFormRegister<TypeValidationStateForm>;
-  Remove: UseFieldArrayRemove;
+  RemoveMuniciones: UseFieldArrayRemove;
 }
-export default function FormMuniciones({ append, fields, register,Remove }: IProps) {
+export default function FormMuniciones({ append, fields, register,RemoveMuniciones }: IProps) {
   const [NumberGenerate, setNumberGenerate] = useState<number>(0);
 
   const hanldeGenerate = (e: ChangeEvent<HTMLInputElement>) => {
@@ -101,7 +101,7 @@ export default function FormMuniciones({ append, fields, register,Remove }: IPro
             />
           </div>
           <div className="w-full flex justify-center my-2">
-            <button className="bg-red-500 text-white px-2 py-1 rounded-md w-3/4 hover:bg-red-600 transition-all" onClick={() => Remove(index)}>Eliminar</button>
+            <button className="bg-red-500 text-white px-2 py-1 rounded-md w-3/4 hover:bg-red-600 transition-all" onClick={() => RemoveMuniciones(index)}>Eliminar</button>
           </div>
         </div>
         ))}

@@ -115,36 +115,36 @@ const DetenidosForm = ({ fields, append, register,RemoveDetenidos }: IProps) => 
                 <label htmlFor="sexo" className="block w-full">
                   Sexo
                 </label>
-                <div className="flex w-full gap-x-2 px-2 md:w-1/2">
-                  <div className="flex items-center">
-                    <input
-                      value='Masculino'
-                      {...register(`detenidos.[${index}].sexo`)}
-                      type="radio"
-                      className="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-blue-500 "
-                    />
-                    <label
-                      htmlFor="masculino"
-                      className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                    >
-                      Masculino
-                    </label>
-                  </div>
-                  <div className="flex items-center">
-                    <input
-                      value='Femenino'
-                      {...register(`detenidos.[${index}].sexo`)}
-                      type="radio"
-                      className="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-blue-500 "
-                    />
-                    <label
-                      
-                      className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                    >
-                      Femenino
-                    </label>
-                  </div>
-                  </div>
+                  <div className="flex w-full gap-x-2 px-2 md:w-1/2">
+                        <div className="flex items-center">
+                          <input
+                            value='Masculino'
+                            {...register(`detenidos.[${index}].sexo`)}
+                            type="radio"
+                            className="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-blue-500 "
+                          />
+                          <label
+                            htmlFor="masculino"
+                            className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                          >
+                            Masculino
+                          </label>
+                        </div>
+                        <div className="flex items-center">
+                          <input
+                            value='Femenino'
+                            {...register(`detenidos.[${index}].sexo`)}
+                            type="radio"
+                            className="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-blue-500 "
+                          />
+                          <label
+                            
+                            className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                          >
+                            Femenino
+                          </label>
+                        </div>
+                    </div>
                   </div>
                   <div className="w-full flex justify-center my-2">
                     <button className="bg-red-500 text-white px-2 py-1 rounded-md w-3/4 hover:bg-red-600 transition-all" onClick={() => RemoveDetenidos(index)}>Eliminar</button>

@@ -42,8 +42,8 @@ const formatData = (obj:any) => {
         return objKeys.map((item,i) => (
             <>
                 {objValues[i] as number > 0 && (
-                    <p className='text-[#002060] text-xl font-medium leading-5 uppercase'>{item} : {item == 'dinero' && '$'} {objValues[i]} </p>
-                ) }
+                    <p className='text-[#002060] text-xl font-medium leading-5 uppercase'>{item} : {item == 'dinero' && '$'} {objValues[i]}0 </p>
+                )}
             </>
         ))
     }
@@ -148,6 +148,29 @@ export default function ApoyoTecnico(){
         }
     }
     
+    const handleClick = async () => {
+        /**
+            *EndPoint
+                http://localhost:5050/api/getResultByRangeDate?date_start=2023-09-01&date_end=2023-09-31
+            * Query Params
+                date_start  @type Date
+                date_end   @type Date
+            *Ejemplo: 
+                http://localhost:5050/api/getResultByRangeDate?date_start=2023-09-01&date_end=2023-09-31
+        **/
+        const StartDate = RangeDate[0]
+        const EndDate = RangeDate[1]
+        const resultados_get = await getApoyoTecnicoResultsTotalByParamas(StartDate,EndDate)
+        // console.log(resultados_get)
+        setDataTotalResultados({loading:false,TotalResultados:{
+            total_armas:resultados_get?.data.total_armas,
+            total_detenidos:resultados_get?.data.total_detenidos,
+            total_dinero:resultados_get?.data.total_dinero,
+            total_municiones:resultados_get?.data.total_municiones,
+            total_sustancias_ilegales:resultados_get?.data.total_sustancias_ilegales,
+            total_vehiculos:resultados_get?.data.total_vehiculos,
+        }})
+    }
 
     return (
         <>
@@ -214,10 +237,18 @@ export default function ApoyoTecnico(){
             <h2 className='text-3xl font-semibold mb-2'>Reporte Mensuales</h2>
             <span className='text-base font-semibold mb-2 inline-block'>Fecha</span>
             <DatePicker dateFormat="d MMM yyyy" selectsRange={true} startDate={StarDate} endDate={EndDate} onChange={(update) => setRangeDate(update) } customInput={<ExampleCustomInput value={''} onClick={() => {}}  />} />
-            <button className='md:ml-2 text-white font-semibold bg-blue-500 px-4 py-1 rounded-md hover:bg-blue-600 mb-2' >Ver Resultados</button>
+            <button className='md:ml-2 text-white font-semibold bg-blue-500 px-4 py-1 rounded-md hover:bg-blue-600 mb-2' onClick={handleClick} >Ver Resultados</button>
 
             <div className="grid md:grid-cols-3 lg:grid-cols-4 sm:grid-cols-2 gap-x-4">
-                {[{title:'Total Detenidos',numero:DataTotalResultados.TotalResultados.total_detenidos ,icon:User},{title:'Total Armas',numero:DataTotalResultados.TotalResultados.total_armas,icon:Armas},{title:'Total Sustancias Sujetas F...',numero:DataTotalResultados.TotalResultados.total_sustancias_ilegales > 0 ? parseFloat(DataTotalResultados.TotalResultados.total_sustancias_ilegales.toFixed(3)) > 1000 ? parseFloat(DataTotalResultados.TotalResultados.total_sustancias_ilegales.toFixed(3)) / 1000 : parseFloat(DataTotalResultados.TotalResultados.total_sustancias_ilegales.toFixed(3))  : 0,otro: parseFloat(DataTotalResultados.TotalResultados.total_sustancias_ilegales.toFixed(3)) > 1000 ? 'Tn' : 'Kg',icon:SustanciasIlegales},{title:'Total Vehiculos',numero:DataTotalResultados.TotalResultados.total_vehiculos,icon:Vehiculo},{title:'Total Dinero',numero:DataTotalResultados.TotalResultados.total_dinero,icon:Dinero},{title:'Total Municiones',numero:DataTotalResultados.TotalResultados.total_municiones,icon:Municiones}].map((item) => (
+                {[
+                    {title:'Total Detenidos',numero:DataTotalResultados.TotalResultados.total_detenidos ,icon:User},
+                    {title:'Total Armas',numero:DataTotalResultados.TotalResultados.total_armas,icon:Armas},
+                    {title:'Total Sustancias Sujetas F...',numero:DataTotalResultados.TotalResultados.total_sustancias_ilegales > 0 ? parseFloat(DataTotalResultados.TotalResultados.total_sustancias_ilegales.toFixed(3)) > 1000 ? parseFloat(DataTotalResultados.TotalResultados.total_sustancias_ilegales.toFixed(3)) / 1000 : parseFloat(DataTotalResultados.TotalResultados.total_sustancias_ilegales.toFixed(3))  : 0,otro: parseFloat(DataTotalResultados.TotalResultados.total_sustancias_ilegales.toFixed(3)) > 1000 ? 'Tn' : 'Kg',icon:SustanciasIlegales},
+                    {title:'Total Vehiculos',numero:DataTotalResultados.TotalResultados.total_vehiculos,icon:Vehiculo},
+                    {title:'Total Dinero',numero:DataTotalResultados.TotalResultados.total_dinero,icon:Dinero},
+                    {title:'Total Municiones',numero:DataTotalResultados.TotalResultados.total_municiones,icon:Municiones},
+                    {title:'Terminales Moviles',numero:DataTotalResultados.TotalResultados.total_municiones,icon:Municiones}
+                ].map((item) => (
                     <CardsCantidad otro={item.otro}  Icon={item.icon!} title_card={item.title} numero={item.numero} />
                 ))}
             </div>

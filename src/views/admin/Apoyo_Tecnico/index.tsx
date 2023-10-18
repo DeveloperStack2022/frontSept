@@ -225,7 +225,7 @@ const Steps = () => {
             register={register}
             fields={FieldsMuniciones}
             append={AgregarMuniciones}
-            Remove={RemoveMuniciones}
+            RemoveMuniciones={RemoveMuniciones}
           />
         );
       case 8:

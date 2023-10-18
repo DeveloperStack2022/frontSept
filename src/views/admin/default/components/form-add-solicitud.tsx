@@ -9,10 +9,10 @@ import {addSolicitud,searchSolicitudByNumero} from '@/services/solicitud-service
 // Custom hooks 
 import {useLocalStorage} from '@/hooks/useLocalStorage'
 import Card from '@components/card'
-// Redux Storage
+// REDUX: Redux Storage
 import {useAppDispatch,useAppSelector} from '@/hooks/redux'
 
-import {informationSolicitud,SolicitudNumero} from '@/store/features/search_solicitud_num_celular'
+import {informationSolicitud,SolicitudNumero,removeInformationSolicitud} from '@/store/features/search_solicitud_num_celular'
 
 import FingerPrintIcon from '@/icons/finger-printer.svg?component'
 import DelitoIcon from '@/icons/delito.svg?component'
@@ -72,22 +72,19 @@ const AddSolicitudForm = () => {
     const [NnumeroCelulares, setNnumeroCelulares] = useState<number>(0)
     const [OpenModal, setOpenModal] = useState<boolean>(false)
     const [ModalContent, setModalContent] = useState<{message:string,status:number}>({message:'',status:0})
-    const [formData, setFormData] = useState<TypeValidationStateForm>({
-        nombre_fical:'',
-        nombre_fiscalia:'',
-        numero_cedula:'',
-        delito:'',
-        numero_celular:'',
-        grado:'',
-        alias:'',
-        grupo_delicuencial:'',
-        tipo_pedido:'',
-        investigacion_previa:'',
-        nombre_caso:'',
-        nombres_apellidos:'',
-        plataforma:'SEPTIER',
-        unidad:'',
-        zona:''
+    const [formData, setFormData] = useState<SolicitudNumero>({
+        Analista:{
+            grado:"",
+            nombre_completos:"",
+            unidad:'',
+            zona:'',
+        },
+        Solicitud:{
+            caso:'',
+            delito:'',
+            investigacion_previa:'',
+            organizacion:''
+        }
     })
     const [CheckIP, setCheckIP] = useState<boolean>(false)
     // Custom Hooks 
@@ -139,31 +136,32 @@ const AddSolicitudForm = () => {
             i++
         }while(i < fields.length)
         remove(0)
+        dispatch(removeInformationSolicitud())
         setOpenModal(prev => !prev)
     }
 
-    const handleSearch = async () => {  
+    const handleSearch = async () => {
+ 
         const valueInputSearch = refInput.current?.value as string
         if(valueInputSearch !== '' && !!valueInputSearch){
           
             const {data,status} = await searchSolicitudByNumero(valueInputSearch,'')
-           
-            let response:SolicitudNumero = data
             
+            let response:SolicitudNumero = data
             if(status == 200){
+                
                 dispatch(informationSolicitud({
-                    numero_celular:response.numero_celular,
-                    solicitante:{
-                        grado:response.solicitante?.grado,
-                        nombres_completos: response.solicitante.nombres_completos,
-                        unidad: response.solicitante.unidad,
-                        zona: response.solicitante.zona
+                    Analista:{
+                        grado:response.Analista.grado,
+                        nombre_completos: response.Analista.nombre_completos,
+                        unidad: response.Analista.unidad,
+                        zona: response.Analista.zona
                     },
-                    solicitud:{
-                        caso: response.solicitud.caso,
-                        delito: response.solicitud.delito,
-                        investigacion_previa: response.solicitud.investigacion_previa,
-                        organizacion_delicuencial: response.solicitud.organizacion_delicuencial
+                    Solicitud:{
+                        caso: response.Solicitud.caso,
+                        delito: response.Solicitud.delito,
+                        investigacion_previa: response.Solicitud.investigacion_previa,
+                        organizacion: response.Solicitud.organizacion
                     }
                 }))
             }
@@ -183,26 +181,18 @@ const AddSolicitudForm = () => {
     useEffect(() => {
         if(stateSelector.status) {
             setFormData({
-                nombre_caso:stateSelector.solicitud.caso,
-                delito:stateSelector.solicitud.delito,
-                grupo_delicuencial:stateSelector.solicitud.organizacion_delicuencial,
-                investigacion_previa: stateSelector.solicitud.investigacion_previa,
-                grado: stateSelector.solicitante.grado,
-                nombres_apellidos: stateSelector.solicitante.nombres_completos,
-                plataforma: 'SEPTIER',
-                unidad: stateSelector.solicitante.unidad,
-                zona: stateSelector.solicitante.zona
+                Analista:{...stateSelector.Analista},
+                Solicitud:{...stateSelector.Solicitud}
             })
-            
-            setValue('delito',stateSelector.solicitud.delito)
-            setValue('nombre_caso',stateSelector.solicitud.caso)
-            setValue('grupo_delicuencial',stateSelector.solicitud.organizacion_delicuencial)
-            setValue('investigacion_previa',stateSelector.solicitud.investigacion_previa)
+            setValue('delito',stateSelector.Solicitud.delito)
+            setValue('nombre_caso',stateSelector.Solicitud.caso)
+            setValue('grupo_delicuencial',stateSelector.Solicitud.organizacion)
+            setValue('investigacion_previa',stateSelector.Solicitud.investigacion_previa)
 
-            setValue('grado',stateSelector.solicitante.grado)
-            setValue('nombres_apellidos',stateSelector.solicitante.nombres_completos)
-            setValue('unidad',stateSelector.solicitante.unidad)
-            setValue('zona',stateSelector.solicitante.zona)
+            setValue('grado',stateSelector.Analista.grado)
+            setValue('nombres_apellidos',stateSelector.Analista.nombre_completos)
+            setValue('unidad',stateSelector.Analista.unidad)
+            setValue('zona',stateSelector.Analista.zona)
         }
     
       return () => {
