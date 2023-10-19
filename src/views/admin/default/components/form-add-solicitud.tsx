@@ -161,7 +161,9 @@ const AddSolicitudForm = () => {
                         caso: response.Solicitud.caso,
                         delito: response.Solicitud.delito,
                         investigacion_previa: response.Solicitud.investigacion_previa,
-                        organizacion: response.Solicitud.organizacion
+                        organizacion: response.Solicitud.organizacion,
+                        nombre_fiscal: response.Solicitud.nombre_fiscal,
+                        nombre_fiscalia: response.Solicitud.nombre_fiscalia
                     }
                 }))
             }

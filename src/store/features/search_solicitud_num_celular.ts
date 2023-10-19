@@ -10,6 +10,8 @@ export type SolicitudNumero = {
     delito:string;
     organizacion:string;
     investigacion_previa:string;
+    nombre_fiscalia:string;
+    nombre_fiscal:string;
  }
  
  type SolicitanteM = {
@@ -36,7 +38,9 @@ const initialState:initalState = {
         caso:'',
         delito:'',
         investigacion_previa:'',
-        organizacion:''
+        organizacion:'',
+        nombre_fiscal:'',
+        nombre_fiscalia:''
     }
 }
 
@@ -56,6 +60,8 @@ export const solicitudByNumCelular = createSlice({
             state.Solicitud.delito = payload.Solicitud.delito
             state.Solicitud.investigacion_previa = payload.Solicitud.investigacion_previa
             state.Solicitud.organizacion = payload.Solicitud.organizacion
+            state.Solicitud.nombre_fiscal = payload.Solicitud.nombre_fiscal,
+            state.Solicitud.nombre_fiscalia = payload.Solicitud.nombre_fiscalia
            
         },
         removeInformationSolicitud:(state) => {
