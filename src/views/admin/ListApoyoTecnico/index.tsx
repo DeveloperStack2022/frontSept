@@ -19,7 +19,7 @@ import Municiones from '@/icons/ApoyoTecnico/municion.svg?component'
 import Vehiculo from '@/icons/ApoyoTecnico/vehiculo.svg?component'
 import Dinero from '@/icons/ApoyoTecnico/dinero.svg?component'
 import SustanciasIlegales from '@/icons/ApoyoTecnico/sustancias_ilegales.svg?component'
-
+import PhoneIcon from '@/icons/mobile.svg?component'
 
 type SustanciasIlegales = {
     medida_peso:string
@@ -42,7 +42,7 @@ const formatData = (obj:any) => {
         return objKeys.map((item,i) => (
             <>
                 {objValues[i] as number > 0 && (
-                    <p className='text-[#002060] text-xl font-medium leading-5 uppercase'>{item} : {item == 'dinero' && '$'} {objValues[i]} </p>
+                    <p className='text-[#002060] text-xl font-medium leading-5 uppercase'>{item} : {item == 'dinero' && '$'} {item == 'dinero' ? objValues[i].toLocaleString('es-Es',{useGrouping:true}) : objValues[i] } </p>
                 )}
             </>
         ))
@@ -63,7 +63,8 @@ export default function ApoyoTecnico(){
         total_municiones:0,
         total_sustancias_ilegales:0,
         total_vehiculos:0,
-        total_dinero:0
+        total_dinero:0,
+        total_terminales_moviles:0
     },error:false})
     const [TotlaPages, setTotalPages] = useState<number>(1)
     const [PageCount, setPageCount] = useState<number>(0);
@@ -169,6 +170,7 @@ export default function ApoyoTecnico(){
             total_municiones:resultados_get?.data.total_municiones,
             total_sustancias_ilegales:resultados_get?.data.total_sustancias_ilegales,
             total_vehiculos:resultados_get?.data.total_vehiculos,
+            total_terminales_moviles: resultados_get?.data.total_terminales_moviles
         }})
     }
 
@@ -196,7 +198,7 @@ export default function ApoyoTecnico(){
                         </div>
                         {/* TODO: UBICACION */}
                         <div className="absolute top-[316px] left-9 w-[325px]">
-                            <p className='text-[#002060] text-lg leading-5'>{DataModal?.direccion}</p>
+                            <p className='text-[#002060] text-base leading-5'>{DataModal?.direccion}</p>
                         </div> 
                         {/* TODO: LATITUD */}
                         <div className="absolute top-[360px] left-9 w-[325px]">
@@ -245,9 +247,9 @@ export default function ApoyoTecnico(){
                     {title:'Total Armas',numero:DataTotalResultados.TotalResultados.total_armas,icon:Armas},
                     {title:'Total Sustancias Sujetas F...',numero:DataTotalResultados.TotalResultados.total_sustancias_ilegales > 0 ? parseFloat(DataTotalResultados.TotalResultados.total_sustancias_ilegales.toFixed(3)) > 1000 ? parseFloat(DataTotalResultados.TotalResultados.total_sustancias_ilegales.toFixed(3)) / 1000 : parseFloat(DataTotalResultados.TotalResultados.total_sustancias_ilegales.toFixed(3))  : 0,otro: parseFloat(DataTotalResultados.TotalResultados.total_sustancias_ilegales.toFixed(3)) > 1000 ? 'Tn' : 'Kg',icon:SustanciasIlegales},
                     {title:'Total Vehiculos',numero:DataTotalResultados.TotalResultados.total_vehiculos,icon:Vehiculo},
-                    {title:'Total Dinero',numero:DataTotalResultados.TotalResultados.total_dinero,icon:Dinero},
+                    {title:'Total Dinero',numero: DataTotalResultados.TotalResultados.total_dinero.toLocaleString('es-Es',{useGrouping:true}), icon: Dinero},
                     {title:'Total Municiones',numero:DataTotalResultados.TotalResultados.total_municiones,icon:Municiones},
-                    {title:'Terminales Moviles',numero:DataTotalResultados.TotalResultados.total_municiones,icon:Municiones}
+                    {title:'Terminales Moviles',numero:DataTotalResultados.TotalResultados.total_terminales_moviles,icon:PhoneIcon}
                 ].map((item) => (
                     <CardsCantidad otro={item.otro}  Icon={item.icon!} title_card={item.title} numero={item.numero} />
                 ))}

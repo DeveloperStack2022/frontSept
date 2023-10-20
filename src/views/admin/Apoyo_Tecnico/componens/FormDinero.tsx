@@ -5,7 +5,7 @@ import {
   UseFieldArrayRemove
 } from "react-hook-form";
 import { ValidationType } from "@/schemas/apoyo-tecnico";
-import { ChangeEvent,useState } from "react";
+import { ChangeEvent,useState,KeyboardEvent } from "react";
 
 type TypeValidationStateForm = Omit<ValidationType, "">;
 
@@ -33,6 +33,13 @@ export default function FormDinero({ fields,append,register }: IProps) {
     }
   }
 
+
+  const handleKeyPress = (e:KeyboardEvent<HTMLInputElement>) => {
+    const char = e.key
+    if(char === '.' || char === ','){
+      e.preventDefault()
+    }
+  }
   
   return (
     <>
@@ -84,11 +91,12 @@ export default function FormDinero({ fields,append,register }: IProps) {
             <div className="w-full px-2 md:w-1/2">
               <label htmlFor="cantidad">Valor Total</label>
               <input
-                type="text"
+                type="number"
                 id="cantidad"
                 autoComplete="off"
-                className={`block w-full rounded-md border  border-gray-300 py-2 pl-2 pr-7 text-sm outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500`}
+                className={` block w-full rounded-md border  border-gray-300 py-2 pl-2 pr-7 text-sm outline-offset-2 outline-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500`}
                 {...register(`dinero.[${index}].valor_total`)}
+                onKeyPress={handleKeyPress}
               />
             </div>
           </div>

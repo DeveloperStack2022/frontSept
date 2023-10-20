@@ -4,7 +4,7 @@ import {FunctionComponent,SVGProps} from 'react'
 
 interface IProps {
     title_card:string;
-    numero:number;
+    numero:string | number;
     otro?:string | undefined
     Icon: FunctionComponent<SVGProps<SVGSVGElement> & { title?: string }>
 }

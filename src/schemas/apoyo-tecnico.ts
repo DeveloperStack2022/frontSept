@@ -7,6 +7,7 @@ export type TotalResultados = {
     total_armas:number,
     total_vehiculos:number
     total_dinero:number
+    total_terminales_moviles:number
 }
 
 export type SingleDataPresentation = {
