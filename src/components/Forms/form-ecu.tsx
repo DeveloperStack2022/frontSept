@@ -29,9 +29,9 @@ import {yupResolver} from '@hookform/resolvers/yup'
 
 // REDUX: TOOLKIT 
 import {SolicitudesEcu} from '@/schemas/solicitudes-ecu'
-import {addData} from '@/store/features/registro-ecu-redux'
-import {useAppDispatch,useAppSelector} from '@/hooks/redux'
+import {addData,AddRegistroEcu} from '@/store/features/registro-ecu-redux'
 
+import {useAppDispatch,useAppSelector} from '@/hooks/redux'
 
 type TypeValidationStateForm = Omit<SolicitudesEcu,'celulares'>
 
@@ -69,6 +69,7 @@ const formEcu = ({btnTitle}:Props) => {
     const handleSubmit = (values:SolicitudesEcu) => {
         console.log(values)
         dispatch(addData({...values}))
+        dispatch(AddRegistroEcu({...values}))
     }
 
     return (
